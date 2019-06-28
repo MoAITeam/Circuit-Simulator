@@ -17,7 +17,7 @@ public:
     Circuit(Observer* o=nullptr);
     ~Circuit();
     void setObserver(Observer* graphics);
-    void add(Component *c, Node *p, Node *n); //aggiunge in tutti i modi
+    void add(Component *c, Node*& p, Node*& n); //aggiunge in tutti i modi, doppio puntatore per modificare quello passato
     void deleteComponent(Component* c);
     void removeComponent(Component* c);
     void print();

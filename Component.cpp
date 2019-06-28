@@ -45,6 +45,11 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawLine(line);
 }
 
+void Component::update(const QRectF &rect) {
+    prepareGeometryChange();
+    QGraphicsItem::update(rect);
+}
+
 std::vector<Node*> Component::getNodes() {
     return nodes;
 }

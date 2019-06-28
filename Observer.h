@@ -10,10 +10,10 @@
 
 class Observer{
 public:
-    //FIXME due versioni per due signal diversi...
     virtual void addItem(Node* item) = 0;
     virtual void addItem(Component* item) = 0;
-    virtual void removeItem(QGraphicsItem* item) = 0;
+    virtual void removeItem(Node* item) = 0;
+    virtual void removeItem(Component* item) = 0;
     virtual ~Observer() {};
 };
 

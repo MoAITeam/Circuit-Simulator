@@ -38,8 +38,9 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    for (auto component : components)
+    for (auto component : components) {
         component->update();
+    }
     QGraphicsItem::mouseMoveEvent(event);
 }
 

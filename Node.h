@@ -8,7 +8,7 @@
 #include <QGraphicsItem>
 #include <QMouseEvent>
 #include <vector>
-#define NodeSize 10
+#define NodeSize 5
 
 class Component;
 

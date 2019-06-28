@@ -22,13 +22,18 @@ void CircuitWidget::addItem(Component *c) {
     scene->addItem(c);
 }
 
+void CircuitWidget::removeItem(Component *c){
+    scene->removeItem(c);
+}
+
 void CircuitWidget::addItem(Node *node) {
     QObject::connect(node,SIGNAL(positionChanged(Node*)),this,SLOT(linkNode(Node*)));
     scene->addItem(node);
 }
 
-void CircuitWidget::removeItem(QGraphicsItem *i){
-    scene->removeItem(i);
+void CircuitWidget::removeItem(Node *node){
+    this->disconnect(node);
+    scene->removeItem(node);
 }
 
 void CircuitWidget::mousePressEvent(QMouseEvent *event) {
@@ -38,10 +43,12 @@ void CircuitWidget::mousePressEvent(QMouseEvent *event) {
 
 void CircuitWidget::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
-        Node *a = new Node(mousePressPoint);
-        Node *b = new Node(event->pos());
+
         Component *c = new Component(5);
-        circuit->add(c, a, b);
+        Node* p=new Node(mousePressPoint.x(), mousePressPoint.y());
+        Node* n=new Node(event->pos().x(), event->pos().y());
+
+        circuit->add(c, p, n);
         circuit->print();
     }
     QGraphicsView::mouseReleaseEvent(event);

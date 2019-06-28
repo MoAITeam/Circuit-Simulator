@@ -19,9 +19,9 @@ public:
 
     QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
+    void update(const QRectF & rect = QRectF());
 
     std::vector<Node*> getNodes();
-
 
 private:
     float value;

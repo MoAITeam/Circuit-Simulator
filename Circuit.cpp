@@ -4,6 +4,7 @@
 
 #include "Circuit.h"
 #include <iostream>
+//TODO: Node should be abstract, concrete GraphicalNode
 
 Circuit::Circuit(Observer *o):observer(o) {
 
@@ -18,15 +19,20 @@ void Circuit::setObserver(Observer *o) {
 }
 
 void Circuit::AddNode(Node *n) {
+
     if(observer!=nullptr)
         observer->addItem(n); //FIXME two overloaded addItems should be one...
+
     nodes.push_back(n);
     I.addRow();
 }
 
 //FIXME should I be allowed to create Nodes outside of the Circuit class?
-void Circuit::add(Component *c, Node *p, Node *n) {
+void Circuit::add(Component *c, Node*& p, Node*& n) {
+    //FIXME Are the original nodes from the calling function updated?
 
+    //Check if the nodes I'm trying to add already exist
+    //If so, replace original pointers with the existing ones
     int indexP=find(p,nodes);
     if (indexP==nodes.size()){
         AddNode(p);
@@ -90,7 +96,9 @@ void Circuit::removeNode(Node *n) {
         for (auto &component : n->getComponents())
             removeComponent(component);
         I.removeRow(index);
-        observer->removeItem(n);
+
+        if(observer!=nullptr)
+            observer->removeItem(n); //FIXME two overloaded addItems should be one...
 
         delete n;
     }
@@ -102,7 +110,10 @@ void Circuit::removeComponent(Component *c) {
     int index= find(c,components);
     if(index!=components.size()) {
         components.erase(components.begin() + index);
-        observer->removeItem(c);
+
+        if(observer!=nullptr)
+            observer->removeItem(c); //FIXME two overloaded addItems should be one...
+
         c->disconnect();
         I.removeColumn(index);
     }
@@ -138,11 +149,12 @@ template <class T> int Circuit::getIndex(T *e,std::vector<T*> v){
 
 void Circuit::link(Node *n) {
     //TODO: should throw duplicated exception?
+    //FIXME: should Node call this method directly, instead of asking the View?
     Node *newNode = nullptr;
 
-    //The heart of link method: finds the one that is the same graphical position but not the same node
+    //The heart of link method: finds the one that is "identical for Node standards" but not the same node
     for(int j=0;j<nodes.size();j++)
-        if(*(nodes[j])==*n&&nodes[j]!=n)
+        if( *(nodes[j]) == *n && nodes[j]!=n )
             newNode=nodes[j];
 
     if (newNode != nullptr) {
@@ -167,7 +179,7 @@ void Circuit::link(Node *n) {
 void Circuit::print(){
     std::cout<<"components->          ";
     for (int i=0; i<components.size(); i++)
-    std::cout<<components[i]<<"        ";
+        std::cout<<components[i]<<"        ";
     std::cout<<std::endl;
     for (int j=0; j< I.bottom()+1; j++) {
         std::cout<<nodes[j]<<"("<<nodes[j]->x()<<","<<nodes[j]->y()<<")"<<"   ";
