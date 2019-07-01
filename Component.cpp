@@ -31,9 +31,7 @@ void Component::connect(std::shared_ptr<Node> n1, std::shared_ptr<Node> n2){
         n1->connectComponent(this);
         n2->connectComponent(this);
         connected=true;
-    I.addCol();
-    I(indexP, I.end()) = 1;
-    I(indexN, I.end()) = -1;
+
 }
 
 void Component::disconnect() {
