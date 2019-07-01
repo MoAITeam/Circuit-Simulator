@@ -28,7 +28,6 @@ public:
     void linkNode(Node* n);
 
 private:
-    QGraphicsScene *scene;
     Circuit* circuit;
     QPointF mousePressPoint;
 };

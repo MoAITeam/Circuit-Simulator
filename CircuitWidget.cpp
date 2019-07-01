@@ -8,31 +8,31 @@
 #include <iostream>
 
 CircuitWidget::CircuitWidget(Circuit* c):circuit(c){
-    scene = new QGraphicsScene(this);
+    QGraphicsScene* scene = new QGraphicsScene(this);
     scene->setSceneRect(0, 0, 400, 400);
     circuit->setObserver(this);
     setScene(scene);
 }
 
 void CircuitWidget::addItem(Component *c) {
-    scene->addItem(c);
+    scene()->addItem(c);
 }
 
 void CircuitWidget::removeItem(Component *c){
-    scene->removeItem(c);
+    scene()->removeItem(c);
 }
 
 void CircuitWidget::addItem(Node *node) {
-    if(node->scene()!=this->scene) {
+    if(node->scene()!=this->scene()) {
         QObject::connect(node, SIGNAL(positionChanged(Node * )), this, SLOT(linkNode(Node * )));
-        scene->addItem(node);
+        scene()->addItem(node);
     }
 }
 
 void CircuitWidget::removeItem(Node *node){
-    if(node->scene()==this->scene) {
+    if(node->scene()==this->scene()) {
         this->disconnect(node);
-        scene->removeItem(node);
+        scene()->removeItem(node);
     }
 }
 

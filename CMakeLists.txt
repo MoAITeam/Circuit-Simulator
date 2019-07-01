@@ -8,9 +8,11 @@ set(CMAKE_PREFIX_PATH "/usr/local/Cellar/qt/5.12.3/lib/cmake/")
 
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Test REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 
-add_executable(FirstSimulatorTest main.cpp Component.cpp Circuit.cpp Node.cpp CircuitWidget.cpp CircuitWidget.h Observer.h)
+add_executable(FirstSimulatorTest  Component.cpp Circuit.cpp Node.cpp CircuitWidget.cpp CircuitWidget.h Observer.h TestCircuitWidget.cpp TestCircuitWidget.h)
 target_link_libraries (FirstSimulatorTest Eigen3::Eigen)
 target_link_libraries(FirstSimulatorTest Qt5::Widgets)
+target_link_libraries(FirstSimulatorTest Qt5::Test)

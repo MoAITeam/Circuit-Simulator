@@ -7,6 +7,7 @@
 
 #include <QGraphicsItem>
 #include <vector>
+#include <memory>
 
 class Node;
 
