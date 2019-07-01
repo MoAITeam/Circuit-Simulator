@@ -3,12 +3,24 @@
 //
 
 #include "TestCircuitWidget.h"
+#include "CircuitWidget.h"
 
 QTEST_MAIN(TestCircuitWidget)
 
 void TestCircuitWidget::testAddItem() {
     Circuit* circuit= new Circuit;
+    CircuitWidget* widget=new CircuitWidget(circuit);
     auto *c = new Component(5);
     circuit->add(c, 50, 50, 100,100);
     QVERIFY(c->getNode(1)->x()==50 && c->getNode(1)->y()==50 && c->getNode(2)->x()==100 && c->getNode(2)->y()==100);
+    bool found=false;
+    for (auto item : widget->scene()->items()){
+        if (item==c) {
+            if (found==false)
+            found=true;
+            else
+                found=false; //duplicated
+        }
+    }
+    QVERIFY(found==true);
 }
