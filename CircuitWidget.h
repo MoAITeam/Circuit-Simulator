@@ -19,7 +19,6 @@ public:
     void addItem(Node* node) override;
     void removeItem(Component *c) override;
     void removeItem(Node *n) override;
-    void LOLMETHOD();
 
     void keyPressEvent(QKeyEvent *event) override;
     void mousePressEvent(QMouseEvent* event) override;
