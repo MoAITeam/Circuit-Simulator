@@ -3,6 +3,8 @@
 //
 
 #include "Circuit.h"
+#include <iostream>
+using namespace std;
 //TODO: node should be abstract non inheriting from QGraphicsItem
 
 Circuit::Circuit(Observer *o):observer(o) {
@@ -39,7 +41,7 @@ void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
     observer->addItem(ns.get());
 
     if (observer != nullptr)
-        observer->addItem(c); //FIXME two overloaded addItems should be one...
+        observer->addItem(c); //FIXME two overloaded addItems should be one..
 
     c->connect(ps, ns);
 
@@ -68,7 +70,7 @@ template <class T> int Circuit::find(T *e,std::vector<T*> v){
     //TODO: should throw duplicated exception?
     int index=v.size();
     for (int i=0; i<v.size();i++)
-        if(*v[i]==*e)
+        if(v[i]==e)
             index=i;
     return index;
 }
@@ -99,6 +101,20 @@ void Circuit::link(Node* &drag) {
                 component->connect(existing,keep);
             }
         }
-        drag=existing.get();
+        //Cipher:Not clear what the aim is in order to do it
+        //drag=existing.get();
+    }
+}
+
+void Circuit::print(){
+    std::cout<<"componenti:          ";
+    for (int i=0; i<components.size(); i++)
+        std::cout<<components[i]<<"        ";
+    std::cout<<std::endl;
+    for (int j=0; j< I.bottom()+1; j++) {
+        std::cout<<nodes[j]<<"("<<nodes[j]->x()<<","<<nodes[j]->y()<<")"<<"   ";
+        for (int i = 0; i < I.end()+1; i++)
+            std::cout << I(j,i) << "                     ";
+        std::cout << std::endl;
     }
 }

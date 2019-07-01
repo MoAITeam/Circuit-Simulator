@@ -24,6 +24,7 @@ void CircuitWidget::removeItem(Component *c){
 
 void CircuitWidget::addItem(Node *node) {
     if(node->scene()!=this->scene()) {
+        //connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type)
         QObject::connect(node, SIGNAL(positionChanged(Node * )), this, SLOT(linkNode(Node * )));
         scene()->addItem(node);
     }
@@ -49,7 +50,8 @@ void CircuitWidget::mouseReleaseEvent(QMouseEvent *event) {
 
         circuit->add(c, mousePressPoint.x(), mousePressPoint.y(), event->pos().x(),event->pos().y());
 
-        //TODO should I be abel to create actual Nodes?
+//TODO should I be abel to create actual Nodes?
+
     }
     else
     {
@@ -59,6 +61,7 @@ void CircuitWidget::mouseReleaseEvent(QMouseEvent *event) {
 
 void CircuitWidget::linkNode(Node* n){
     circuit->link(n);
+    circuit->print();
 }
 
 void CircuitWidget::keyPressEvent(QKeyEvent *event)
