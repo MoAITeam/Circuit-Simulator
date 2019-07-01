@@ -8,8 +8,6 @@
 //TODO: What the heck is argv i only need it to create the application for Qt
 int main(int argc, char **argv) {
 
-    Circuit c;
-
     /*try {
         Component *component = new Component(5);
         Node *a = new Node(0, 0);
@@ -23,14 +21,14 @@ int main(int argc, char **argv) {
 
     QApplication app(argc,argv);
     QMainWindow mainWindow;
-    //TODO MA IL CONTROLLER dov'e???
-    CircuitWidget* graph=new CircuitWidget(&c);
+    CircuitWidget* graph;
+    Circuit c;
+    graph=new CircuitWidget(&c);
     c.setObserver(graph);
     mainWindow.setCentralWidget(graph);
     mainWindow.show();
 
     app.exec();
-    c.print();
 
     return 0;
 }

@@ -8,7 +8,7 @@
 #include <QGraphicsItem>
 #include <QMouseEvent>
 #include <vector>
-#define NodeSize 5
+#define NodeSize 10
 
 class Component;
 
@@ -17,12 +17,14 @@ Q_OBJECT
 public:
     Node(float x, float y);
     Node(QPointF point);
+    ~Node();
     bool operator==(Node& a);
     void connectComponent(Component* c);
     void disconnectComponent(Component* c);
 
     QRectF boundingRect() const override;
     void paint(QPainter* painter,const QStyleOptionGraphicsItem*,QWidget* ) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     std::vector<Component*> getComponents();
@@ -31,7 +33,9 @@ signals:
     void positionChanged(Node *);
 
 private:
+    void adjustComponents();
     float voltage;
+    bool dragging=false;
     std::vector<Component*> components;
 };
 

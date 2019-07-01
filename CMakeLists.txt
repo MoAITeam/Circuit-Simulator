@@ -11,6 +11,6 @@ find_package(Qt5Widgets REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 
-add_executable(FirstSimulatorTest main.cpp Component.cpp Circuit.cpp Node.cpp IMatrix.cpp CircuitWidget.cpp CircuitWidget.h Observer.h)
+add_executable(FirstSimulatorTest main.cpp Component.cpp Circuit.cpp Node.cpp CircuitWidget.cpp CircuitWidget.h Observer.h)
 target_link_libraries (FirstSimulatorTest Eigen3::Eigen)
 target_link_libraries(FirstSimulatorTest Qt5::Widgets)

@@ -4,6 +4,8 @@
 #include "Node.h"
 #include "Component.h"
 #include <QPainter>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsScene>
 
 Node::Node(float x, float y){
     setFlag(ItemIsMovable);
@@ -15,12 +17,18 @@ Node::Node(QPointF point):Node(point.x(),point.y()) {
 
 }
 
+Node::~Node(){
+    /*for (auto component : components) {
+        disconnectComponent(component);
+        component->disconnect();
+        delete component;
+        //scene()->removeItem(this);
+    }*/
+    //FIXME something that might actually work
+}
+
 bool Node::operator==(Node& n) {
-    if (qAbs(this->x()-n.x())<(NodeSize)&&qAbs(this->y()-n.y())<(NodeSize))
-        return true;
-    else {
-        return false;
-    }
+    return qAbs(x() - n.x()) < (NodeSize) && qAbs(y() - n.y()) < (NodeSize);
 }
 
 QRectF Node::boundingRect() const {
@@ -32,16 +40,31 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     painter->drawEllipse(-NodeSize/2, -NodeSize/2, NodeSize, NodeSize);
 }
 
-void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsItem::mouseReleaseEvent(event);
-    emit positionChanged(this);
+void Node::adjustComponents(){
+    for (auto component : components) {
+        component->prepare();
+        component->update();
+    }
 }
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    for (auto component : components) {
-        component->update();
-    }
+    adjustComponents();
     QGraphicsItem::mouseMoveEvent(event);
+}
+
+void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    if (event->button()==Qt::LeftButton)
+        dragging=true;
+    QGraphicsItem::mousePressEvent(event);
+}
+
+void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    adjustComponents();
+    QGraphicsItem::mouseReleaseEvent(event);
+    if (dragging==true) {
+        emit positionChanged(this);
+        dragging=false;
+    }
 }
 
 void Node::connectComponent(Component *c) {

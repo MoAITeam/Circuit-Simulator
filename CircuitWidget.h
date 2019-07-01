@@ -15,7 +15,6 @@ class CircuitWidget: public QGraphicsView, public Observer{
 Q_OBJECT
 public:
     CircuitWidget(Circuit* c);
-    ~CircuitWidget();
     void addItem(Component* c) override;
     void addItem(Node* node) override;
     void removeItem(Component *c) override;

@@ -5,9 +5,15 @@
 #include "Component.h"
 #include "Node.h"
 #include <QPainter>
+#include <QGraphicsScene>
 
 Component::Component(float v): value(v) {
 
+}
+
+Component::~Component() {
+    //FIXME something that actually works
+    //scene()->removeItem(this);
 }
 
 bool Component::operator==(Component &c) {
@@ -16,11 +22,14 @@ bool Component::operator==(Component &c) {
     return false;
 }
 
-void Component::connect(Node *n1, Node *n2) {
-    nodes[0]=n1;
-    nodes[1]=n2;
-    n1->connectComponent(this);
-    n2->connectComponent(this);
+void Component::connect(std::shared_ptr<Node> n1, std::shared_ptr<Node> n2){
+    if (connected)
+            disconnect();
+        nodes[0] = n1;
+        nodes[1] = n2;
+        n1->connectComponent(this);
+        n2->connectComponent(this);
+        connected=true;
 }
 
 void Component::disconnect() {
@@ -28,6 +37,8 @@ void Component::disconnect() {
     this->nodes[1]->disconnectComponent(this);
     nodes[0]= nullptr;
     nodes[1]= nullptr;
+    connected= false;
+
 }
 
 QRectF Component::boundingRect() const {
@@ -45,11 +56,10 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawLine(line);
 }
 
-void Component::update(const QRectF &rect) {
+void Component::prepare(){
     prepareGeometryChange();
-    QGraphicsItem::update(rect);
 }
 
-std::vector<Node*> Component::getNodes() {
-    return nodes;
+std::shared_ptr<Node> Component::getNode(int i) {
+    return nodes[i];
 }

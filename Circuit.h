@@ -8,7 +8,6 @@
 //TODO: components and nodes should be abstract not graphical entities [VERY HARD]!
 #include "Component.h"
 #include "Node.h"
-#include "IMatrix.h"
 #include <vector>
 #include "Observer.h"
 
@@ -17,22 +16,15 @@ public:
     Circuit(Observer* o=nullptr);
     ~Circuit();
     void setObserver(Observer* graphics);
-    void add(Component *c, Node*& p, Node*& n); //aggiunge in tutti i modi, doppio puntatore per modificare quello passato
-    void deleteComponent(Component* c);
-    void removeComponent(Component* c);
-    void print();
-    void link(Node* n);
+    void add(Component *c, float x1, float y1, float x2, float y2); //aggiunge in tutti i modi, doppio puntatore per modificare quello passato
+    void removeComponent(Component *c);
+    void link(Node* &drag);
 
 private:
     template <class T> int find(T *e,std::vector<T*> v);
-    template <class T> int getIndex(T *e,std::vector<T*> v);
-    void connect(Component *c, Node *p, Node *n); //aggiunge solo se esistono già i nodi
-    void AddNode(Node* n);
-    void removeNode(Node* n);
     std::vector<Component*> components;
     std::vector<Node*> nodes;
     Observer* observer;
-    IMatrix I;
 };
 
 

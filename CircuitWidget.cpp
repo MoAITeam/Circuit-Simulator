@@ -14,10 +14,6 @@ CircuitWidget::CircuitWidget(Circuit* c):circuit(c){
     setScene(scene);
 }
 
-CircuitWidget::~CircuitWidget() {
-    delete scene;
-}
-
 void CircuitWidget::addItem(Component *c) {
     scene->addItem(c);
 }
@@ -27,13 +23,17 @@ void CircuitWidget::removeItem(Component *c){
 }
 
 void CircuitWidget::addItem(Node *node) {
-    QObject::connect(node,SIGNAL(positionChanged(Node*)),this,SLOT(linkNode(Node*)));
-    scene->addItem(node);
+    if(node->scene()!=this->scene) {
+        QObject::connect(node, SIGNAL(positionChanged(Node * )), this, SLOT(linkNode(Node * )));
+        scene->addItem(node);
+    }
 }
 
 void CircuitWidget::removeItem(Node *node){
-    this->disconnect(node);
-    scene->removeItem(node);
+    if(node->scene()==this->scene) {
+        this->disconnect(node);
+        scene->removeItem(node);
+    }
 }
 
 void CircuitWidget::mousePressEvent(QMouseEvent *event) {
@@ -43,20 +43,22 @@ void CircuitWidget::mousePressEvent(QMouseEvent *event) {
 
 void CircuitWidget::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
+        QGraphicsView::mouseReleaseEvent(event);
 
-        Component *c = new Component(5);
-        Node* p=new Node(mousePressPoint.x(), mousePressPoint.y());
-        Node* n=new Node(event->pos().x(), event->pos().y());
+        auto *c = new Component(5);
 
-        circuit->add(c, p, n);
-        circuit->print();
+        circuit->add(c, mousePressPoint.x(), mousePressPoint.y(), event->pos().x(),event->pos().y());
+
+        //TODO should I be abel to create actual Nodes?
     }
-    QGraphicsView::mouseReleaseEvent(event);
+    else
+    {
+        QGraphicsView::mouseReleaseEvent(event);
+    }
 }
 
 void CircuitWidget::linkNode(Node* n){
     circuit->link(n);
-    circuit->print();
 }
 
 void CircuitWidget::keyPressEvent(QKeyEvent *event)
