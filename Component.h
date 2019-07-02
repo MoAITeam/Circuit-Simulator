@@ -8,10 +8,9 @@
 #include <QGraphicsItem>
 #include <vector>
 #include <memory>
+#include "ComponentObserver.h"
 
 class Node;
-
-class ComponentObserver;
 
 class Component: public QGraphicsItem {
 public:

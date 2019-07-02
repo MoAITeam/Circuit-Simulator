@@ -5,7 +5,7 @@
 #ifndef FIRSTSIMULATORTEST_COMPONENTOBSERVER_H
 #define FIRSTSIMULATORTEST_COMPONENTOBSERVER_H
 
-#include "Component.h"
+class Component;
 
 class ComponentObserver{
 public:

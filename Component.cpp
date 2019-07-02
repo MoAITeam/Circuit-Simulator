@@ -4,7 +4,6 @@
 
 #include "Component.h"
 #include "Node.h"
-#include "ComponentObserver.h"
 #include <QPainter>
 #include <QGraphicsScene>
 #include "Circuit.h"
