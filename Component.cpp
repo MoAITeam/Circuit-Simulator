@@ -4,6 +4,7 @@
 
 #include "Component.h"
 #include "Node.h"
+#include "ComponentObserver.h"
 #include <QPainter>
 #include <QGraphicsScene>
 #include "Circuit.h"
@@ -13,14 +14,12 @@ Component::Component(float v): value(v) {
 }
 
 Component::~Component() {
-    //FIXME something that actually works
-    //scene()->removeItem(this);
+    observer->removeComponent(this);
+    disconnect();
 }
 
-bool Component::operator==(Component &c) {
-    if (this==&c)
-        return true;
-    return false;
+void Component::setObserver(ComponentObserver* o){
+    observer=o;
 }
 
 void Component::connect(std::shared_ptr<Node> n1, std::shared_ptr<Node> n2){
@@ -40,7 +39,6 @@ void Component::disconnect() {
     nodes[0]= nullptr;
     nodes[1]= nullptr;
     connected= false;
-
 }
 
 QRectF Component::boundingRect() const {
@@ -58,8 +56,9 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawLine(line);
 }
 
-void Component::prepare(){
+void Component::redraw(){
     prepareGeometryChange();
+    update();
 }
 
 std::shared_ptr<Node> Component::getNode(int i) {

@@ -30,10 +30,9 @@ public:
     std::vector<Component*> getComponents();
 
 signals:
-    void positionChanged(Node *);
+    void positionChanged(Node*);
 
 private:
-    void adjustComponents();
     float voltage;
     bool dragging=false;
     std::vector<Component*> components;

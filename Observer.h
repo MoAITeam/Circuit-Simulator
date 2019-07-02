@@ -12,8 +12,7 @@ class Observer{
 public:
     virtual void addItem(Node* item) = 0;
     virtual void addItem(Component* item) = 0;
-    virtual void removeItem(Node* item) = 0;
-    virtual void removeItem(Component* item) = 0;
+   // virtual void removeItem(Node* item) = 0;
     virtual ~Observer() {};
 };
 

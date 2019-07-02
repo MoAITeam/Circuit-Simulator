@@ -17,8 +17,7 @@ public:
     CircuitWidget(Circuit* c);
     void addItem(Component* c) override;
     void addItem(Node* node) override;
-    void removeItem(Component *c) override;
-    void removeItem(Node *n) override;
+    //void removeItem(Node *n) override;
 
     void keyPressEvent(QKeyEvent *event) override;
     void mousePressEvent(QMouseEvent* event) override;

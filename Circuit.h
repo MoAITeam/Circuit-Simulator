@@ -10,24 +10,21 @@
 #include "Node.h"
 #include <vector>
 #include "Observer.h"
-#include "IMatrix.h"
 
-class Circuit{
+class Circuit: public ComponentObserver{
 public:
     Circuit(Observer* o=nullptr);
     ~Circuit();
     void setObserver(Observer* graphics);
     void add(Component *c, float x1, float y1, float x2, float y2); //aggiunge in tutti i modi, doppio puntatore per modificare quello passato
-    void removeComponent(Component *c);
-    void link(Node* &drag);
-    void print();
+    void removeComponent(Component *c) override;
+    void link(Node& drag);
 
 private:
-    template <class T> int find(T *e,std::vector<T*> v);
+    int find(Component* c);
     std::vector<Component*> components;
     std::vector<Node*> nodes;
     Observer* observer;
-    IMatrix I;
 };
 
 

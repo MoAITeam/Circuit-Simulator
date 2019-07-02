@@ -18,13 +18,7 @@ Node::Node(QPointF point):Node(point.x(),point.y()) {
 }
 
 Node::~Node(){
-    /*for (auto component : components) {
-        disconnectComponent(component);
-        component->disconnect();
-        delete component;
-        //scene()->removeItem(this);
-    }*/
-    //FIXME something that might actually work
+    disconnect(); //for signals
 }
 
 bool Node::operator==(Node& n) {
@@ -40,15 +34,10 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     painter->drawEllipse(-NodeSize/2, -NodeSize/2, NodeSize, NodeSize);
 }
 
-void Node::adjustComponents(){
-    for (auto component : components) {
-        component->prepare();
-        component->update();
-    }
-}
-
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    adjustComponents();
+    for (auto component : components) {
+        component->redraw();
+    }
     QGraphicsItem::mouseMoveEvent(event);
 }
 
@@ -59,7 +48,9 @@ void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    adjustComponents();
+    for (auto component : components) {
+        component->redraw();
+    }
     QGraphicsItem::mouseReleaseEvent(event);
     if (dragging==true) {
         emit positionChanged(this);
