@@ -22,16 +22,17 @@ public:
 
     QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
-    void redraw(); //FIXME ugly name hiding
+    void redraw();
 
-    std::shared_ptr<Node> getNode(int i);
+    std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> getNodes();
 
 private:
     float value;
     float current;
     float voltage;
     ComponentObserver* observer;
-    std::vector<std::shared_ptr<Node>> nodes{nullptr, nullptr};
+    std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> nodes{nullptr, nullptr};
+    //std::vector<std::shared_ptr<Node>> nodes{nullptr, nullptr}; //FIXME pair
 
     bool connected=false;
 

@@ -24,8 +24,8 @@ void Component::setObserver(ComponentObserver* o){
 void Component::connect(std::shared_ptr<Node> n1, std::shared_ptr<Node> n2){
     if (connected)
             disconnect();
-        nodes[0] = n1;
-        nodes[1] = n2;
+        nodes.first = n1;
+        nodes.second = n2;
         n1->connectComponent(this);
         n2->connectComponent(this);
         connected=true;
@@ -33,22 +33,22 @@ void Component::connect(std::shared_ptr<Node> n1, std::shared_ptr<Node> n2){
 }
 
 void Component::disconnect() {
-    this->nodes[0]->disconnectComponent(this);
-    this->nodes[1]->disconnectComponent(this);
-    nodes[0]= nullptr;
-    nodes[1]= nullptr;
+    this->nodes.first->disconnectComponent(this);
+    this->nodes.second->disconnectComponent(this);
+    nodes.first= nullptr;
+    nodes.second= nullptr;
     connected= false;
 }
 
 QRectF Component::boundingRect() const {
-    QPoint n1(nodes[0]->x(),nodes[0]->y());
-    QPoint n2(nodes[1]->x(),nodes[1]->y());
+    QPoint n1(nodes.first->x(),nodes.first->y());
+    QPoint n2(nodes.second->x(),nodes.second->y());
     return QRectF(n1,n2).normalized();
 }
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    QPoint n1(nodes[0]->x(),nodes[0]->y());
-    QPoint n2(nodes[1]->x(),nodes[1]->y());
+    QPoint n1(nodes.first->x(),nodes.first->y());
+    QPoint n2(nodes.second->x(),nodes.second->y());
     QLineF line(n1,n2);
 
     painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
@@ -60,6 +60,6 @@ void Component::redraw(){
     update();
 }
 
-std::shared_ptr<Node> Component::getNode(int i) {
-    return nodes[i];
+std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> Component::getNodes() {
+    return nodes;
 }

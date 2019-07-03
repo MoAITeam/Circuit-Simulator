@@ -8,6 +8,7 @@
 QTEST_MAIN(TestCircuitWidget)
 
 void TestCircuitWidget::testAddItem() {
+
     Circuit* circuit= new Circuit;
     CircuitWidget* widget=new CircuitWidget(circuit);
     auto *c = new Component(5);
@@ -23,4 +24,5 @@ void TestCircuitWidget::testAddItem() {
         }
     }
     QVERIFY(found==true);
+
 }

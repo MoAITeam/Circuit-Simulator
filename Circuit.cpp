@@ -19,7 +19,11 @@ Circuit::~Circuit() {
 
 void Circuit::setObserver(CircuitObserver *o) {
     observer=o;
-    //FIXME: update the observer about myself!!!
+    for (auto &component : components) {
+        observer->addItem(component);
+        observer->addItem(component->getNodes().first.get());
+        observer->addItem(component->getNodes().second.get());
+    }
 }
 
 void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
@@ -71,10 +75,10 @@ void Circuit::link(Node& drag) {
 
     //The heart of link method: finds the one that is "identical for Node standards" but not the same node
     for (auto &component : components) {
-        if (*(component->getNode(0))==drag && component->getNode(0).get()!=&drag)
-            existing= component->getNode(0);
-        if (*(component->getNode(1))==drag && component->getNode(1).get()!=&drag)
-            existing= component->getNode(1);
+        if (*(component->getNodes().first)==drag && component->getNodes().first.get()!=&drag)
+            existing= component->getNodes().first;
+        if (*(component->getNodes().second)==drag && component->getNodes().second.get()!=&drag)
+            existing= component->getNodes().second;
     }
 
     if (existing != nullptr) {
@@ -83,7 +87,10 @@ void Circuit::link(Node& drag) {
 
         for (auto &component : componentsToUpdate) {
             std::shared_ptr<Node> keep;
-            keep = component->getNode((component->getNode(0).get() == &drag ? 1 : 0));
+            if (component->getNodes().first.get() == &drag)
+                keep = component->getNodes().second;
+            if (component->getNodes().second.get() == &drag)
+                keep = component->getNodes().first;
             if (*keep == drag) {
                 delete component;
             } else {

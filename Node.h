@@ -31,7 +31,7 @@ public:
     void paint(QPainter* painter,const QStyleOptionGraphicsItem*,QWidget* ) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* ) override;
     std::vector<Component*> getComponents();
 
 private:

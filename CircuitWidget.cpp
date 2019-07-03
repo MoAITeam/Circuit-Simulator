@@ -12,7 +12,6 @@ CircuitWidget::CircuitWidget(Circuit* c):circuit(c){
     scene->setSceneRect(0, 0, 400, 400);
     circuit->setObserver(this);
     setScene(scene);
-    //TODO maybe redefine QGraphicsScene?
 }
 
 void CircuitWidget::addItem(QGraphicsItem *item) {

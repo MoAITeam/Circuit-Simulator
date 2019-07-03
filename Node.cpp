@@ -48,6 +48,7 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 }
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    if(event->button()==Qt::LeftButton)
     for (auto component : components) {
         component->redraw();
     }
@@ -62,7 +63,7 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         observer->link(*this);
 }
 
-void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
     destroy();
 }
 

@@ -5,18 +5,19 @@
 #ifndef FIRSTSIMULATORTEST_CIRCUIT_H
 #define FIRSTSIMULATORTEST_CIRCUIT_H
 
-//TODO: components and nodes should be abstract not graphical entities [VERY HARD]!
 #include "Component.h"
 #include "Node.h"
 #include <vector>
 #include "CircuitObserver.h"
+
+//TODO observer for matrix
 
 class Circuit: public ComponentObserver, public NodeObserver{
 public:
     Circuit(CircuitObserver* o=nullptr);
     ~Circuit();
 
-    void add(Component *c, float x1, float y1, float x2, float y2) override;
+    void add(Component *c, float x1, float y1, float x2, float y2);
     void remove(Component *c) override;
 
     void setObserver(CircuitObserver* graphics);
