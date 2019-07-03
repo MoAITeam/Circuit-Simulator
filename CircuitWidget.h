@@ -11,20 +11,15 @@
 #include <QMouseEvent>
 #include "Circuit.h"
 
-class CircuitWidget: public QGraphicsView, public Observer{
+class CircuitWidget: public QGraphicsView, public CircuitObserver{
 Q_OBJECT
 public:
     CircuitWidget(Circuit* c);
-    void addItem(Component* c) override;
-    void addItem(Node* node) override;
-    //void removeItem(Node *n) override;
+    void addItem(QGraphicsItem* c) override;
 
     void keyPressEvent(QKeyEvent *event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
-
-    public slots:
-    void linkNode(Node* n);
 
 private:
     Circuit* circuit;

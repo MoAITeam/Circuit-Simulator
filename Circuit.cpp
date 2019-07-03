@@ -3,9 +3,10 @@
 //
 
 #include "Circuit.h"
+#define NOT_FOUND -1
 //TODO: node should be abstract non inheriting from QGraphicsItem
 
-Circuit::Circuit(Observer *o):observer(o) {
+Circuit::Circuit(CircuitObserver *o):observer(o) {
 
 }
 
@@ -16,41 +17,48 @@ Circuit::~Circuit() {
     }
 }
 
-void Circuit::setObserver(Observer *o) {
+void Circuit::setObserver(CircuitObserver *o) {
     observer=o;
+    //FIXME: update the observer about myself!!!
 }
 
 void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
 
-    //Check if the nodes I'm trying to add already exist
-    //If so, replace original pointers with the existing ones
-
     int index=find(c);
-    if (index!=components.size())
+    if (index!=NOT_FOUND)
         throw "Already added to circuit";
 
     std::shared_ptr<Node> ps(new Node(x1,y1));
     std::shared_ptr<Node> ns(new Node(x2,y2));
 
-    observer->addItem(ps.get());
-    observer->addItem(ns.get());
-
-    c->setObserver(this);
-
-    if (observer != nullptr)
-        observer->addItem(c); //FIXME two overloaded addItems should be one...
-
-    c->connect(ps, ns);
-
     components.push_back(c);
 
+    c->setObserver(this);
+    ps->setObserver(this);
+    ns->setObserver(this);
+
+    if (observer != nullptr){
+
+        observer->addItem(ps.get());
+        observer->addItem(ns.get());
+        observer->addItem(c);
+
+    }
+
+    c->connect(ps, ns);
     link(*ps);
     link(*ns);
 }
 
+void Circuit::remove(Component *c) {
+    int index= find(c);
+    if(index!=NOT_FOUND)
+        components.erase(components.begin() + index);
+}
+
 int Circuit::find(Component* c){
     //TODO: should throw duplicated exception?
-    int index=components.size();
+    int index=NOT_FOUND;
     for (int i=0; i<components.size();i++)
         if(components[i]==c)
             index=i;
@@ -62,7 +70,6 @@ void Circuit::link(Node& drag) {
     std::shared_ptr<Node> existing;
 
     //The heart of link method: finds the one that is "identical for Node standards" but not the same node
-    //Alternativa: costruire un'area attorno al nodo che si attiva versione hover, e controlla se sto pigiando...seee
     for (auto &component : components) {
         if (*(component->getNode(0))==drag && component->getNode(0).get()!=&drag)
             existing= component->getNode(0);
@@ -84,10 +91,4 @@ void Circuit::link(Node& drag) {
             }
         }
     }
-}
-
-void Circuit::removeComponent(Component *c) {
-    int index= find(c);
-    if(index!=components.size())
-        components.erase(components.begin() + index);
 }

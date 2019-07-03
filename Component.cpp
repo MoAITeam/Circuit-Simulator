@@ -13,7 +13,7 @@ Component::Component(float v): value(v) {
 }
 
 Component::~Component() {
-    observer->removeComponent(this);
+    observer->remove(this);
     disconnect();
 }
 

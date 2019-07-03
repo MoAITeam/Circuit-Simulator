@@ -12,16 +12,12 @@ CircuitWidget::CircuitWidget(Circuit* c):circuit(c){
     scene->setSceneRect(0, 0, 400, 400);
     circuit->setObserver(this);
     setScene(scene);
+    //TODO maybe redefine QGraphicsScene?
 }
 
-void CircuitWidget::addItem(Component *c) {
-    scene()->addItem(c);
-}
-
-void CircuitWidget::addItem(Node *node) {
-    if(node->scene()!=this->scene()) {
-        QObject::connect(node, SIGNAL(positionChanged(Node * )), this, SLOT(linkNode(Node * )));
-        scene()->addItem(node);
+void CircuitWidget::addItem(QGraphicsItem *item) {
+    if(item->scene()!=this->scene()) {
+        scene()->addItem(item);
     }
 }
 
@@ -43,11 +39,6 @@ void CircuitWidget::mouseReleaseEvent(QMouseEvent *event) {
     }
 }
 
-void CircuitWidget::linkNode(Node* n){
-    circuit->link(*n);
-
-}
-
 void CircuitWidget::keyPressEvent(QKeyEvent *event){
-    std::cout<<"Evento Debug"<<std::endl;
+
 }

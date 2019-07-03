@@ -19,6 +19,19 @@ Node::Node(QPointF point):Node(point.x(),point.y()) {
 
 Node::~Node(){
     disconnect(); //for signals
+    //if it ever had to get destroyed not regularly
+}
+
+void Node::destroy(){
+    std::vector<Component*> comps=components;
+    for(auto &component : comps) {
+        disconnectComponent(component);
+        delete component;
+    }
+}
+
+void Node::setObserver(NodeObserver *o){
+    observer=o;
 }
 
 bool Node::operator==(Node& n) {
@@ -41,21 +54,16 @@ void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseMoveEvent(event);
 }
 
-void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    if (event->button()==Qt::LeftButton)
-        dragging=true;
-    QGraphicsItem::mousePressEvent(event);
-}
-
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     for (auto component : components) {
         component->redraw();
     }
     QGraphicsItem::mouseReleaseEvent(event);
-    if (dragging==true) {
-        emit positionChanged(this);
-        dragging=false;
-    }
+        observer->link(*this);
+}
+
+void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+    destroy();
 }
 
 void Node::connectComponent(Component *c) {
