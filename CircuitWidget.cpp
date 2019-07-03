@@ -14,7 +14,7 @@ CircuitWidget::CircuitWidget(Circuit* c):circuit(c){
     setScene(scene);
 }
 
-void CircuitWidget::addItem(QGraphicsItem *item) {
+void CircuitWidget::addNotify(QGraphicsItem *item) {
     if(item->scene()!=this->scene()) {
         scene()->addItem(item);
     }

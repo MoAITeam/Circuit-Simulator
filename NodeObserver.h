@@ -8,9 +8,10 @@
 
 class Node;
 
+//Actually notifies change of state (previously implemented with Qt Slots)
 class NodeObserver {
 public:
-    virtual void link(Node& n)=0;
+    virtual void notify(Node &n)=0; //TODO should only comunicate new position
 
 };
 

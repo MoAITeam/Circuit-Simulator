@@ -18,10 +18,10 @@ public:
     ~Circuit();
 
     void add(Component *c, float x1, float y1, float x2, float y2);
-    void remove(Component *c) override;
+    void removeNotify(Component *c) override;
 
     void setObserver(CircuitObserver* graphics);
-    void link(Node& drag) override;
+    void notify(Node &drag) override;
 
 private:
     int find(Component* c);

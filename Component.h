@@ -16,14 +16,15 @@ class Component: public QGraphicsItem {
 public:
     Component(float v);
     ~Component();
-    void setObserver(ComponentObserver *o);
     void connect(std::shared_ptr<Node> n1, std::shared_ptr<Node> n2);
     void disconnect();
 
     QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
     void redraw();
 
+    void setObserver(ComponentObserver *o);
     std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> getNodes();
 
 private:
@@ -31,8 +32,7 @@ private:
     float current;
     float voltage;
     ComponentObserver* observer;
-    std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> nodes{nullptr, nullptr};
-    //std::vector<std::shared_ptr<Node>> nodes{nullptr, nullptr}; //FIXME pair
+    std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> nodes;
 
     bool connected=false;
 

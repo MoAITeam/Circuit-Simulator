@@ -6,14 +6,13 @@
 #include "Node.h"
 #include <QPainter>
 #include <QGraphicsScene>
-#include "Circuit.h"
 
-Component::Component(float v): value(v) {
+Component::Component(float v): value(v), nodes{nullptr, nullptr} {
 
 }
 
 Component::~Component() {
-    observer->remove(this);
+    observer->removeNotify(this); //TODO can we get around this?
     disconnect();
 }
 
@@ -46,13 +45,17 @@ QRectF Component::boundingRect() const {
     return QRectF(n1,n2).normalized();
 }
 
-void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
     QPoint n1(nodes.first->x(),nodes.first->y());
     QPoint n2(nodes.second->x(),nodes.second->y());
     QLineF line(n1,n2);
 
     painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->drawLine(line);
+}
+
+void Component::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
+    delete this;
 }
 
 void Component::redraw(){

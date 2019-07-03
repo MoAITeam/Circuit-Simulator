@@ -20,9 +20,9 @@ Circuit::~Circuit() {
 void Circuit::setObserver(CircuitObserver *o) {
     observer=o;
     for (auto &component : components) {
-        observer->addItem(component);
-        observer->addItem(component->getNodes().first.get());
-        observer->addItem(component->getNodes().second.get());
+        observer->addNotify(component);
+        observer->addNotify(component->getNodes().first.get());
+        observer->addNotify(component->getNodes().second.get());
     }
 }
 
@@ -43,18 +43,18 @@ void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
 
     if (observer != nullptr){
 
-        observer->addItem(ps.get());
-        observer->addItem(ns.get());
-        observer->addItem(c);
+        observer->addNotify(ps.get());
+        observer->addNotify(ns.get());
+        observer->addNotify(c);
 
     }
 
     c->connect(ps, ns);
-    link(*ps);
-    link(*ns);
+    notify(*ps);
+    notify(*ns);
 }
 
-void Circuit::remove(Component *c) {
+void Circuit::removeNotify(Component *c) {
     int index= find(c);
     if(index!=NOT_FOUND)
         components.erase(components.begin() + index);
@@ -69,7 +69,7 @@ int Circuit::find(Component* c){
     return index;
 }
 
-void Circuit::link(Node& drag) {
+void Circuit::notify(Node &drag) {
     //TODO: should throw duplicated exception?
     std::shared_ptr<Node> existing;
 

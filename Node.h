@@ -19,20 +19,23 @@ class Node: public QObject, public QGraphicsItem{
 Q_OBJECT
 public:
     Node(float x, float y);
-    Node(QPointF point);
     ~Node();
-    bool operator==(Node& a);
     void connectComponent(Component* c);
     void disconnectComponent(Component* c);
-    void destroy();
-    void setObserver(NodeObserver *o);
 
     QRectF boundingRect() const override;
     void paint(QPainter* painter,const QStyleOptionGraphicsItem*,QWidget* ) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* ) override;
+    void destroy(); //It really just deletes all the components attached to it, could do it without a function
+
+
+    void setObserver(NodeObserver *o);
     std::vector<Component*> getComponents();
+
+    bool operator==(Node& a);
 
 private:
     float voltage;

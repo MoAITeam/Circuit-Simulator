@@ -13,13 +13,8 @@ Node::Node(float x, float y){
     this->setY(y);
 }
 
-Node::Node(QPointF point):Node(point.x(),point.y()) {
-
-}
-
 Node::~Node(){
     disconnect(); //for signals
-    //if it ever had to get destroyed not regularly
 }
 
 void Node::destroy(){
@@ -60,7 +55,7 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         component->redraw();
     }
     QGraphicsItem::mouseReleaseEvent(event);
-        observer->link(*this);
+    observer->notify(*this);
 }
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {

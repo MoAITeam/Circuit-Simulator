@@ -18,7 +18,6 @@ int main(int argc, char **argv) {
     mainWindow.show();
 
     app.exec();
-    c.print();
 
     return 0;
 }
