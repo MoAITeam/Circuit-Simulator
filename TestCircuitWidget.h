@@ -13,6 +13,7 @@ class TestCircuitWidget: public QObject {
 Q_OBJECT
     void testAddItem();
     void removeRandomComponent(); //TODO
+    void createAndRemoveOrsaMaggiore(); //TODO
 };
 
 

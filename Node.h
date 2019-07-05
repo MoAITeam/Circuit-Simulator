@@ -23,23 +23,28 @@ public:
     void connectComponent(Component* c);
     void disconnectComponent(Component* c);
 
+
     QRectF boundingRect() const override;
     void paint(QPainter* painter,const QStyleOptionGraphicsItem*,QWidget* ) override;
+
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+    //Just updates the drawing like the real application I'm building
+
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+    //notifies observer of the changed position
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* ) override;
-    void destroy(); //It really just deletes all the components attached to it, could do it without a function
+    //It really just deletes all the components attached to it
 
 
     void setObserver(NodeObserver *o);
-    std::vector<Component*> getComponents();
+    std::list<Component*> getComponents();
 
     bool operator==(Node& a);
 
 private:
     float voltage;
-    std::vector<Component*> components;
+    std::list<Component*> components;
     NodeObserver* observer;
 };
 

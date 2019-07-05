@@ -24,9 +24,8 @@ public:
     void notify(Node &drag) override;
 
 private:
-    int find(Component* c);
     CircuitObserver* observer;
-    std::vector<Component*> components;
+    std::list<Component*> components;
 
 };
 

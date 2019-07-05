@@ -13,7 +13,7 @@ void TestCircuitWidget::testAddItem() {
     CircuitWidget* widget=new CircuitWidget(circuit);
     auto *c = new Component(5);
     circuit->add(c, 50, 50, 100,100);
-    QVERIFY(c->getNode(1)->x()==50 && c->getNode(1)->y()==50 && c->getNode(2)->x()==100 && c->getNode(2)->y()==100);
+    QVERIFY(c->getNodes().first->x()==50 && c->getNodes().first->y()==50 && c->getNodes().second->x()==100 && c->getNodes().second->y()==100);
     bool found=false;
     for (auto item : widget->scene()->items()){
         if (item==c) {

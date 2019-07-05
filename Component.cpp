@@ -12,31 +12,26 @@ Component::Component(float v): value(v), nodes{nullptr, nullptr} {
 }
 
 Component::~Component() {
-    observer->removeNotify(this); //TODO can we get around this?
-    disconnect();
+    observer->removeNotify(this);
+    nodes.first->disconnectComponent(this);
+    nodes.second->disconnectComponent(this);
 }
 
 void Component::setObserver(ComponentObserver* o){
     observer=o;
 }
 
-void Component::connect(std::shared_ptr<Node> n1, std::shared_ptr<Node> n2){
-    if (connected)
-            disconnect();
-        nodes.first = n1;
-        nodes.second = n2;
-        n1->connectComponent(this);
-        n2->connectComponent(this);
-        connected=true;
-
-}
-
-void Component::disconnect() {
-    this->nodes.first->disconnectComponent(this);
-    this->nodes.second->disconnectComponent(this);
-    nodes.first= nullptr;
-    nodes.second= nullptr;
-    connected= false;
+void Component::connect(std::shared_ptr<Node> p, std::shared_ptr<Node> n){
+    if(p!= nullptr && n!=nullptr) { //Exactly disconnecting but keeping in the view and in the component vector in circuit
+        if (nodes.first != nullptr)
+            nodes.first->disconnectComponent(this);
+        if (nodes.second != nullptr)
+            nodes.second->disconnectComponent(this);
+        nodes.first = p;
+        nodes.second = n;
+        p->connectComponent(this);
+        n->connectComponent(this);
+    }
 }
 
 QRectF Component::boundingRect() const {
@@ -63,6 +58,6 @@ void Component::redraw(){
     update();
 }
 
-std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> Component::getNodes() {
+nodePair Component::getNodes() {
     return nodes;
 }

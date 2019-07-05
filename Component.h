@@ -11,30 +11,32 @@
 #include "ComponentObserver.h"
 
 class Node;
+typedef std::pair<std::shared_ptr<Node>, std::shared_ptr<Node>> nodePair;
 
 class Component: public QGraphicsItem {
 public:
     Component(float v);
     ~Component();
-    void connect(std::shared_ptr<Node> n1, std::shared_ptr<Node> n2);
-    void disconnect();
+    void connect(std::shared_ptr<Node> p, std::shared_ptr<Node> n);
+
 
     QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
     void redraw();
 
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
+    //just really deletes the pointer
+
+
     void setObserver(ComponentObserver *o);
-    std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> getNodes();
+    nodePair getNodes();
 
 private:
     float value;
     float current;
     float voltage;
     ComponentObserver* observer;
-    std::pair<std::shared_ptr<Node>,std::shared_ptr<Node>> nodes;
-
-    bool connected=false;
+    nodePair nodes;
 
 };
 

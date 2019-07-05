@@ -17,14 +17,6 @@ Node::~Node(){
     disconnect(); //for signals
 }
 
-void Node::destroy(){
-    std::vector<Component*> comps=components;
-    for(auto &component : comps) {
-        disconnectComponent(component);
-        delete component;
-    }
-}
-
 void Node::setObserver(NodeObserver *o){
     observer=o;
 }
@@ -43,23 +35,26 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 }
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    if(event->button()==Qt::LeftButton)
-    for (auto component : components) {
-        component->redraw();
+    if(event->button()==Qt::LeftButton) {
+        for (auto component : components) {
+            component->redraw();
+        }
     }
     QGraphicsItem::mouseMoveEvent(event);
 }
 
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    for (auto component : components) {
-        component->redraw();
-    }
     QGraphicsItem::mouseReleaseEvent(event);
+    //updateComponents(); to get better drawings, but it's not the point of the demo...
     observer->notify(*this);
 }
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
-    destroy();
+    std::list<Component*> comps=components;
+    for(auto &component : comps) {
+        disconnectComponent(component);
+        delete component;
+    }
 }
 
 void Node::connectComponent(Component *c) {
@@ -67,11 +62,9 @@ void Node::connectComponent(Component *c) {
 }
 
 void Node::disconnectComponent(Component *c){
-    for(int i=0; i<components.size(); i++)
-        if(components[i]==c)
-            components.erase(components.begin()+i);
+    components.remove(c);
 }
 
-std::vector<Component*> Node::getComponents() {
+std::list<Component*> Node::getComponents() {
     return components;
 }
