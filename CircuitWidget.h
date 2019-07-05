@@ -17,7 +17,6 @@ public:
     CircuitWidget(Circuit* c);
     void addNotify(QGraphicsItem *c) override;
 
-    void keyPressEvent(QKeyEvent *event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
 

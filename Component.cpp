@@ -12,26 +12,40 @@ Component::Component(float v): value(v), nodes{nullptr, nullptr} {
 }
 
 Component::~Component() {
+    if (observer!= nullptr)
     observer->removeNotify(this);
-    nodes.first->disconnectComponent(this);
-    nodes.second->disconnectComponent(this);
+    nodes.first->disconnect(this);
+    nodes.second->disconnect(this);
 }
 
 void Component::setObserver(ComponentObserver* o){
     observer=o;
 }
 
-void Component::connect(std::shared_ptr<Node> p, std::shared_ptr<Node> n){
-    if(p!= nullptr && n!=nullptr) { //Exactly disconnecting but keeping in the view and in the component vector in circuit
+void Component::connect(Node* p, Node* n){
+    if(p!= nullptr && n!=nullptr) {
         if (nodes.first != nullptr)
-            nodes.first->disconnectComponent(this);
+            nodes.first->disconnect(this);
         if (nodes.second != nullptr)
-            nodes.second->disconnectComponent(this);
+            nodes.second->disconnect(this);
         nodes.first = p;
         nodes.second = n;
-        p->connectComponent(this);
-        n->connectComponent(this);
+        p->connect(this);
+        n->connect(this);
     }
+}
+
+nodePair Component::getNodes() {
+    return nodes;
+}
+
+void Component::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
+    delete this;
+}
+
+void Component::redraw(){
+    prepareGeometryChange();
+    update();
 }
 
 QRectF Component::boundingRect() const {
@@ -47,17 +61,4 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
 
     painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->drawLine(line);
-}
-
-void Component::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
-    delete this;
-}
-
-void Component::redraw(){
-    prepareGeometryChange();
-    update();
-}
-
-nodePair Component::getNodes() {
-    return nodes;
 }

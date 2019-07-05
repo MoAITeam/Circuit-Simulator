@@ -26,18 +26,10 @@ void CircuitWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 void CircuitWidget::mouseReleaseEvent(QMouseEvent *event) {
+    QGraphicsView::mouseReleaseEvent(event);
     if (event->button() == Qt::RightButton) {
-        QGraphicsView::mouseReleaseEvent(event);
 
         auto *c = new Component(5);
         circuit->add(c, mousePressPoint.x(), mousePressPoint.y(), event->pos().x(), event->pos().y());
     }
-    else
-    {
-        QGraphicsView::mouseReleaseEvent(event);
-    }
-}
-
-void CircuitWidget::keyPressEvent(QKeyEvent *event){
-
 }

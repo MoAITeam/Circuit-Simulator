@@ -20,8 +20,8 @@ Q_OBJECT
 public:
     Node(float x, float y);
     ~Node();
-    void connectComponent(Component* c);
-    void disconnectComponent(Component* c);
+    void connect(Component *c);
+    void disconnect(Component *c);
 
 
     QRectF boundingRect() const override;

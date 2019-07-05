@@ -20,14 +20,16 @@ public:
     void add(Component *c, float x1, float y1, float x2, float y2);
     void removeNotify(Component *c) override;
     void removeNotify(Node *n) override;
+    void checkLink(Node &n);
 
     void setObserver(CircuitObserver* graphics);
-    void notify(Node &drag) override;
+    void moveNotify(Node &drag) override;
 
 private:
     CircuitObserver* observer;
     std::list<Component*> components;
     std::list<Node*> nodes;
+
 };
 
 
