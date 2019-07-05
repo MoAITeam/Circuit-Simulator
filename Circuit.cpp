@@ -19,9 +19,9 @@ Circuit::~Circuit() {
 void Circuit::setObserver(CircuitObserver *o) {
     observer=o;
     for (auto &component : components) {
-        observer->addNotify(component);
-        observer->addNotify(component->getNodes().first.get());
-        observer->addNotify(component->getNodes().second.get());
+        observer->addNotify(component,component->getNodes().first.get(),component->getNodes().second.get());
+       // observer->addNotify(component->getNodes().first.get());
+       // observer->addNotify(component->getNodes().second.get());
     }
 }
 
@@ -42,9 +42,9 @@ void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
 
     if (observer != nullptr){
 
-        observer->addNotify(ps.get());
-        observer->addNotify(ns.get());
-        observer->addNotify(c);
+        observer->addNotify(c,ps.get(),ns.get());
+       // observer->addNotify(ns.get());
+       // observer->addNotify(c);
 
     }
 

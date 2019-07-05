@@ -15,7 +15,7 @@ class CircuitWidget: public QGraphicsView, public CircuitObserver{
 Q_OBJECT
 public:
     CircuitWidget(Circuit* c);
-    void addNotify(QGraphicsItem *c) override;
+    void addNotify(QGraphicsItem *c,QGraphicsItem* n1,QGraphicsItem* n2) override;
 
     void keyPressEvent(QKeyEvent *event) override;
     void mousePressEvent(QMouseEvent* event) override;

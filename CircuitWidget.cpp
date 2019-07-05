@@ -14,10 +14,14 @@ CircuitWidget::CircuitWidget(Circuit* c):circuit(c){
     setScene(scene);
 }
 
-void CircuitWidget::addNotify(QGraphicsItem *item) {
-    if(item->scene()!=this->scene()) {
+void CircuitWidget::addNotify(QGraphicsItem *item, QGraphicsItem* item1,QGraphicsItem* item2) {
+    if(item->scene()!=this->scene())
         scene()->addItem(item);
-    }
+    if(item1->scene()!=this->scene())
+        scene()->addItem(item1);
+    if(item2->scene()!=this->scene())
+        scene()->addItem(item2);
+
 }
 
 void CircuitWidget::mousePressEvent(QMouseEvent *event) {

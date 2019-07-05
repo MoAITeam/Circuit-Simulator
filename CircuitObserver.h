@@ -10,7 +10,7 @@
 
 class CircuitObserver{
 public:
-    virtual void addNotify(QGraphicsItem *item) = 0;
+    virtual void addNotify(QGraphicsItem *item, QGraphicsItem* item1,QGraphicsItem* item2) = 0;
     virtual ~CircuitObserver() {};
 };
 
