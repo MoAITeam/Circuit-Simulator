@@ -27,6 +27,7 @@ void CircuitWidget::mousePressEvent(QMouseEvent *event) {
 
 void CircuitWidget::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
+
         QGraphicsView::mouseReleaseEvent(event);
 
         auto *c = new Component(5);
