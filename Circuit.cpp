@@ -35,6 +35,8 @@ void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
     std::shared_ptr<Node> ns(new Node(x2,y2));
 
     components.push_back(c);
+    nodes.push_back(ps.get());
+    nodes.push_back(ns.get());
 
     c->setObserver(this);
     ps->setObserver(this);
@@ -55,6 +57,10 @@ void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
 
 void Circuit::removeNotify(Component *c) {
     components.remove(c);
+}
+
+void Circuit::removeNotify(Node *n) {
+    nodes.remove(n);
 }
 
 void Circuit::notify(Node &drag) {

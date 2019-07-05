@@ -15,6 +15,7 @@ Node::Node(float x, float y){
 
 Node::~Node(){
     disconnect(); //for signals
+    observer->removeNotify(this);
 }
 
 void Node::setObserver(NodeObserver *o){

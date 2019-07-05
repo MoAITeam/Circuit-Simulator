@@ -12,7 +12,7 @@ class Node;
 class NodeObserver {
 public:
     virtual void notify(Node &n)=0; //TODO should only comunicate new position
-
+    virtual void removeNotify(Node* n)=0; //TODO should only comunicate new position
 };
 
 
