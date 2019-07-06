@@ -7,22 +7,40 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsScene>
 
-Node::Node(float x, float y){
+Node::Node(float x, float y):observer(nullptr){
     setFlag(ItemIsMovable);
     this->setX(x);
     this->setY(y);
 }
 
 Node::~Node(){
-    disconnect(); //for signals
+    if(observer!= nullptr)
+        observer->removeNotify(this);
+
+    std::list<Component*> toDelete=components;
+    for(auto &component : toDelete) {
+        delete component;
+    }
+}
+
+void Node::connect(Component *c) {
+    components.push_back(c);
+}
+
+void Node::disconnect(Component *c){
+    components.remove(c);
+}
+
+bool Node::operator==(Node& n) {
+    return qAbs(x() - n.x()) < (NodeSize) && qAbs(y() - n.y()) < (NodeSize);
 }
 
 void Node::setObserver(NodeObserver *o){
     observer=o;
 }
 
-bool Node::operator==(Node& n) {
-    return qAbs(x() - n.x()) < (NodeSize) && qAbs(y() - n.y()) < (NodeSize);
+std::list<Component*> Node::getComponents() {
+    return components;
 }
 
 QRectF Node::boundingRect() const {
@@ -35,36 +53,22 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 }
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    //if(event->button()==Qt::LeftButton) {
+    if(event->button()==Qt::LeftButton) {
         for (auto component : components) {
             component->redraw();
-
+        }
     }
     QGraphicsItem::mouseMoveEvent(event);
 }
 
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseReleaseEvent(event);
-    //updateComponents(); to get better drawings, but it's not the point of the demo...
-    observer->notify(*this);
+    for (auto component : components) {
+        component->redraw();
+    }
+    observer->moveNotify(*this);
 }
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
-    std::list<Component*> comps=components;
-    for(auto &component : comps) {
-        disconnectComponent(component);
-        delete component;
-    }
-}
-
-void Node::connectComponent(Component *c) {
-    components.push_back(c);
-}
-
-void Node::disconnectComponent(Component *c){
-    components.remove(c);
-}
-
-std::list<Component*> Node::getComponents() {
-    return components;
+    delete this;
 }

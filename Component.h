@@ -11,14 +11,14 @@
 #include "ComponentObserver.h"
 
 class Node;
-typedef std::pair<std::shared_ptr<Node>, std::shared_ptr<Node>> nodePair;
+typedef std::pair<Node*,Node*> nodePair;
 
 class Component: public QGraphicsItem {
 public:
     Component(float v);
     ~Component();
     void connect(std::shared_ptr<Node> p, std::shared_ptr<Node> n);
-
+    void connect(Node* p, Node* n);
 
     QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;

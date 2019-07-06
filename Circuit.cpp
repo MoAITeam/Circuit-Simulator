@@ -3,6 +3,7 @@
 //
 
 #include "Circuit.h"
+//TODO valgrind doens't work on Mac
 //TODO: node should be abstract non inheriting from QGraphicsItem
 
 Circuit::Circuit(CircuitObserver *o):observer(o) {
@@ -19,9 +20,9 @@ Circuit::~Circuit() {
 void Circuit::setObserver(CircuitObserver *o) {
     observer=o;
     for (auto &component : components) {
-        observer->addNotify(component,component->getNodes().first.get(),component->getNodes().second.get());
-       // observer->addNotify(component->getNodes().first.get());
-       // observer->addNotify(component->getNodes().second.get());
+        observer->addNotify(component);
+        observer->addNotify(component->getNodes().first);
+        observer->addNotify(component->getNodes().second);
     }
 }
 
@@ -31,54 +32,73 @@ void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
         if (c==component)
         throw "Already added to circuit";
 
-    std::shared_ptr<Node> ps(new Node(x1,y1));
-    std::shared_ptr<Node> ns(new Node(x2,y2));
+    Node* p= new Node(x1,y1);
+    Node* n= new Node(x2,y2);
 
-    components.push_back(c);
-
-    c->setObserver(this);
-    ps->setObserver(this);
-    ns->setObserver(this);
-
-    if (observer != nullptr){
-
-        observer->addNotify(c,ps.get(),ns.get());
-       // observer->addNotify(ns.get());
-       // observer->addNotify(c);
-
+    bool found=false;
+    for (auto &node : nodes)
+        if (*p==*node) {
+            delete p;
+            p = node;
+            found=true;
+        }
+    if (found==false){
+        nodes.push_back(p);
+        p->setObserver(this);
+        observer->addNotify(p);
     }
 
-    c->connect(ps, ns);
-    notify(*ps);
-    notify(*ns);
+    found= false;
+    for (auto &node : nodes)
+        if (*n==*node) {
+            delete n;
+            n = node;
+            found=true;
+        }
+    if (found==false){
+        nodes.push_back(n);
+        n->setObserver(this);
+        observer->addNotify(n);
+    }
+
+
+    components.push_back(c);
+    c->setObserver(this);
+    observer->addNotify(c);
+
+    c->connect(p, n);
+}
+
+void Circuit::checkLink(Node &n) {
+    //TODO: should throw duplicated exception?
+            Node* existing=nullptr;
+
+    //The heart of link method: finds the one that is "identical for Node standards" but not the same node
+    for (auto &node : nodes) {
+        if (*node==n && node!=&n)
+            existing=node;
+    }
+
+    if (existing != nullptr) {
+        std::list<Component *> componentsToUpdate = n.getComponents();
+        for (auto &component : componentsToUpdate) {
+            nodePair nodes= component->getNodes();
+            Node* keep;
+            keep = nodes.first == &n ? nodes.second :nodes.first;
+            *keep == n ? delete component : component->connect(existing,keep);
+        }
+        delete &n;
+    }
 }
 
 void Circuit::removeNotify(Component *c) {
     components.remove(c);
 }
 
-void Circuit::notify(Node &drag) {
-    //TODO: should throw duplicated exception?
-    std::shared_ptr<Node> existing;
-    nodePair nodes;
+void Circuit::removeNotify(Node *n) {
+    nodes.remove(n);
+}
 
-    //The heart of link method: finds the one that is "identical for Node standards" but not the same node
-    for (auto &component : components) {
-        nodes=component->getNodes();
-        if (*(nodes.first)==drag && nodes.first.get()!=&drag)
-            existing= nodes.first;
-        if (*(nodes.second)==drag && nodes.second.get()!=&drag)
-            existing= nodes.second;
-    }
-
-    if (existing != nullptr) {
-
-        std::list<Component *> componentsToUpdate = drag.getComponents();
-        for (auto &component : componentsToUpdate) {
-            nodes=component->getNodes();
-            std::shared_ptr<Node> keep;
-            keep = nodes.first.get() == &drag ? nodes.second :nodes.first;
-            *keep == drag ? delete component : component->connect(existing,keep);
-        }
-    }
+void Circuit::moveNotify(Node &drag) {
+    checkLink(drag);
 }
