@@ -10,9 +10,8 @@ int main(int argc, char **argv) {
 
     QApplication app(argc,argv);
     QMainWindow mainWindow;
-    CircuitWidget* graph;
     Circuit c;
-    graph=new CircuitWidget(&c);
+    auto graph=new CircuitWidget(&c);
     c.setObserver(graph);
     mainWindow.setCentralWidget(graph);
     mainWindow.show();
