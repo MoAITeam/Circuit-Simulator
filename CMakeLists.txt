@@ -13,11 +13,13 @@ find_package(Qt5Test REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 
+set(SOURCE_FILES main.cpp Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h IMatrix.cpp IMatrix.h)
+
 enable_testing()
 
-add_executable(FirstSimulatorTest main.cpp Component.cpp Circuit.cpp Node.cpp CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h)
+add_executable(FirstSimulatorTest main.cpp Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h IMatrix.cpp IMatrix.h)
+
 
 target_link_libraries (FirstSimulatorTest Eigen3::Eigen)
 target_link_libraries(FirstSimulatorTest Qt5::Widgets)
 target_link_libraries(FirstSimulatorTest Qt5::Test)
-
