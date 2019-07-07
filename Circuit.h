@@ -9,6 +9,7 @@
 #include "Node.h"
 #include <vector>
 #include "CircuitObserver.h"
+#include "SparseMatrix.h"
 
 //TODO observer for matrix
 
@@ -29,7 +30,7 @@ private:
     CircuitObserver* observer;
     std::list<Component*> components;
     std::list<Node*> nodes;
-
+    SparseMatrix m;
 };
 
 

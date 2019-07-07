@@ -43,6 +43,7 @@ void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
             found=true;
         }
     if (found==false){
+        m.add(p);
         nodes.push_back(p);
         p->setObserver(this);
         observer->addNotify(p);
@@ -56,6 +57,7 @@ void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
             found=true;
         }
     if (found==false){
+        m.add(n);
         nodes.push_back(n);
         n->setObserver(this);
         observer->addNotify(n);
@@ -96,6 +98,7 @@ void Circuit::removeNotify(Component *c) {
 }
 
 void Circuit::removeNotify(Node *n) {
+    m.remove(n,nodes);
     nodes.remove(n);
 }
 

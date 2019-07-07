@@ -12,8 +12,8 @@ find_package(Qt5Test REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 
-add_executable(FirstSimulatorTest main.cpp Component.cpp Circuit.cpp Node.cpp CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h)
-add_executable(FirstSimulatorTest-Test TestCircuitWidget.cpp Component.cpp Circuit.cpp Node.cpp CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h)
+add_executable(FirstSimulatorTest main.cpp MyMatrix.cpp Component.cpp Circuit.cpp Node.cpp CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h SparseMatrix.cpp SparseMatrix.h)
+add_executable(FirstSimulatorTest-Test MyMatrix.cpp TestCircuitWidget.cpp Component.cpp Circuit.cpp Node.cpp CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h SparseMatrix.cpp SparseMatrix.h)
 
 target_link_libraries (FirstSimulatorTest Eigen3::Eigen)
 target_link_libraries(FirstSimulatorTest Qt5::Widgets)
