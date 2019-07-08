@@ -59,12 +59,13 @@ void Circuit::add(Component *c, Node* p, Node* n) {
         observer->addNotify(n);
     }
 
-
     components.push_back(c);
     c->setObserver(this);
     observer->addNotify(c);
 
     c->connect(p, n);
+    m.add(c,nodes);
+
 }
 
 void Circuit::checkLink(Node &n) {
@@ -94,7 +95,7 @@ void Circuit::removeNotify(Component *c) {
 }
 
 void Circuit::removeNotify(Node *n) {
-    m.remove(n,nodes);
+    //m.remove(n,nodes);
     nodes.remove(n);
 }
 

@@ -3,19 +3,36 @@
 //
 
 #include "MyMatrix.h"
+#include <iostream>
 
 MyMatrix::MyMatrix(){
     this->setZero(0,0);
 }
 
 void MyMatrix::addRow() {
-    this->conservativeResize(this->rows()+1,NoChange);
-    this->row(this->rows()-1).setZero();
+    conservativeResize(rows()+1,NoChange);
+    row(rows()-1).setZero();
 }
 
 void MyMatrix::addCol() {
-    this->conservativeResize(NoChange,this->cols()+1);
-    this->rightCols(1).setZero();
+    conservativeResize(NoChange,cols()+1);
+    col(cols()-1).setZero();
+}
+
+void MyMatrix::ROWinsertBetweenNthAndNthplusOne(int x) {
+    Matrix<int,Dynamic,Dynamic> B = Matrix<int,Dynamic,Dynamic>::Zero(rows()+1, cols());
+    B.topRows(x) = topRows(x);
+    B.bottomRows(rows()-x) =  bottomRows(rows()-x);
+    this->resize(rows()+1,cols());
+    matrix().swap(B);
+}
+
+void MyMatrix::COLinsertBetweenNthAndNthplusOne(int x) {
+    Matrix<int,Dynamic,Dynamic> B = Matrix<int,Dynamic,Dynamic>::Zero(rows(), cols()+1);
+    B.leftCols(x) = leftCols(x);
+    B.rightCols(cols()-x) =  rightCols(cols()-x);
+    this->resize(rows(),cols()+1);
+    matrix().swap(B);
 }
 
 int MyMatrix::end() {

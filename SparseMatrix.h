@@ -12,11 +12,13 @@ class SparseMatrix {
 public:
     SparseMatrix();
     void add(Node* n);
+    void add(Component* c,std::list<Node*> v);
     void remove(Node* n,std::list<Node*> v);
 
 private:
     int CompsIndex;
     MyMatrix* m;
+    MyMatrix* terms;
 };
 
 

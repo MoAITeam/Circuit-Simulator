@@ -7,7 +7,7 @@
 #include <QPainter>
 #include <QGraphicsScene>
 
-Component::Component(float v): value(v), nodes{nullptr, nullptr} {
+Component::Component(float v): behavior{1,v,9}, nodes{nullptr, nullptr} {
 
 }
 
