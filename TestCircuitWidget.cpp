@@ -44,13 +44,10 @@ private slots:
         circuit->add(c,p,n);
         mainWindow->setCentralWidget(widget);
         QTest::mouseDClick(widget->viewport(),Qt::LeftButton,Qt::NoModifier,widget->mapFromScene(100,100));
-        mainWindow->update();
-        QTest::mouseDClick(widget->viewport(),Qt::LeftButton,Qt::NoModifier,widget->mapFromScene(50,50)); //FIXME FUCK.
-        //delete c;
-        //delete p;
-        //delete n;
+        QTest::mouseClick(widget->viewport(),Qt::LeftButton,Qt::NoModifier,widget->mapFromScene(0,0));
+        QTest::mouseDClick(widget->viewport(),Qt::LeftButton,Qt::NoModifier,widget->mapFromScene(48,48));
         bool status =false;
-        if(widget->scene()->items().size()==1) //items has always one void
+        if(widget->scene()->items().size()==0) //items has always one void
             status=true;
         QVERIFY(status==true);
     };
