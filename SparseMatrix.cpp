@@ -48,8 +48,26 @@ void SparseMatrix::remove(Node *n, std::list<Node*> v){
         if (node == n) {
             m->removeRow(2*CompsIndex + i);
             m->removeColumn(2*CompsIndex + i);
+            terms->removeRow(2*CompsIndex+i);
         }
         i++;
     }
-    std::cout<<*m<<std::endl;
+    std::cout<<(*m)<<"\n*[x]=\n"<<(*terms)<<std::endl;
+}
+
+void SparseMatrix::remove(Component *c, std::list<Component*> v){
+    int i=0;
+    for (auto &component:v) {
+        if (component == c) {
+            m->removeRow(i);
+            m->removeColumn(i);
+            terms->removeRow(i);
+            m->removeRow(CompsIndex+i-1);
+            m->removeColumn(CompsIndex + i-1);
+            terms->removeRow(CompsIndex+i-1);
+            CompsIndex--;
+        }
+        i++;
+    }
+    std::cout<<(*m)<<"\n*[x]=\n"<<(*terms)<<std::endl;
 }

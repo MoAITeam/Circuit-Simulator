@@ -91,11 +91,14 @@ void Circuit::checkLink(Node &n) {
 }
 
 void Circuit::removeNotify(Component *c) {
+    //lasciare questo ordine altrimenti non lo trova
+    m.remove(c,components);
     components.remove(c);
 }
 
 void Circuit::removeNotify(Node *n) {
-    //m.remove(n,nodes);
+    //lasciare questo ordine altrimenti non lo trova
+    m.remove(n,nodes);
     nodes.remove(n);
 }
 
