@@ -7,6 +7,7 @@
 
 QTEST_MAIN(TestCircuitWidget)
 
+
 void TestCircuitWidget::testAddItem() {
 
     Circuit* circuit= new Circuit;
