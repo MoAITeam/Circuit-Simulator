@@ -6,9 +6,13 @@
 #include "Component.h"
 #include <iostream>
 
-SparseMatrix::SparseMatrix(): CompsIndex(0) {
+SparseMatrix::SparseMatrix(): components(0) {
     terms=new MyMatrix();
     terms->resize(0,1);
+}
+
+SparseMatrix::~SparseMatrix(){
+    delete terms;
 }
 
 void SparseMatrix::add() {
@@ -24,53 +28,63 @@ void SparseMatrix::add(Component *c,int a, int b) {
     matrix()(0,0)=1;
     (*terms)(0,0)=0;
 
-    insertRow(CompsIndex + 1);
-    insertCol(CompsIndex + 1);
-    terms->insertRow(CompsIndex + 1);
-    matrix()(CompsIndex+1,0)=c->behavior[0];
-    matrix()(CompsIndex+1,CompsIndex+1)=c->behavior[1];
-    (*terms)(CompsIndex+1)=c->behavior[2];
+    int index=components+1;
+    insertRow(index);
+    insertCol(index);
 
-    CompsIndex++;
+    terms->insertRow(index);
+    matrix()(index,0)=c->behavior[0];
+    matrix()(index,index)=c->behavior[1];
+    (*terms)(index)=c->behavior[2];
 
-    matrix()(0,CompsIndex*2+a)=1;
-    matrix()(2*CompsIndex+a,CompsIndex)=1;
-    matrix()(0,CompsIndex*2+b)=1;
-    matrix()(2*CompsIndex+b,CompsIndex)=1;
+    components++;
 
-    print();
+    index=2*components+a;
+    matrix()(0,index)=1;
+    matrix()(index,components)=1;
+
+    index=2*components+b;
+    matrix()(0,index)=1;
+    matrix()(index,components)=1;
+
+    //print();
 }
 
 void SparseMatrix::update(int i,int a, int b){
 
-    col(2*CompsIndex-i-1).bottomRows(cols()-2*CompsIndex).setZero();
-    row(CompsIndex-i-1).rightCols(cols()-2*CompsIndex).setZero();
-    matrix()(CompsIndex-i-1,CompsIndex*2+a)=1;
-    matrix()(2*CompsIndex+a,2*CompsIndex-i-1)=1;
-    matrix()(CompsIndex-i-1,CompsIndex*2+b)=1;
-    matrix()(2*CompsIndex+b,2*CompsIndex-i-1)=1;
-    print();
+    int index=components-i-1;
+    int nodes=cols()-2*components;
+    row(index).rightCols(nodes).setZero();
+    col(index+components).bottomRows(nodes).setZero();
+    matrix()(index,components*2+a)=1;
+    matrix()(2*components+a,index+components)=1;
+    matrix()(index,components*2+b)=1;
+    matrix()(2*components+b,index+components)=1;
+    //print();
 }
 
 void SparseMatrix::removeNode(int i){
 
-    removeRow(2*CompsIndex + i);
-    removeColumn(2*CompsIndex + i);
-    terms->removeRow(2*CompsIndex+i);
+    int index=2*components+i;
+    removeRow(index);
+    removeColumn(index);
+    terms->removeRow(index);
 
-    print();
+    //print();
 }
 
 void SparseMatrix::removeComponent(int i){
-    removeRow(CompsIndex-i-1);
-    removeColumn(CompsIndex-i-1);
+    int index=components-i-1;
+    removeRow(index);
+    removeColumn(index);
     terms->removeRow(i);
-    removeRow(2*CompsIndex-i-2);
-    removeColumn(2*CompsIndex -i-2);
-    terms->removeRow(2*CompsIndex-i-2);
-    CompsIndex--;
+    index=index+components-1;
+    removeRow(index);
+    removeColumn(index);
+    terms->removeRow(index);
+    components--;
 
-    print();
+    //print();
 }
 
 void SparseMatrix::print(){

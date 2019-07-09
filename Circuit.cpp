@@ -6,12 +6,12 @@
 //TODO: node should be abstract non inheriting from QGraphicsItem
 
 Circuit::Circuit(CircuitObserver *o):observer(o) {
-
+    matrix=new SparseMatrix();
 }
 
 Circuit::~Circuit() {
-    std::list<Component*> toUpdate=components;
-    for (auto &component : toUpdate) {
+    std::list<Component*> toDestroy=components;
+    for (auto &component : toDestroy) {
         delete component;
     }
 }
@@ -39,7 +39,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
             found=true;
         }
     if (found==false){
-        matrix.add();
+        matrix->add();
         nodes.push_back(p);
         p->setObserver(this);
         observer->addNotify(p);
@@ -53,7 +53,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
             found=true;
         }
     if (found==false){
-        matrix.add();
+        matrix->add();
         nodes.push_back(n);
         n->setObserver(this);
         observer->addNotify(n);
@@ -64,7 +64,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
     observer->addNotify(c);
 
     c->connect(p, n);
-    matrix.add(c,getIndex(p,nodes),getIndex(n,nodes));
+    matrix->add(c,getIndex(p,nodes),getIndex(n,nodes));
 
 }
 
@@ -88,7 +88,7 @@ void Circuit::checkLink(Node &n) {
                 delete component;
             else {
                 component->connect(existing, keep);
-                matrix.update(getIndex(component,components),getIndex(existing,this->nodes),getIndex(keep,this->nodes));
+                matrix->update(getIndex(component,components),getIndex(existing,this->nodes),getIndex(keep,this->nodes));
             }
             }
         delete &n;
@@ -106,12 +106,14 @@ template <class T> int Circuit::getIndex(T *x,std::list<T*> v){
 }
 
 void Circuit::removeNotify(Component *c) {
-    matrix.removeComponent(getIndex(c,components));
+    if (matrix!=nullptr)
+    matrix->removeComponent(getIndex(c,components));
     components.remove(c);
 }
 
 void Circuit::removeNotify(Node *n) {
-    matrix.removeNode(getIndex(n,nodes));
+    if (matrix!= nullptr)
+    matrix->removeNode(getIndex(n,nodes));
     nodes.remove(n);
 }
 

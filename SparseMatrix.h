@@ -11,6 +11,7 @@
 class SparseMatrix: public MyMatrix{
 public:
     SparseMatrix();
+    ~SparseMatrix();
     void add();
     void add(Component* c,int a, int b);
     void removeNode(int i);
@@ -19,7 +20,7 @@ public:
     void print();
 
 private:
-    int CompsIndex;
+    int components;
     MyMatrix* terms;
 };
 
