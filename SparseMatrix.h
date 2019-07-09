@@ -15,6 +15,7 @@ public:
     void add(Component* c,std::list<Node*> v);
     void remove(Node* n,std::list<Node*> v);
     void remove(Component* c,std::list<Component*> v);
+    void update(Component* c,std::list<Component*> v,std::list<Node*> n);
 
 private:
     int CompsIndex;

@@ -87,11 +87,8 @@ void Circuit::checkLink(Node &n) {
             if(*keep == n )
                 delete component;
             else {
-                m.remove(component,components);
-                components.remove(component);
                 component->connect(existing, keep);
-                components.push_back(component);
-                m.add(component,this->nodes);
+                m.update(component,components,this->nodes);
             }
             }
         delete &n;
@@ -99,13 +96,11 @@ void Circuit::checkLink(Node &n) {
 }
 
 void Circuit::removeNotify(Component *c) {
-    //lasciare questo ordine altrimenti non lo trova
     m.remove(c,components);
     components.remove(c);
 }
 
 void Circuit::removeNotify(Node *n) {
-    //lasciare questo ordine altrimenti non lo trova
     m.remove(n,nodes);
     nodes.remove(n);
 }

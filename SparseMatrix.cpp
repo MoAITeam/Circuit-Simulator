@@ -42,6 +42,26 @@ void SparseMatrix::add(Component *c,std::list<Node*> v) {
     std::cout<<(*m)<<"\n*[x]=\n"<<(*terms)<<std::endl;
 }
 
+void SparseMatrix::update(Component *c,std::list<Component*> vc,std::list<Node*> vn){
+    int i=0;
+    for (auto &component:vc) {
+        if (component == c) {
+            m->col(2*CompsIndex-i-1).bottomRows(vn.size()).setZero();
+            m->row(CompsIndex-i-1).rightCols(vn.size()).setZero();
+            int y=0;
+            for (auto &node:vn) {
+                if (node == c->getNodes().first || node==c->getNodes().second) {
+                    (*m)(CompsIndex-i-1,CompsIndex*2+y)=-1;
+                    (*m)(2*CompsIndex+y,2*CompsIndex-i-1)=1;
+                }
+                y++;
+            }
+        }
+        i++;
+    }
+    std::cout<<(*m)<<"\n*[x]=\n"<<(*terms)<<std::endl;
+}
+
 void SparseMatrix::remove(Node *n, std::list<Node*> v){
     int i=0;
     for (auto &node:v) {
