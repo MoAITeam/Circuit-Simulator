@@ -84,8 +84,16 @@ void Circuit::checkLink(Node &n) {
             nodePair nodes= component->getNodes();
             Node* keep;
             keep = nodes.first == &n ? nodes.second :nodes.first;
-            *keep == n ? delete component : component->connect(existing,keep);
-        }
+            if(*keep == n )
+                delete component;
+            else {
+                m.remove(component,components);
+                components.remove(component);
+                component->connect(existing, keep);
+                components.push_back(component);
+                m.add(component,this->nodes);
+            }
+            }
         delete &n;
     }
 }

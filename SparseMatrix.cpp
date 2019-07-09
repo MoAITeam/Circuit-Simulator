@@ -59,12 +59,12 @@ void SparseMatrix::remove(Component *c, std::list<Component*> v){
     int i=0;
     for (auto &component:v) {
         if (component == c) {
-            m->removeRow(i);
-            m->removeColumn(i);
+            m->removeRow(CompsIndex-i-1);
+            m->removeColumn(CompsIndex-i-1);
             terms->removeRow(i);
-            m->removeRow(CompsIndex+i-1);
-            m->removeColumn(CompsIndex + i-1);
-            terms->removeRow(CompsIndex+i-1);
+            m->removeRow(2*CompsIndex-i-2);
+            m->removeColumn(2*CompsIndex -i-2);
+            terms->removeRow(2*CompsIndex-i-2);
             CompsIndex--;
         }
         i++;
