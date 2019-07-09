@@ -22,6 +22,7 @@ public:
     void removeNotify(Component *c) override;
     void removeNotify(Node *n) override;
     void checkLink(Node &n);
+    template <class T> int getIndex(T*x,std::list<T*> v);
 
     void setObserver(CircuitObserver* graphics);
     void moveNotify(Node &drag) override;
@@ -30,7 +31,7 @@ private:
     CircuitObserver* observer;
     std::list<Component*> components;
     std::list<Node*> nodes;
-    SparseMatrix m;
+    SparseMatrix matrix; //Muore insieme, associazione, non puntatore
 };
 
 

@@ -8,18 +8,18 @@
 #include "MyMatrix.h"
 #include "Node.h"
 
-class SparseMatrix {
+class SparseMatrix: public MyMatrix{
 public:
     SparseMatrix();
-    void add(Node* n);
-    void add(Component* c,std::list<Node*> v);
-    void remove(Node* n,std::list<Node*> v);
-    void remove(Component* c,std::list<Component*> v);
-    void update(Component* c,std::list<Component*> v,std::list<Node*> n);
+    void add();
+    void add(Component* c,int a, int b);
+    void removeNode(int i);
+    void removeComponent(int i);
+    void update(int i,int a, int b);
+    void print();
 
 private:
     int CompsIndex;
-    MyMatrix* m;
     MyMatrix* terms;
 };
 

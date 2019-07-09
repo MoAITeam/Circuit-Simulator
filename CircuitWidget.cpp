@@ -28,10 +28,11 @@ void CircuitWidget::mousePressEvent(QMouseEvent *event) {
 void CircuitWidget::mouseReleaseEvent(QMouseEvent *event) {
     QGraphicsView::mouseReleaseEvent(event);
     if (event->button() == Qt::RightButton) {
-
-        auto *c = new Component(5);
-        auto *p = new Node(mousePressPoint.x(), mousePressPoint.y());
-        auto *n = new Node(event->x(),event->y());
-        circuit->add(c, p, n);
+        if(sqrt(pow(mousePressPoint.x()-event->x(),2)+pow(mousePressPoint.y()-event->y(),2))>NodeSize) {
+            auto *c = new Component(5);
+            auto *p = new Node(mousePressPoint.x(), mousePressPoint.y());
+            auto *n = new Node(event->x(), event->y());
+            circuit->add(c, p, n);
+        }
     }
 }

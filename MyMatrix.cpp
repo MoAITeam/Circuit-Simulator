@@ -19,7 +19,7 @@ void MyMatrix::addCol() {
     col(cols()-1).setZero();
 }
 
-void MyMatrix::ROWinsertBetweenNthAndNthplusOne(int x) {
+void MyMatrix::insertRow(int x) {
     Matrix<int,Dynamic,Dynamic> B = Matrix<int,Dynamic,Dynamic>::Zero(rows()+1, cols());
     B.topRows(x) = topRows(x);
     B.bottomRows(rows()-x) =  bottomRows(rows()-x);
@@ -27,7 +27,7 @@ void MyMatrix::ROWinsertBetweenNthAndNthplusOne(int x) {
     matrix().swap(B);
 }
 
-void MyMatrix::COLinsertBetweenNthAndNthplusOne(int x) {
+void MyMatrix::insertCol(int x) {
     Matrix<int,Dynamic,Dynamic> B = Matrix<int,Dynamic,Dynamic>::Zero(rows(), cols()+1);
     B.leftCols(x) = leftCols(x);
     B.rightCols(cols()-x) =  rightCols(cols()-x);

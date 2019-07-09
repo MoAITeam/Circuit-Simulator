@@ -39,7 +39,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
             found=true;
         }
     if (found==false){
-        m.add(p);
+        matrix.add();
         nodes.push_back(p);
         p->setObserver(this);
         observer->addNotify(p);
@@ -53,7 +53,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
             found=true;
         }
     if (found==false){
-        m.add(n);
+        matrix.add();
         nodes.push_back(n);
         n->setObserver(this);
         observer->addNotify(n);
@@ -64,7 +64,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
     observer->addNotify(c);
 
     c->connect(p, n);
-    m.add(c,nodes);
+    matrix.add(c,getIndex(p,nodes),getIndex(n,nodes));
 
 }
 
@@ -88,20 +88,30 @@ void Circuit::checkLink(Node &n) {
                 delete component;
             else {
                 component->connect(existing, keep);
-                m.update(component,components,this->nodes);
+                matrix.update(getIndex(component,components),getIndex(existing,this->nodes),getIndex(keep,this->nodes));
             }
             }
         delete &n;
     }
 }
 
+template <class T> int Circuit::getIndex(T *x,std::list<T*> v){
+    int i=0;
+    for (auto &e : v){
+        if (e==x)
+            return i;
+        i++;
+    }
+    return 0;
+}
+
 void Circuit::removeNotify(Component *c) {
-    m.remove(c,components);
+    matrix.removeComponent(getIndex(c,components));
     components.remove(c);
 }
 
 void Circuit::removeNotify(Node *n) {
-    m.remove(n,nodes);
+    matrix.removeNode(getIndex(n,nodes));
     nodes.remove(n);
 }
 
