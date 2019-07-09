@@ -11,17 +11,14 @@ using namespace Eigen;
 
 typedef Matrix<int,Dynamic,Dynamic> DynamicMatrix;
 
-class MyMatrix: public DynamicMatrix {
+class EigenInterface: public DynamicMatrix {
 
 public:
-    MyMatrix();
+    EigenInterface();
     void addRow();
     void insertRow(int x);
     void insertCol(int x);
     void addCol();
-    void addCol(int x);
-    int end();
-    int bottom();
     void removeColumn(int index);
     void removeRow(int index);
 };

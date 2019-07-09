@@ -88,7 +88,10 @@ void Circuit::checkLink(Node &n) {
                 delete component;
             else {
                 component->connect(existing, keep);
-                matrix->update(getIndex(component,components),getIndex(existing,this->nodes),getIndex(keep,this->nodes));
+                int componentIndex=getIndex(component,components);
+                int pIndex=getIndex(existing,this->nodes);
+                int nIndex=getIndex(keep,this->nodes);
+                matrix->update(componentIndex,pIndex,nIndex);
             }
             }
         delete &n;
@@ -106,13 +109,11 @@ template <class T> int Circuit::getIndex(T *x,std::list<T*> v){
 }
 
 void Circuit::removeNotify(Component *c) {
-    if (matrix!=nullptr)
     matrix->removeComponent(getIndex(c,components));
     components.remove(c);
 }
 
 void Circuit::removeNotify(Node *n) {
-    if (matrix!= nullptr)
     matrix->removeNode(getIndex(n,nodes));
     nodes.remove(n);
 }

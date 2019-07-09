@@ -5,10 +5,10 @@
 #ifndef FIRSTSIMULATORTEST_SPARSEMATRIX_H
 #define FIRSTSIMULATORTEST_SPARSEMATRIX_H
 
-#include "MyMatrix.h"
+#include "EigenInterface.h"
 #include "Node.h"
 
-class SparseMatrix: public MyMatrix{
+class SparseMatrix: public EigenInterface{
 public:
     SparseMatrix();
     ~SparseMatrix();
@@ -21,7 +21,7 @@ public:
 
 private:
     int components;
-    MyMatrix* terms;
+    EigenInterface* terms;
 };
 
 

@@ -7,7 +7,7 @@
 #include <iostream>
 
 SparseMatrix::SparseMatrix(): components(0) {
-    terms=new MyMatrix();
+    terms=new EigenInterface();
     terms->resize(0,1);
 }
 
