@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     mainWindow.show();
 
     auto *gen = new Component(0,1,10);
-    auto  *pgen = new Node(50,50,1);
+    auto  *pgen = new Node(50,50);
     auto  *ngen = new Node(50,100);
     c.add(gen,pgen,ngen);
 

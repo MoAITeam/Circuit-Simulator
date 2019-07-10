@@ -137,11 +137,21 @@ void Circuit::solve(){
         i++;
     }
     i=0;
-    nodes.front()->setVoltage(0); //ground
-    std::list<Node*> toUpdate=nodes;
-    toUpdate.remove(nodes.front());
+    //nodes.front()->setVoltage(0); //ground
+    //std::list<Node*> toUpdate=nodes;
+    //toUpdate.remove(nodes.front());
+    auto toUpdate=nodes;
     for(auto& node:toUpdate){
-        node->setVoltage(solution[2*components.size()+i]);
+        int val=solution[2*components.size()+i];
+        node->setVoltage(val);
+        if(val<0.0001 && val>-0.0001) {
+            node->setGround(true);
+            node->update();
+        }
+        else {
+            node->setGround(false);
+            node->update();
+        }
         i++;
     }
 }
