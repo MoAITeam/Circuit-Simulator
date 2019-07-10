@@ -20,19 +20,19 @@ void EigenInterface::addCol() {
 }
 
 void EigenInterface::insertRow(int x) {
-    Matrix<int,Dynamic,Dynamic> B = Matrix<int,Dynamic,Dynamic>::Zero(rows()+1, cols());
-    B.topRows(x) = topRows(x);
-    B.bottomRows(rows()-x) =  bottomRows(rows()-x);
+    Matrix<int,Dynamic,Dynamic> updated = Matrix<int,Dynamic,Dynamic>::Zero(rows()+1, cols());
+    updated.topRows(x) = topRows(x);
+    updated.bottomRows(rows()-x) =  bottomRows(rows()-x);
     this->resize(rows()+1,cols());
-    matrix().swap(B);
+    matrix().swap(updated);
 }
 
 void EigenInterface::insertCol(int x) {
-    Matrix<int,Dynamic,Dynamic> B = Matrix<int,Dynamic,Dynamic>::Zero(rows(), cols()+1);
-    B.leftCols(x) = leftCols(x);
-    B.rightCols(cols()-x) =  rightCols(cols()-x);
+    Matrix<int,Dynamic,Dynamic> updated = Matrix<int,Dynamic,Dynamic>::Zero(rows(), cols()+1);
+    updated.leftCols(x) = leftCols(x);
+    updated.rightCols(cols()-x) =  rightCols(cols()-x);
     this->resize(rows(),cols()+1);
-    matrix().swap(B);
+    matrix().swap(updated);
 }
 
 void EigenInterface::removeColumn(int index) {

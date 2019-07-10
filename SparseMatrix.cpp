@@ -39,15 +39,14 @@ void SparseMatrix::add(Component *c,int a, int b) {
 
     components++;
 
+    int p=a>b?1:-1;
     index=2*components+a;
-    matrix()(0,index)=1;
-    matrix()(index,components)=1;
+    matrix()(0,index)=p;
+    matrix()(index,components)=-p;
 
     index=2*components+b;
-    matrix()(0,index)=1;
-    matrix()(index,components)=1;
-
-    //print();
+    matrix()(0,index)=-p;
+    matrix()(index,components)=p;
 }
 
 void SparseMatrix::update(int i,int a, int b){
@@ -56,11 +55,12 @@ void SparseMatrix::update(int i,int a, int b){
     int nodes=cols()-2*components;
     row(index).rightCols(nodes).setZero();
     col(index+components).bottomRows(nodes).setZero();
-    matrix()(index,components*2+a)=1;
-    matrix()(2*components+a,index+components)=1;
-    matrix()(index,components*2+b)=1;
-    matrix()(2*components+b,index+components)=1;
-    //print();
+
+    int p=a>b?1:-1;
+    matrix()(index,components*2+a)=p;
+    matrix()(2*components+a,index+components)=-p;
+    matrix()(index,components*2+b)=-p;
+    matrix()(2*components+b,index+components)=p;
 }
 
 void SparseMatrix::removeNode(int i){
@@ -69,8 +69,6 @@ void SparseMatrix::removeNode(int i){
     removeRow(index);
     removeColumn(index);
     terms->removeRow(index);
-
-    //print();
 }
 
 void SparseMatrix::removeComponent(int i){
@@ -83,14 +81,24 @@ void SparseMatrix::removeComponent(int i){
     removeColumn(index);
     terms->removeRow(index);
     components--;
-
-    //print();
 }
 
 void SparseMatrix::print(){
+
+    EigenInterface zeroNodeMatrix=(*this);
+    EigenInterface zeroNodeTerms=(*terms);
+    int index=2*components;
+    zeroNodeMatrix.removeRow(index);
+    zeroNodeMatrix.removeColumn(index);
+    zeroNodeTerms.removeRow(index);
+    VectorXf solution;
+    solution=(zeroNodeMatrix.cast <float> ()).colPivHouseholderQr().solve(((zeroNodeTerms).cast <float> ()).col(0));
     std::cout<<"-----Matrix-----"<<std::endl;
-    for(int i=0;i<rows();i++){
-        std::cout<<row(i)<<"[X]"<<terms->row(i)<<std::endl;
-    }
+    DynamicMatrix print(rows(),cols()+1);
+    print<<matrix(),*terms;
+    std::cout<<print<<std::endl;
     std::cout<<"-----End--------"<<std::endl;
+    std::cout<<"-----Solution---"<<std::endl;
+    std::cout<<solution<<std::endl;
+    std::cout<<"-----EndSol-----"<<std::endl;
 }

@@ -23,6 +23,7 @@ public:
     void removeNotify(Node *n) override;
     void checkLink(Node &n);
     template <class T> int getIndex(T*x,std::list<T*> v);
+    void print();
 
     void setObserver(CircuitObserver* graphics);
     void moveNotify(Node &drag) override;
