@@ -15,10 +15,10 @@ enable_testing()
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(SOURCE_FILES main.cpp Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h MyMatrix.cpp MyMatrix.h SparseMatrix.cpp SparseMatrix.h)
+set(SOURCE_FILES main.cpp Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h EigenInterface.cpp EigenInterface.h SparseMatrix.cpp SparseMatrix.h)
 
 
-add_executable(FirstSimulatorTest main.cpp Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h MyMatrix.cpp MyMatrix.h SparseMatrix.cpp SparseMatrix.h)
+add_executable(FirstSimulatorTest main.cpp Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h EigenInterface.h EigenInterface.cpp SparseMatrix.cpp SparseMatrix.h)
 #add_executable(FirstSimulatorTest TestCircuitWidget.cpp Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h MyMatrix.cpp MyMatrix.h SparseMatrix.cpp SparseMatrix.h)
 add_test(TestCircuitWidget TestCircuitWidget)
 

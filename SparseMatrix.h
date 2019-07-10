@@ -5,20 +5,23 @@
 #ifndef FIRSTSIMULATORTEST_SPARSEMATRIX_H
 #define FIRSTSIMULATORTEST_SPARSEMATRIX_H
 
-#include "MyMatrix.h"
+#include "EigenInterface.h"
 #include "Node.h"
 
-class SparseMatrix {
+class SparseMatrix: public EigenInterface{
 public:
     SparseMatrix();
-    void add(Node* n);
-    void add(Component* c,std::list<Node*> v);
-    void remove(Node* n,std::list<Node*> v);
+    ~SparseMatrix();
+    void add();
+    void add(Component* c,int a, int b);
+    void removeNode(int i);
+    void removeComponent(int i);
+    void update(int i,int a, int b);
+    void print();
 
 private:
-    int CompsIndex;
-    MyMatrix* m;
-    MyMatrix* terms;
+    int components;
+    EigenInterface* terms;
 };
 
 

@@ -6,12 +6,12 @@
 //TODO: node should be abstract non inheriting from QGraphicsItem
 
 Circuit::Circuit(CircuitObserver *o):observer(o) {
-
+    matrix=new SparseMatrix();
 }
 
 Circuit::~Circuit() {
-    std::list<Component*> toUpdate=components;
-    for (auto &component : toUpdate) {
+    std::list<Component*> toDestroy=components;
+    for (auto &component : toDestroy) {
         delete component;
     }
 }
@@ -39,7 +39,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
             found=true;
         }
     if (found==false){
-        m.add(p);
+        matrix->add();
         nodes.push_back(p);
         p->setObserver(this);
         observer->addNotify(p);
@@ -53,7 +53,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
             found=true;
         }
     if (found==false){
-        m.add(n);
+        matrix->add();
         nodes.push_back(n);
         n->setObserver(this);
         observer->addNotify(n);
@@ -64,7 +64,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
     observer->addNotify(c);
 
     c->connect(p, n);
-    m.add(c,nodes);
+    matrix->add(c,getIndex(p,nodes),getIndex(n,nodes));
 
 }
 
@@ -84,21 +84,44 @@ void Circuit::checkLink(Node &n) {
             nodePair nodes= component->getNodes();
             Node* keep;
             keep = nodes.first == &n ? nodes.second :nodes.first;
-            *keep == n ? delete component : component->connect(existing,keep);
-        }
+            if(*keep == n )
+                delete component;
+            else {
+                component->connect(existing, keep);
+                int componentIndex=getIndex(component,components);
+                int pIndex=getIndex(existing,this->nodes);
+                int nIndex=getIndex(keep,this->nodes);
+                matrix->update(componentIndex,pIndex,nIndex);
+            }
+            }
         delete &n;
     }
 }
 
+template <class T> int Circuit::getIndex(T *x,std::list<T*> v){
+    int i=0;
+    for (auto &e : v){
+        if (e==x)
+            return i;
+        i++;
+    }
+    return 0;
+}
+
 void Circuit::removeNotify(Component *c) {
+    matrix->removeComponent(getIndex(c,components));
     components.remove(c);
 }
 
 void Circuit::removeNotify(Node *n) {
-    //m.remove(n,nodes);
+    matrix->removeNode(getIndex(n,nodes));
     nodes.remove(n);
 }
 
 void Circuit::moveNotify(Node &drag) {
     checkLink(drag);
+}
+
+void Circuit::print(){
+    matrix->print();
 }
