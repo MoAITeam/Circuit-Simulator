@@ -50,6 +50,7 @@ QRectF Node::boundingRect() const {
 
 void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->drawEllipse(-NodeSize/2, -NodeSize/2, NodeSize, NodeSize);
 }
 
@@ -57,7 +58,6 @@ void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     //if(event->button()==Qt::LeftButton) {
         for (auto component : components) {
             component->redraw();
-       //}
     }
     QGraphicsItem::mouseMoveEvent(event);
 }

@@ -141,5 +141,6 @@ void Circuit::solve(){
     toUpdate.remove(nodes.front());
     for(auto& node:toUpdate){
         node->setVoltage(solution[2*components.size()+i]);
+        i++;
     }
 }
