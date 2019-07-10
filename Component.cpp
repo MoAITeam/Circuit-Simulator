@@ -76,7 +76,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
         value.setNum(behavior[2]);
     }
     painter->drawLine(line);
-    painter->drawText(this->boundingRect().center(),value);
+    //painter->drawText(this->boundingRect().center(),value);
 }
 
 void Component::setCurrent(float value) {

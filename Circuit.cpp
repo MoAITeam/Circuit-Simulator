@@ -120,6 +120,7 @@ void Circuit::removeNotify(Node *n) {
 }
 
 void Circuit::moveNotify(Node &drag) {
+    if(!drag.isGround())
     checkLink(drag);
 }
 

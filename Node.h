@@ -33,6 +33,7 @@ public:
 
     void setObserver(NodeObserver *o);
     std::list<Component*> getComponents();
+    bool isGround();
 
     bool operator==(Node& a);
 
