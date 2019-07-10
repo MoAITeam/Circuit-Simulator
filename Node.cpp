@@ -6,8 +6,9 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsScene>
+#include <iostream>
 
-Node::Node(float x, float y):observer(nullptr){
+Node::Node(float x, float y):observer(nullptr),voltage(0){
     setFlag(ItemIsMovable);
     this->setX(x);
     this->setY(y);
@@ -52,6 +53,11 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     painter->drawEllipse(-NodeSize/2, -NodeSize/2, NodeSize, NodeSize);
 }
 
+void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    std::cout<<"Node Voltage:"<<voltage<<std::endl;
+    QGraphicsItem::mousePressEvent(event);
+}
+
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     if(event->button()==Qt::LeftButton) {
         for (auto component : components) {
@@ -71,4 +77,8 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
     delete this;
+}
+
+void Node::setVoltage(float v){
+    voltage=v;
 }

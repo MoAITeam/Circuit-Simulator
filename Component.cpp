@@ -6,6 +6,9 @@
 #include "Node.h"
 #include <QPainter>
 #include <QGraphicsScene>
+#include <QGraphicsSceneMouseEvent>
+#include <iostream>
+#include <cmath>
 
 Component::Component(float a,float b,float c): behavior{a,b,c}, nodes{nullptr, nullptr} {
 
@@ -61,4 +64,21 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
 
     painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->drawLine(line);
+}
+
+void Component::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    int d1=sqrt(pow((event->pos().x()-nodes.first->x()),2)+pow((event->pos().y()-nodes.first->y()),2));
+    int d2=sqrt(pow(event->pos().x()-nodes.second->x(),2)+pow(event->pos().y()-nodes.second->y(),2));
+    int length=sqrt(pow(nodes.first->x()-nodes.second->x(),2)+pow(nodes.second->y()-nodes.first->y(),2));
+    if(d1+d2-length<4)
+    std::cout<<"Component Voltage:"<<voltage<<"\nComponent Current:"<<current<<std::endl;
+    QGraphicsItem::mousePressEvent(event);
+}
+
+void Component::setCurrent(float v) {
+    current=v;
+}
+
+void Component::setVoltage(float v) {
+    voltage=v;
 }

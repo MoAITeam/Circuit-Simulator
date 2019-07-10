@@ -2,6 +2,7 @@
 // Created by Sierra on 2019-06-13.
 //
 
+#include <iostream>
 #include "Circuit.h"
 //TODO: node should be abstract non inheriting from QGraphicsItem
 
@@ -125,4 +126,25 @@ void Circuit::moveNotify(Node &drag) {
 
 void Circuit::print(){
     matrix->print();
+}
+
+void Circuit::solve(){
+    std::vector<float> solution=matrix->solve();
+    int i=0;
+    for (auto &component : components){
+        component->setVoltage(solution[components.size()-1-i]);
+        component->setCurrent(solution[2*components.size()-1-i]);
+        i++;
+    }
+    nodes.front()->setVoltage(0);//ground
+    std::list<Node*> toUpdate=nodes;
+    toUpdate.remove(nodes.front());
+    i=0;
+    for (auto &node : toUpdate){
+        node->setVoltage(solution[i+components.size()*2]);
+        i++;
+    }
+    /*for(auto stampa:solution)
+    std::cout<<stampa<<std::endl;
+     */
 }

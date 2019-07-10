@@ -22,18 +22,6 @@ int main(int argc, char **argv) {
     auto  *ngen = new Node(50,100);
     c.add(gen,pgen,ngen);
 
-    auto *r1=new Component(1,-5,0);
-    auto  *p1= new Node(50,50);
-    auto  *n1= new Node(100,50);
-    c.add(r1,n1,p1);
-
-    auto *r2=new Component(1,-5,0);
-    auto  *p2= new Node(100,50);
-    auto  *n2= new Node(50,100);
-    c.add(r2,n2,p2);
-
-
-
     app.exec();
 
     return 0;
