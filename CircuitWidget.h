@@ -21,6 +21,7 @@ public:
     void mouseReleaseEvent(QMouseEvent* event) override;
     void keyPressEvent(QKeyEvent *event) override ;
 
+
 private:
     Circuit* circuit;
     QPointF mousePressPoint;

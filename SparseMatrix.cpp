@@ -91,10 +91,25 @@ void SparseMatrix::removeComponent(int i){
 }
 
 void SparseMatrix::print(){
+    std::cout<<"-----Matrix-----"<<std::endl;
+    DynamicMatrix print(rows(),cols()+1);
+    print<<matrix(),*terms;
+    std::cout<<print<<std::endl;
+
+    std::cout<<"-----End--------"<<std::endl;
+
+
+
+
+}
+
+
+std::vector<float> SparseMatrix::solve(){
+
     /*SparseMatrix* zeroNodeMatrix= new SparseMatrix();
-    *zeroNodeMatrix=(*this);
-    auto  zeroNodeTerms=new EigenInterface();
-    *zeroNodeTerms=(*terms);*/
+*zeroNodeMatrix=(*this);
+auto  zeroNodeTerms=new EigenInterface();
+*zeroNodeTerms=(*terms);*/
     EigenInterface zeroNodeMatrix=*this;
     EigenInterface zeroNodeTerms=*(this->terms);
     int index=2*components;
@@ -103,18 +118,10 @@ void SparseMatrix::print(){
     zeroNodeTerms.removeRow(index);
     VectorXf solution;
     solution=(zeroNodeMatrix.cast <float>()).colPivHouseholderQr().solve(((zeroNodeTerms).cast<float>()).col(0));
-    std::cout<<"-----Matrix-----"<<std::endl;
-    DynamicMatrix print(rows(),cols()+1);
-    print<<matrix(),*terms;
-    std::cout<<print<<std::endl;
-
-    std::cout<<"-----End--------"<<std::endl;
-
-    std::cout<<"------SOLUTION------"<<std::endl;
-    std::cout<<solution<<std::endl;
-    zeroNodeMatrix.resize(0,0);
-    zeroNodeTerms.resize(0,0);
-
+    std::vector<float> sol;
+    sol.resize(solution.size());
+    VectorXf::Map(&sol[0],solution.size())=solution;
+    return sol;
 
 
 }

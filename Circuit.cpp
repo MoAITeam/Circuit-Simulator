@@ -126,3 +126,20 @@ void Circuit::moveNotify(Node &drag) {
 void Circuit::print(){
     matrix->print();
 }
+
+void Circuit::solve(){
+    std::vector<float> solution=matrix->solve();
+    int i=0;
+    for(auto &component:components){
+        component->setVoltage(solution[components.size()-1-i]);
+        component->setCurrent(solution[2*components.size()-1-i]);
+        i++;
+    }
+    i=0;
+    nodes.front()->setVoltage(0); //ground
+    std::list<Node*> toUpdate=nodes;
+    toUpdate.remove(nodes.front());
+    for(auto& node:toUpdate){
+        node->setVoltage(solution[2*components.size()+i]);
+    }
+}

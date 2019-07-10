@@ -7,6 +7,7 @@
 
 #include "EigenInterface.h"
 #include "Node.h"
+#include <memory>
 
 class SparseMatrix: public EigenInterface{
 public:
@@ -18,6 +19,7 @@ public:
     void removeComponent(int i);
     void update(int i,int a, int b);
     void print();
+    std::vector<float> solve();
 
 private:
     int components;

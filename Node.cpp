@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsScene>
+#include <iostream>
 
 Node::Node(float x, float y):observer(nullptr){
     setFlag(ItemIsMovable);
@@ -71,4 +72,13 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
     delete this;
+}
+
+void Node::setVoltage(float value) {
+    voltage=value;
+}
+
+void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    std::cout<<voltage<<std::endl;
+    QGraphicsItem::mousePressEvent(event);
 }

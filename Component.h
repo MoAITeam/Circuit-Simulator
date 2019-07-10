@@ -24,10 +24,14 @@ public:
     void redraw();
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
 
 
     void setObserver(ComponentObserver *o);
     nodePair getNodes();
+
+    void setCurrent(float value);
+    void setVoltage(float value);
 
     float behavior[3];
 

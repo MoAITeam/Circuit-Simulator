@@ -27,6 +27,7 @@ public:
     void setObserver(CircuitObserver* graphics);
     void moveNotify(Node &drag) override;
     void print();
+    void solve();
 
 private:
     CircuitObserver* observer;
