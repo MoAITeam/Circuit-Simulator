@@ -9,7 +9,6 @@ EigenInterface::EigenInterface(){
     this->setZero(0,0);
 }
 
-
 void EigenInterface::addRow() {
     conservativeResize(rows()+1,NoChange);
     row(rows()-1).setZero();

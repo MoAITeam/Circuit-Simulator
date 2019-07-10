@@ -9,19 +9,12 @@ find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Test REQUIRED)
 
-enable_testing()
-
-
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(SOURCE_FILES main.cpp Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h EigenInterface.cpp EigenInterface.h SparseMatrix.cpp SparseMatrix.h)
+set(SOURCE_FILES Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h EigenInterface.cpp SparseMatrix.cpp SparseMatrix.h)
 
+add_executable(FirstSimulatorTest main.cpp ${SOURCE_FILES})
+add_executable(FirstSimulatorTest-Test TestCircuitWidget.cpp ${SOURCE_FILES})
 
-add_executable(FirstSimulatorTest main.cpp Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h EigenInterface.h EigenInterface.cpp SparseMatrix.cpp SparseMatrix.h)
-#add_executable(FirstSimulatorTest TestCircuitWidget.cpp Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h MyMatrix.cpp MyMatrix.h SparseMatrix.cpp SparseMatrix.h)
-add_test(TestCircuitWidget TestCircuitWidget)
-
-target_link_libraries (FirstSimulatorTest Eigen3::Eigen)
-target_link_libraries(FirstSimulatorTest Qt5::Widgets)
-target_link_libraries(FirstSimulatorTest Qt5::Test)
+target_link_libraries (FirstSimulatorTest Eigen3::Eigen Qt5::Widgets)
+target_link_libraries (FirstSimulatorTest-Test Eigen3::Eigen Qt5::Widgets Qt5::Test)
