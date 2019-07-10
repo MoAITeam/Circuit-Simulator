@@ -8,7 +8,7 @@
 #include <QGraphicsScene>
 #include <iostream>
 
-Node::Node(float x, float y):observer(nullptr){
+Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setFlag(ItemIsMovable);
     this->setX(x);
     this->setY(y);
@@ -50,6 +50,9 @@ QRectF Node::boundingRect() const {
 
 void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    if(gnd)
+    painter->setPen(QPen(Qt::gray, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    else
     painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->drawEllipse(-NodeSize/2, -NodeSize/2, NodeSize, NodeSize);
 }

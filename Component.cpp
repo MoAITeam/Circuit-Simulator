@@ -58,12 +58,25 @@ QRectF Component::boundingRect() const {
 }
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
+    QString value="";
     QPoint n1(nodes.first->x(),nodes.first->y());
     QPoint n2(nodes.second->x(),nodes.second->y());
     QLineF line(n1,n2);
 
-    painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    if (behavior[1]==0) {
+        painter->setPen(QPen(Qt::red, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        value.setNum(behavior[2]);
+    }
+    else {
+        painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        value.setNum(-behavior[1]);
+    }
+    if (behavior[0]==0) {
+        painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        value.setNum(behavior[2]);
+    }
     painter->drawLine(line);
+    painter->drawText(this->boundingRect().center(),value);
 }
 
 void Component::setCurrent(float value) {

@@ -17,7 +17,7 @@ class NodeObserver;
 
 class Node: public QGraphicsItem{
 public:
-    Node(float x, float y);
+    Node(float x, float y,bool isGround=false);
     ~Node();
     void connect(Component *c);
     void disconnect(Component *c);
@@ -40,6 +40,7 @@ private:
     float voltage;
     std::list<Component*> components;
     NodeObserver* observer;
+    bool gnd;
 };
 
 

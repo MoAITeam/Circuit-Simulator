@@ -59,8 +59,6 @@ void SparseMatrix::update(int i,int a, int b){
     col(index+components).bottomRows(nodes).setZero();
 
     int p=a>b?1:-1;
-
-
     matrix()(index,components*2+a)=p;
     matrix()(2*components+a,index+components)=-p;
     matrix()(index,components*2+b)=-p;
@@ -73,8 +71,6 @@ void SparseMatrix::removeNode(int i){
     removeRow(index);
     removeColumn(index);
     terms->removeRow(index);
-
-    //print();
 }
 
 void SparseMatrix::removeComponent(int i){
@@ -95,7 +91,6 @@ void SparseMatrix::print(){
     DynamicMatrix print(rows(),cols()+1);
     print<<matrix(),*terms;
     std::cout<<print<<std::endl;
-
     std::cout<<"-----End--------"<<std::endl;
 
 

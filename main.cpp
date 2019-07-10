@@ -17,13 +17,15 @@ int main(int argc, char **argv) {
     mainWindow.setCentralWidget(graph);
     mainWindow.show();
 
-    auto *gen = new Component(1,0,10);
-    auto  *pgen = new Node(50,50);
+    auto *gen = new Component(0,1,10);
+    auto  *pgen = new Node(50,50,1);
     auto  *ngen = new Node(50,100);
     c.add(gen,pgen,ngen);
 
-
-
+    auto *gen2 = new Component(1,0,10);
+    auto  *pgen2 = new Node(350,50);
+    auto  *ngen2 = new Node(350,100);
+    c.add(gen2,pgen2,ngen2);
 
     app.exec();
 
