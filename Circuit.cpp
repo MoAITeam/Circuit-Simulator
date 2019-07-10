@@ -79,7 +79,6 @@ void Circuit::checkLink(Node &n) {
     }
 
     if (existing != nullptr) {
-        //FIXME: memory leaks
         std::list<Component *> componentsToUpdate = n.getComponents();
         for (auto &component : componentsToUpdate) {
             nodePair nodes= component->getNodes();
@@ -123,6 +122,6 @@ void Circuit::moveNotify(Node &drag) {
     checkLink(drag);
 }
 
-void Circuit::print() {
+void Circuit::print(){
     matrix->print();
 }

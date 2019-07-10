@@ -17,20 +17,22 @@ int main(int argc, char **argv) {
     mainWindow.setCentralWidget(graph);
     mainWindow.show();
 
-    auto *gen = new Component(1,0,10);
-    auto *pgen = new Node(50,50);
-    auto *ngen = new Node(50,100);
-    c.add(gen, pgen, ngen);
+    auto gen = new Component(1,0,10);
+    auto  pgen = new Node(50,50);
+    auto  ngen = new Node(50,100);
+    c.add(gen,pgen,ngen);
 
-    auto *r1 = new Component(1,-5,0);
-    auto *p1 = new Node(50,50);
-    auto *n1 = new Node(100,50);
-    c.add(r1, p1, n1);
+    auto r1=new Component(1,-5,0);
+    auto  p1= new Node(50,50);
+    auto  n1= new Node(100,50);
+    c.add(r1,n1,p1);
 
-    auto *r2 = new Component(1,-5,0);
-    auto *p2 = new Node(100,50);
-    auto *n2 = new Node(50,100);
-    c.add(r2, p2, n2);
+    auto r2=new Component(1,-5,0);
+    auto  p2= new Node(100,50);
+    auto  n2= new Node(50,100);
+    c.add(r2,n2,p2);
+
+
 
     app.exec();
 

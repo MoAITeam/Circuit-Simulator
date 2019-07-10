@@ -15,7 +15,7 @@ typedef std::pair<Node*,Node*> nodePair;
 
 class Component: public  QGraphicsItem{
 public:
-    Component(float a, float b, float c);
+    Component(float a,float b, float c);
     ~Component();
     void connect(Node* p, Node* n);
 

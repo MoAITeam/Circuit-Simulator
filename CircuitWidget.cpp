@@ -40,5 +40,5 @@ void CircuitWidget::mouseReleaseEvent(QMouseEvent *event) {
 
 void CircuitWidget::keyPressEvent(QKeyEvent *event) {
     if(event->key()==Qt::Key::Key_C)
-    circuit->print();
+        circuit->print();
 }

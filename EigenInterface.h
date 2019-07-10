@@ -21,6 +21,7 @@ public:
     void addCol();
     void removeColumn(int index);
     void removeRow(int index);
+
 };
 
 

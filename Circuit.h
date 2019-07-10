@@ -22,11 +22,11 @@ public:
     void removeNotify(Component *c) override;
     void removeNotify(Node *n) override;
     void checkLink(Node &n);
-    template <class T> int getIndex(T*x,std::list<T*> v);
-    void print();
+    template <typename T> int getIndex(T*x,std::list<T*> v);
 
     void setObserver(CircuitObserver* graphics);
     void moveNotify(Node &drag) override;
+    void print();
 
 private:
     CircuitObserver* observer;
