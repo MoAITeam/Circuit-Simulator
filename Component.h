@@ -22,13 +22,16 @@ public:
     QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
     void redraw();
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
-    void setCurrent(float v);
-    void setVoltage(float v);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
+
+
     void setObserver(ComponentObserver *o);
     nodePair getNodes();
+
+    void setCurrent(float value);
+    void setVoltage(float value);
 
     float behavior[3];
 

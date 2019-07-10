@@ -6,9 +6,9 @@
 #include "Node.h"
 #include <QPainter>
 #include <QGraphicsScene>
-#include <QGraphicsSceneMouseEvent>
 #include <iostream>
 #include <cmath>
+#include <QGraphicsSceneMouseEvent>
 
 Component::Component(float a,float b,float c): behavior{a,b,c}, nodes{nullptr, nullptr} {
 
@@ -62,23 +62,26 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     QPoint n2(nodes.second->x(),nodes.second->y());
     QLineF line(n1,n2);
 
-    painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->drawLine(line);
 }
 
+void Component::setCurrent(float value) {
+    current=value;
+}
+
+void Component::setVoltage(float value) {
+    voltage=value;
+}
+
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    int d1=sqrt(pow((event->pos().x()-nodes.first->x()),2)+pow((event->pos().y()-nodes.first->y()),2));
-    int d2=sqrt(pow(event->pos().x()-nodes.second->x(),2)+pow(event->pos().y()-nodes.second->y(),2));
-    int length=sqrt(pow(nodes.first->x()-nodes.second->x(),2)+pow(nodes.second->y()-nodes.first->y(),2));
-    if(d1+d2-length<4)
-    std::cout<<"Component Voltage:"<<voltage<<"\nComponent Current:"<<current<<std::endl;
+    int d1=sqrt(pow(event->pos().x()-nodes.first->x(),2)+pow((event->pos().y()-nodes.first->y()),2));
+    int d2=sqrt(pow(event->pos().x()-nodes.second->x(),2)+pow((event->pos().y()-nodes.second->y()),2));
+    int length=sqrt(pow(nodes.second->x()-nodes.first->x(),2)+pow((nodes.second->y()-nodes.first->y()),2));
+    if(d1+d2<length+5) {
+        std::cout << "Current Value:" << current << std::endl;
+        std::cout << "Voltage Value:" << voltage << std::endl;
+    }
     QGraphicsItem::mousePressEvent(event);
-}
 
-void Component::setCurrent(float v) {
-    current=v;
-}
-
-void Component::setVoltage(float v) {
-    voltage=v;
 }

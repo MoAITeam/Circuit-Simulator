@@ -22,6 +22,9 @@ int main(int argc, char **argv) {
     auto  *ngen = new Node(50,100);
     c.add(gen,pgen,ngen);
 
+
+
+
     app.exec();
 
     return 0;

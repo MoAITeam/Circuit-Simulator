@@ -28,10 +28,10 @@ public:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* ) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
+    void setVoltage(float value);
 
     void setObserver(NodeObserver *o);
-    void setVoltage(float v);
     std::list<Component*> getComponents();
 
     bool operator==(Node& a);

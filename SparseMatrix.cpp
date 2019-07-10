@@ -40,6 +40,7 @@ void SparseMatrix::add(Component *c,int a, int b) {
     components++;
 
     int p=a>b?1:-1;
+
     index=2*components+a;
     matrix()(0,index)=p;
     matrix()(index,components)=-p;
@@ -47,6 +48,7 @@ void SparseMatrix::add(Component *c,int a, int b) {
     index=2*components+b;
     matrix()(0,index)=-p;
     matrix()(index,components)=p;
+
 }
 
 void SparseMatrix::update(int i,int a, int b){
@@ -57,6 +59,8 @@ void SparseMatrix::update(int i,int a, int b){
     col(index+components).bottomRows(nodes).setZero();
 
     int p=a>b?1:-1;
+
+
     matrix()(index,components*2+a)=p;
     matrix()(2*components+a,index+components)=-p;
     matrix()(index,components*2+b)=-p;
@@ -69,6 +73,8 @@ void SparseMatrix::removeNode(int i){
     removeRow(index);
     removeColumn(index);
     terms->removeRow(index);
+
+    //print();
 }
 
 void SparseMatrix::removeComponent(int i){
@@ -81,6 +87,7 @@ void SparseMatrix::removeComponent(int i){
     removeColumn(index);
     terms->removeRow(index);
     components--;
+
 }
 
 void SparseMatrix::print(){
@@ -88,21 +95,33 @@ void SparseMatrix::print(){
     DynamicMatrix print(rows(),cols()+1);
     print<<matrix(),*terms;
     std::cout<<print<<std::endl;
+
     std::cout<<"-----End--------"<<std::endl;
-    solve();
+
+
+
+
 }
 
+
 std::vector<float> SparseMatrix::solve(){
-    EigenInterface zeroNodeMatrix=(*this);
-    EigenInterface zeroNodeTerms=(*terms);
+
+    /*SparseMatrix* zeroNodeMatrix= new SparseMatrix();
+*zeroNodeMatrix=(*this);
+auto  zeroNodeTerms=new EigenInterface();
+*zeroNodeTerms=(*terms);*/
+    EigenInterface zeroNodeMatrix=*this;
+    EigenInterface zeroNodeTerms=*(this->terms);
     int index=2*components;
-    zeroNodeMatrix.removeRow(index);
     zeroNodeMatrix.removeColumn(index);
+    zeroNodeMatrix.removeRow(index);
     zeroNodeTerms.removeRow(index);
     VectorXf solution;
-    solution=(zeroNodeMatrix.cast <float> ()).colPivHouseholderQr().solve(((zeroNodeTerms).cast <float> ()).col(0));
+    solution=(zeroNodeMatrix.cast <float>()).colPivHouseholderQr().solve(((zeroNodeTerms).cast<float>()).col(0));
     std::vector<float> sol;
     sol.resize(solution.size());
     VectorXf::Map(&sol[0],solution.size())=solution;
     return sol;
+
+
 }

@@ -7,6 +7,7 @@
 
 #include "EigenInterface.h"
 #include "Node.h"
+#include <memory>
 
 class SparseMatrix: public EigenInterface{
 public:
