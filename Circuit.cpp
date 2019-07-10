@@ -3,7 +3,6 @@
 //
 
 #include "Circuit.h"
-//TODO valgrind doens't work on Mac
 //TODO: node should be abstract non inheriting from QGraphicsItem
 
 Circuit::Circuit(CircuitObserver *o):observer(o) {
@@ -26,14 +25,11 @@ void Circuit::setObserver(CircuitObserver *o) {
     }
 }
 
-void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
+void Circuit::add(Component *c, Node* p, Node* n) {
 
     for (auto &component : components)
         if (c==component)
         throw "Already added to circuit";
-
-    Node* p= new Node(x1,y1);
-    Node* n= new Node(x2,y2);
 
     bool found=false;
     for (auto &node : nodes)
@@ -43,6 +39,7 @@ void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
             found=true;
         }
     if (found==false){
+        m.add(p);
         nodes.push_back(p);
         p->setObserver(this);
         observer->addNotify(p);
@@ -56,17 +53,19 @@ void Circuit::add(Component *c, float x1, float y1, float x2, float y2) {
             found=true;
         }
     if (found==false){
+        m.add(n);
         nodes.push_back(n);
         n->setObserver(this);
         observer->addNotify(n);
     }
-
 
     components.push_back(c);
     c->setObserver(this);
     observer->addNotify(c);
 
     c->connect(p, n);
+    m.add(c,nodes);
+
 }
 
 void Circuit::checkLink(Node &n) {
@@ -96,6 +95,7 @@ void Circuit::removeNotify(Component *c) {
 }
 
 void Circuit::removeNotify(Node *n) {
+    //m.remove(n,nodes);
     nodes.remove(n);
 }
 

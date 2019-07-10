@@ -5,9 +5,9 @@
 #ifndef FIRSTSIMULATORTEST_NODE_H
 #define FIRSTSIMULATORTEST_NODE_H
 
-#include <QGraphicsItem>
 #include <QMouseEvent>
 #include <vector>
+#include <QGraphicsItem>
 #include "NodeObserver.h"
 #define NodeSize 10
 
@@ -15,27 +15,19 @@ class Component;
 
 class NodeObserver;
 
-class Node: public QObject, public QGraphicsItem{
-Q_OBJECT
+class Node: public QGraphicsItem{
 public:
     Node(float x, float y);
     ~Node();
     void connect(Component *c);
     void disconnect(Component *c);
 
-
     QRectF boundingRect() const override;
     void paint(QPainter* painter,const QStyleOptionGraphicsItem*,QWidget* ) override;
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
-    //Just updates the drawing like the real application I'm building
-
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-    //notifies observer of the changed position
-
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* ) override;
-    //It really just deletes all the components attached to it
-
 
     void setObserver(NodeObserver *o);
     std::list<Component*> getComponents();
