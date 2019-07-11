@@ -75,6 +75,10 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
         painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
         value.setNum(behavior[2]);
     }
+    if (behavior[0]==1&&behavior[2]==0&&behavior[1]==0) {
+        painter->setPen(QPen(Qt::gray, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        value.setNum(behavior[2]);
+    }
     painter->drawLine(line);
     //painter->drawText(this->boundingRect().center(),value);
 }
