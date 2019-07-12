@@ -141,8 +141,7 @@ void Circuit::solve(){
     std::list<Node*> toUpdate=nodes;
     toUpdate.remove(nodes.front());
     for(auto& node:toUpdate){
-        float val=solution[2*components.size()+i];
-        node->setVoltage(val);
+        node->setVoltage(solution[2*components.size()+i]);
         i++;
     }
 }

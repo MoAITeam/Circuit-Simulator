@@ -83,14 +83,10 @@ void Node::setVoltage(float value) {
 }
 
 void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    std::cout<<"Node Voltage:"<<voltage<<std::endl;
+    std::cout<<voltage<<std::endl;
     QGraphicsItem::mousePressEvent(event);
 }
 
 bool Node::isGround(){
     return gnd;
-}
-
-void Node::setGround(bool ground){
-    gnd=ground;
 }
