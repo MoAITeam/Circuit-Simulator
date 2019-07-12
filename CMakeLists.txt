@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_PREFIX_PATH "/usr/local/Cellar/qt/5.12.3/lib/cmake/")
 
+set(CMAKE_AUTORCC  ON)
+
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Test REQUIRED)
