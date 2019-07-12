@@ -51,6 +51,49 @@ void SparseMatrix::add(Component *c,int a, int b) {
 
 }
 
+void SparseMatrix::add(Component *c,int a) {
+    insertRow(0);
+    insertCol(0);
+    terms->insertRow(0);
+    matrix()(0,0)=1;
+    (*terms)(0,0)=0;
+
+    int index=components+1;
+    insertRow(index);
+    insertCol(index);
+
+    terms->insertRow(index);
+    matrix()(index,0)=c->behavior[0];
+    matrix()(index,index)=c->behavior[1];
+    (*terms)(index)=c->behavior[2];
+
+    components++;
+
+    index=2*components+a;
+    matrix()(0,index)=1;
+    matrix()(index,components)=-1;
+
+}
+
+void SparseMatrix::add(Component *c) {
+    insertRow(0);
+    insertCol(0);
+    terms->insertRow(0);
+    matrix()(0,0)=1;
+    (*terms)(0,0)=0;
+
+    int index=components+1;
+    insertRow(index);
+    insertCol(index);
+
+    terms->insertRow(index);
+    matrix()(index,0)=c->behavior[0];
+    matrix()(index,index)=c->behavior[1];
+    (*terms)(index)=c->behavior[2];
+
+    components++;
+}
+
 void SparseMatrix::update(int i,int a, int b){
 
     int index=components-i-1;
@@ -63,6 +106,25 @@ void SparseMatrix::update(int i,int a, int b){
     matrix()(2*components+a,index+components)=-p;
     matrix()(index,components*2+b)=-p;
     matrix()(2*components+b,index+components)=p;
+}
+
+void SparseMatrix::update(int i,int a){
+
+    int index=components-i-1;
+    int nodes=cols()-2*components;
+    row(index).rightCols(nodes).setZero();
+    col(index+components).bottomRows(nodes).setZero();
+
+    matrix()(index,components*2+a)=1;
+    matrix()(2*components+a,index+components)=-1;
+}
+
+void SparseMatrix::update(int i){
+
+    int index=components-i-1;
+    int nodes=cols()-2*components;
+    row(index).rightCols(nodes).setZero();
+    col(index+components).bottomRows(nodes).setZero();
 }
 
 void SparseMatrix::removeNode(int i){
@@ -92,31 +154,22 @@ void SparseMatrix::print(){
     print<<matrix(),*terms;
     std::cout<<print<<std::endl;
     std::cout<<"-----End--------"<<std::endl;
-
-
-
-
 }
 
 
 std::vector<float> SparseMatrix::solve(){
 
-    /*SparseMatrix* zeroNodeMatrix= new SparseMatrix();
-*zeroNodeMatrix=(*this);
-auto  zeroNodeTerms=new EigenInterface();
-*zeroNodeTerms=(*terms);*/
     EigenInterface zeroNodeMatrix=*this;
     EigenInterface zeroNodeTerms=*(this->terms);
     int index=2*components;
-    zeroNodeMatrix.removeColumn(index);
-    zeroNodeMatrix.removeRow(index);
-    zeroNodeTerms.removeRow(index);
+    //zeroNodeMatrix.removeColumn(index);
+    //zeroNodeMatrix.removeRow(index);
+    //zeroNodeTerms.removeRow(index);
     VectorXf solution;
     solution=(zeroNodeMatrix.cast <float>()).colPivHouseholderQr().solve(((zeroNodeTerms).cast<float>()).col(0));
     std::vector<float> sol;
     sol.resize(solution.size());
     VectorXf::Map(&sol[0],solution.size())=solution;
     return sol;
-
 
 }

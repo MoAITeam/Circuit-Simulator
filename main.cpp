@@ -28,8 +28,8 @@ int main(int argc, char **argv) {
     c.add(gen2,pgen2,ngen2);
 
     auto *wire = new Component(1,0,0);
-    auto  *wirep = new Node(150,300);
-    auto  *wiren = new Node(250,300);
+    auto  *wirep = new Node(150,300,1);
+    auto  *wiren = new Node(250,300,1);
     c.add(wire,wirep,wiren);
 
     app.exec();

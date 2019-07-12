@@ -74,7 +74,7 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
-    if(!gnd)
+    //if(!gnd)
     delete this;
 }
 
@@ -83,7 +83,7 @@ void Node::setVoltage(float value) {
 }
 
 void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    std::cout<<voltage<<std::endl;
+    std::cout<<"Node Voltage:"<<voltage<<std::endl;
     QGraphicsItem::mousePressEvent(event);
 }
 
