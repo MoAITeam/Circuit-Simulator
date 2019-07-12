@@ -1,0 +1,14 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>images/currentsource.png</file>
+    <file>images/voltagesource.png</file>
+    <file>images/resistance.png</file>
+
+
+
+
+
+</qresource>
+</RCC>
+
+
