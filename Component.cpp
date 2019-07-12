@@ -96,8 +96,8 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     int d2=sqrt(pow(event->pos().x()-nodes.second->x(),2)+pow((event->pos().y()-nodes.second->y()),2));
     int length=sqrt(pow(nodes.second->x()-nodes.first->x(),2)+pow((nodes.second->y()-nodes.first->y()),2));
     if(d1+d2<length+5) {
-        std::cout << "Current Value:" << current << std::endl;
-        std::cout << "Voltage Value:" << voltage << std::endl;
+        std::cout << "Current Value:" << abs(current) << std::endl;
+        std::cout << "Voltage Value:" << abs(voltage) << std::endl;
     }
     QGraphicsItem::mousePressEvent(event);
 

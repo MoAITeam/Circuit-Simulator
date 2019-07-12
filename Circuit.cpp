@@ -3,7 +3,6 @@
 //
 
 #include "Circuit.h"
-//TODO: node should be abstract non inheriting from QGraphicsItem
 
 Circuit::Circuit(CircuitObserver *o):observer(o) {
     matrix=new SparseMatrix();
@@ -66,19 +65,8 @@ void Circuit::add(Component *c, Node* p, Node* n) {
     observer->addNotify(c);
 
     c->connect(p, n);
-
-    auto nonGrounds=nodes;
-    for (auto &node:nodes)
-        if(node->isGround())
-            nonGrounds.remove(node);
-    if(n->isGround()&&p->isGround())
-    matrix->add(c);
-    if(n->isGround()&&!p->isGround())
-        matrix->add(c,getIndex(p,nonGrounds));
-    if(!n->isGround()&&p->isGround())
-        matrix->add(c,getIndex(n,nonGrounds));
-    if(!n->isGround()&&!p->isGround())
-        matrix->add(c,getIndex(p,nonGrounds),getIndex(n,nonGrounds));
+    //FIXME ugly
+    matrix->add(c,getIndex(p,nonGround()),p,getIndex(n,nonGround()),n);
 
 }
 
@@ -103,20 +91,9 @@ void Circuit::checkLink(Node &n) {
             else {
                 component->connect(existing, keep);
                 int componentIndex=getIndex(component,components);
-                auto nonGrounds=this->nodes;
-                for (auto &node:this->nodes)
-                    if(node->isGround())
-                        nonGrounds.remove(node);
-                int pIndex=getIndex(existing,nonGrounds);
-                int nIndex=getIndex(keep,nonGrounds);
-                if(!existing->isGround()&&!keep->isGround())
-                matrix->update(componentIndex,pIndex,nIndex);
-                if(existing->isGround()&&!keep->isGround())
-                    matrix->update(componentIndex,nIndex);
-                if(!existing->isGround()&&keep->isGround())
-                    matrix->update(componentIndex,pIndex);
-                if(existing->isGround()&&keep->isGround())
-                    matrix->update(componentIndex);
+
+                //FIXME ugly
+                matrix->update(componentIndex,getIndex(existing,nonGround()), existing,getIndex(keep,nonGround()),keep);
             }
             }
         delete &n;
@@ -133,19 +110,22 @@ template <class T> int Circuit::getIndex(T *x,std::list<T*> v){
     return 0;
 }
 
+std::list<Node*> Circuit::nonGround(){
+    auto nonGrounds=nodes;
+    for (auto &node:nodes)
+        if(node->isGround())
+            nonGrounds.remove(node);
+    return nonGrounds;
+}
+
 void Circuit::removeNotify(Component *c) {
     matrix->removeComponent(getIndex(c,components));
     components.remove(c);
 }
 
 void Circuit::removeNotify(Node *n) {
-    if(!n->isGround()) {
-        auto nonGrounds = nodes;
-        for (auto &node:nodes)
-            if (node->isGround())
-                nonGrounds.remove(node);
-        matrix->removeNode(getIndex(n, nonGrounds));
-    }
+    if(!n->isGround())
+        matrix->removeNode(getIndex(n, nonGround()));
     nodes.remove(n);
 }
 
@@ -166,12 +146,7 @@ void Circuit::solve(){
         i++;
     }
     i=0;
-    auto nonGrounds=nodes;
-    for (auto &node:nodes)
-        if(node->isGround()) {
-            node->setVoltage(0);
-            nonGrounds.remove(node);
-        }
+    auto nonGrounds=nonGround();
     for(auto& node:nonGrounds){
         node->setVoltage(solution[2*components.size()+i]);
         i++;

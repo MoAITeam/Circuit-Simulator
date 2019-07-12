@@ -74,7 +74,6 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
-    //if(!gnd)
     delete this;
 }
 
