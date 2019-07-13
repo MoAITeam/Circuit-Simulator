@@ -31,7 +31,7 @@ void CircuitWidget::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
         //Aggiungere il nodo solo se ha senso
         if(sqrt(pow(mousePressPoint.x()-event->x(),2)+pow(mousePressPoint.y()-event->y(),2))>NodeSize) {
-            auto *r= new Resistor(5);
+            auto *r= new Resistor(5.5);
             auto *p = new Node(mousePressPoint.x(), mousePressPoint.y());
             auto *n = new Node(event->x(), event->y());
             circuit->add(r, p, n);

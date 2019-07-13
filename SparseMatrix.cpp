@@ -21,7 +21,7 @@ void SparseMatrix::add() {
     terms->addRow();
 }
 
-void SparseMatrix::add(float behavior[3],int a, int b) {
+void SparseMatrix::add(const float behavior[3],int a, int b) {
     insertRow(0);
     insertCol(0);
     terms->insertRow(0);
@@ -105,7 +105,7 @@ void SparseMatrix::print(){
 std::vector<float> SparseMatrix::solve(){
 
     VectorXf solution;
-    solution=((*this).cast <float>()).colPivHouseholderQr().solve(((*terms).cast<float>()).col(0));
+    solution=(*this).colPivHouseholderQr().solve((*terms).col(0));
     std::vector<float> sol;
     sol.resize(solution.size());
     VectorXf::Map(&sol[0],solution.size())=solution;

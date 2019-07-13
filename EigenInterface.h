@@ -9,7 +9,7 @@
 
 using namespace Eigen;
 
-typedef Matrix<int,Dynamic,Dynamic> DynamicMatrix;
+typedef Matrix<float,Dynamic,Dynamic> DynamicMatrix;
 
 class EigenInterface: public DynamicMatrix {
 

@@ -11,6 +11,7 @@
 #include <QMainWindow>
 #include "TestCircuitWidget.cpp"
 #include "CircuitWidget.h"
+#include "Component.h"
 
 class TestCircuitWidget: public QObject {
 Q_OBJECT
@@ -52,6 +53,21 @@ private slots:
         QVERIFY(status==true);
     };
 };
+
+    void testSampleCircuit(){
+        QMainWindow* mainWindow=new QMainWindow();
+        auto circuit=new Circuit;
+        auto widget= new CircuitWidget(circuit);
+        auto curr=new currentSource(10);
+        auto pCurr = new Node(50,50);
+        auto nCurr = new Node(100,100);
+
+        auto curr=new currentSource(10);
+        auto pCurr = new Node(50,50);
+        auto nCurr = new Node(100,100);
+
+
+    }
 
 QTEST_MAIN(TestCircuitWidget)
 #include "TestCircuitWidget.moc"
