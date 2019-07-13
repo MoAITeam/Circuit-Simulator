@@ -4,7 +4,6 @@
 
 #include "Component.h"
 #include "Node.h"
-#include <QPainter>
 #include <QGraphicsScene>
 #include <iostream>
 #include <cmath>
@@ -58,33 +57,10 @@ QRectF Component::boundingRect() const {
 }
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
-    QString value="";
     QPoint n1(nodes.first->x(),nodes.first->y());
     QPoint n2(nodes.second->x(),nodes.second->y());
     QLineF line(n1,n2);
-
-    if (behavior[1]==0) {
-        painter->setPen(QPen(Qt::red, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        value.setNum(behavior[2]);
-        //QPixmap* mypix= new QPixmap(":/images/currentsource.png");
-
-    }
-    else {
-        painter->setPen(QPen(Qt::green, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        value.setNum(-behavior[1]);
-
-
-    }
-    if (behavior[0]==0) {
-        painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        value.setNum(behavior[2]);
-    }
-    if (behavior[0]==1&&behavior[2]==0&&behavior[1]==0) {
-        painter->setPen(QPen(Qt::gray, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        value.setNum(behavior[2]);
-    }
     painter->drawLine(line);
-    painter->drawText(this->boundingRect().center(),value);
 }
 
 void Component::setCurrent(float value) {

@@ -21,7 +21,7 @@ void SparseMatrix::add() {
     terms->addRow();
 }
 
-void SparseMatrix::add(Component *c,int a, Node* p, int b, Node* n) {
+void SparseMatrix::add(float behavior[3],int a, int b) {
     insertRow(0);
     insertCol(0);
     terms->insertRow(0);
@@ -33,27 +33,27 @@ void SparseMatrix::add(Component *c,int a, Node* p, int b, Node* n) {
     insertCol(index);
 
     terms->insertRow(index);
-    matrix()(index,0)=c->behavior[0];
-    matrix()(index,index)=c->behavior[1];
-    (*terms)(index)=c->behavior[2];
+    matrix()(index,0)=behavior[0];
+    matrix()(index,index)=behavior[1];
+    (*terms)(index)=behavior[2];
 
     components++;
 
     int i=a>b?1:-1;
 
-    if(!p->isGround()) {
+    if(a!=notFound) {
         matrix()(0, 2 * components + a) = i;
         matrix()(2 * components + a, components) = -i;
     }
 
-    if(!n->isGround()) {
+    if(b!=notFound) {
         matrix()(0, 2 * components + b) = -i;
         matrix()(2 * components + b, components) = i;
     }
 
 }
 
-void SparseMatrix::update(int i,int a, Node* p, int b, Node* n){
+void SparseMatrix::update(int i,int a,int b){
 
     int index=components-i-1;
     int nodes=cols()-2*components;
@@ -61,12 +61,12 @@ void SparseMatrix::update(int i,int a, Node* p, int b, Node* n){
     col(index+components).bottomRows(nodes).setZero();
 
     int c=a>b?1:-1;
-    if(!p->isGround()) {
+    if(a!=notFound) {
         matrix()(index, components * 2 + a) = c;
         matrix()(2 * components + a, index + components) = -c;
     }
 
-    if(!n->isGround()) {
+    if(b!=notFound) {
         matrix()(index, components * 2 + b) = -c;
         matrix()(2 * components + b, index + components) = c;
     }

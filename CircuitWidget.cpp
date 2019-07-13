@@ -6,6 +6,7 @@
 #include "Node.h"
 #include "Component.h"
 #include <iostream>
+#include "Resistor.h"
 
 CircuitWidget::CircuitWidget(Circuit* c):circuit(c){
     QGraphicsScene* scene = new QGraphicsScene(this);
@@ -30,10 +31,10 @@ void CircuitWidget::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
         //Aggiungere il nodo solo se ha senso
         if(sqrt(pow(mousePressPoint.x()-event->x(),2)+pow(mousePressPoint.y()-event->y(),2))>NodeSize) {
-            auto *c = new Component(1,-5,0);
+            auto *r= new Resistor(5);
             auto *p = new Node(mousePressPoint.x(), mousePressPoint.y());
             auto *n = new Node(event->x(), event->y());
-            circuit->add(c, p, n);
+            circuit->add(r, p, n);
         }
     }
 }

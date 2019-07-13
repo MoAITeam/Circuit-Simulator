@@ -4,6 +4,8 @@
 
 #include "Circuit.h"
 
+
+
 Circuit::Circuit(CircuitObserver *o):observer(o) {
     matrix=new SparseMatrix();
 }
@@ -65,8 +67,8 @@ void Circuit::add(Component *c, Node* p, Node* n) {
     observer->addNotify(c);
 
     c->connect(p, n);
-    //FIXME ugly
-    matrix->add(c,getIndex(p,nonGround()),p,getIndex(n,nonGround()),n);
+
+    matrix->add(c->behavior,getIndex(p,nonGround()),getIndex(n,nonGround()));
 
 }
 
@@ -92,8 +94,7 @@ void Circuit::checkLink(Node &n) {
                 component->connect(existing, keep);
                 int componentIndex=getIndex(component,components);
 
-                //FIXME ugly
-                matrix->update(componentIndex,getIndex(existing,nonGround()), existing,getIndex(keep,nonGround()),keep);
+                matrix->update(componentIndex,getIndex(existing,nonGround()),getIndex(keep,nonGround()));
             }
             }
         delete &n;
@@ -107,7 +108,7 @@ template <class T> int Circuit::getIndex(T *x,std::list<T*> v){
             return i;
         i++;
     }
-    return 0;
+    return notFound;
 }
 
 std::list<Node*> Circuit::nonGround(){

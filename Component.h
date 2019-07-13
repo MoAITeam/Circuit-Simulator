@@ -9,6 +9,7 @@
 #include <memory>
 #include <QGraphicsItem>
 #include "ComponentObserver.h"
+#include <QPainter>
 
 class Node;
 typedef std::pair<Node*,Node*> nodePair;
@@ -20,7 +21,7 @@ public:
     void connect(Node* p, Node* n);
 
     QRectF boundingRect() const override;
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
     void redraw();
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
@@ -35,9 +36,11 @@ public:
 
     float behavior[3];
 
-private:
+protected:
     float current;
     float voltage;
+
+private:
     ComponentObserver* observer;
     nodePair nodes;
 
