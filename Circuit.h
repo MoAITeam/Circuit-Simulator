@@ -11,7 +11,6 @@
 #include "CircuitObserver.h"
 #include "SparseMatrix.h"
 
-//TODO observer for matrix
 
 class Circuit: public ComponentObserver, public NodeObserver{
 public:
@@ -26,6 +25,7 @@ public:
 
     void setObserver(CircuitObserver* graphics);
     void moveNotify(Node &drag) override;
+    std::list<Node*> nonGround();
     void print();
     void solve();
 

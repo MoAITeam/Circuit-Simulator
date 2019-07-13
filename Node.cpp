@@ -74,7 +74,6 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
-    if(!gnd)
     delete this;
 }
 
@@ -89,8 +88,4 @@ void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 bool Node::isGround(){
     return gnd;
-}
-
-void Node::setGround(bool ground){
-    gnd=ground;
 }

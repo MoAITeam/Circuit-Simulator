@@ -21,7 +21,7 @@ void SparseMatrix::add() {
     terms->addRow();
 }
 
-void SparseMatrix::add(Component *c,int a, int b) {
+void SparseMatrix::add(Component *c,int a, Node* p, int b, Node* n) {
     insertRow(0);
     insertCol(0);
     terms->insertRow(0);
@@ -39,30 +39,37 @@ void SparseMatrix::add(Component *c,int a, int b) {
 
     components++;
 
-    int p=a>b?1:-1;
+    int i=a>b?1:-1;
 
-    index=2*components+a;
-    matrix()(0,index)=p;
-    matrix()(index,components)=-p;
+    if(!p->isGround()) {
+        matrix()(0, 2 * components + a) = i;
+        matrix()(2 * components + a, components) = -i;
+    }
 
-    index=2*components+b;
-    matrix()(0,index)=-p;
-    matrix()(index,components)=p;
+    if(!n->isGround()) {
+        matrix()(0, 2 * components + b) = -i;
+        matrix()(2 * components + b, components) = i;
+    }
 
 }
 
-void SparseMatrix::update(int i,int a, int b){
+void SparseMatrix::update(int i,int a, Node* p, int b, Node* n){
 
     int index=components-i-1;
     int nodes=cols()-2*components;
     row(index).rightCols(nodes).setZero();
     col(index+components).bottomRows(nodes).setZero();
 
-    int p=a>b?1:-1;
-    matrix()(index,components*2+a)=p;
-    matrix()(2*components+a,index+components)=-p;
-    matrix()(index,components*2+b)=-p;
-    matrix()(2*components+b,index+components)=p;
+    int c=a>b?1:-1;
+    if(!p->isGround()) {
+        matrix()(index, components * 2 + a) = c;
+        matrix()(2 * components + a, index + components) = -c;
+    }
+
+    if(!n->isGround()) {
+        matrix()(index, components * 2 + b) = -c;
+        matrix()(2 * components + b, index + components) = c;
+    }
 }
 
 void SparseMatrix::removeNode(int i){
@@ -92,31 +99,16 @@ void SparseMatrix::print(){
     print<<matrix(),*terms;
     std::cout<<print<<std::endl;
     std::cout<<"-----End--------"<<std::endl;
-
-
-
-
 }
 
 
 std::vector<float> SparseMatrix::solve(){
 
-    /*SparseMatrix* zeroNodeMatrix= new SparseMatrix();
-*zeroNodeMatrix=(*this);
-auto  zeroNodeTerms=new EigenInterface();
-*zeroNodeTerms=(*terms);*/
-    EigenInterface zeroNodeMatrix=*this;
-    EigenInterface zeroNodeTerms=*(this->terms);
-    int index=2*components;
-    zeroNodeMatrix.removeColumn(index);
-    zeroNodeMatrix.removeRow(index);
-    zeroNodeTerms.removeRow(index);
     VectorXf solution;
-    solution=(zeroNodeMatrix.cast <float>()).colPivHouseholderQr().solve(((zeroNodeTerms).cast<float>()).col(0));
+    solution=((*this).cast <float>()).colPivHouseholderQr().solve(((*terms).cast<float>()).col(0));
     std::vector<float> sol;
     sol.resize(solution.size());
     VectorXf::Map(&sol[0],solution.size())=solution;
     return sol;
-
 
 }

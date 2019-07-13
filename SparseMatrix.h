@@ -14,10 +14,10 @@ public:
     SparseMatrix();
     ~SparseMatrix();
     void add();
-    void add(Component* c,int a, int b);
+    void add(Component* c,int a, Node* p, int b, Node* n);
     void removeNode(int i);
     void removeComponent(int i);
-    void update(int i,int a, int b);
+    void update(int i,int a, Node* p, int b, Node* n);
     void print();
     std::vector<float> solve();
 

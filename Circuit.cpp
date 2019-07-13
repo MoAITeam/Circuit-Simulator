@@ -3,7 +3,6 @@
 //
 
 #include "Circuit.h"
-//TODO: node should be abstract non inheriting from QGraphicsItem
 
 Circuit::Circuit(CircuitObserver *o):observer(o) {
     matrix=new SparseMatrix();
@@ -13,7 +12,6 @@ Circuit::~Circuit() {
     std::list<Node*> toDestroy=nodes;
     for (auto &node : toDestroy) {
         delete node;
-
     }
 }
 
@@ -40,6 +38,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
             found=true;
         }
     if (found==false){
+        if(!p->isGround())
         matrix->add();
         nodes.push_back(p);
         p->setObserver(this);
@@ -54,6 +53,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
             found=true;
         }
     if (found==false){
+        if(!n->isGround())
         matrix->add();
         nodes.push_back(n);
         n->setObserver(this);
@@ -65,7 +65,8 @@ void Circuit::add(Component *c, Node* p, Node* n) {
     observer->addNotify(c);
 
     c->connect(p, n);
-    matrix->add(c,getIndex(p,nodes),getIndex(n,nodes));
+    //FIXME ugly
+    matrix->add(c,getIndex(p,nonGround()),p,getIndex(n,nonGround()),n);
 
 }
 
@@ -90,9 +91,9 @@ void Circuit::checkLink(Node &n) {
             else {
                 component->connect(existing, keep);
                 int componentIndex=getIndex(component,components);
-                int pIndex=getIndex(existing,this->nodes);
-                int nIndex=getIndex(keep,this->nodes);
-                matrix->update(componentIndex,pIndex,nIndex);
+
+                //FIXME ugly
+                matrix->update(componentIndex,getIndex(existing,nonGround()), existing,getIndex(keep,nonGround()),keep);
             }
             }
         delete &n;
@@ -109,18 +110,26 @@ template <class T> int Circuit::getIndex(T *x,std::list<T*> v){
     return 0;
 }
 
+std::list<Node*> Circuit::nonGround(){
+    auto nonGrounds=nodes;
+    for (auto &node:nodes)
+        if(node->isGround())
+            nonGrounds.remove(node);
+    return nonGrounds;
+}
+
 void Circuit::removeNotify(Component *c) {
     matrix->removeComponent(getIndex(c,components));
     components.remove(c);
 }
 
 void Circuit::removeNotify(Node *n) {
-    matrix->removeNode(getIndex(n,nodes));
+    if(!n->isGround())
+        matrix->removeNode(getIndex(n, nonGround()));
     nodes.remove(n);
 }
 
 void Circuit::moveNotify(Node &drag) {
-    if(!drag.isGround())
     checkLink(drag);
 }
 
@@ -137,12 +146,9 @@ void Circuit::solve(){
         i++;
     }
     i=0;
-    nodes.front()->setVoltage(0); //ground
-    std::list<Node*> toUpdate=nodes;
-    toUpdate.remove(nodes.front());
-    for(auto& node:toUpdate){
-        float val=solution[2*components.size()+i];
-        node->setVoltage(val);
+    auto nonGrounds=nonGround();
+    for(auto& node:nonGrounds){
+        node->setVoltage(solution[2*components.size()+i]);
         i++;
     }
 }

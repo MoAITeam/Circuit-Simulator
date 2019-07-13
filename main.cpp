@@ -5,7 +5,6 @@
 #include <QApplication>
 #include <QMainWindow>
 
-//TODO: What the heck is argv i only need it to create the application for Qt
 int main(int argc, char **argv) {
 
     QApplication app(argc,argv);
@@ -18,19 +17,19 @@ int main(int argc, char **argv) {
     mainWindow.show();
 
     auto *curr = new Component(0,1,10);
-    auto  *currp = new Node(50,50,1);
-    auto  *currn = new Node(50,100);
-    c.add(curr,currp,currn);
+    auto  *curr_p = new Node(50,50);
+    auto  *curr_n = new Node(50,100);
+    c.add(curr,curr_p,curr_n);
 
-    auto *gen2 = new Component(1,0,10);
-    auto  *pgen2 = new Node(350,50);
-    auto  *ngen2 = new Node(350,100);
-    c.add(gen2,pgen2,ngen2);
+    auto *volt = new Component(1,0,10);
+    auto  *volt_p = new Node(350,50);
+    auto  *volt_n = new Node(350,100);
+    c.add(volt,volt_p,volt_n);
 
     auto *wire = new Component(1,0,0);
-    auto  *wirep = new Node(150,300);
-    auto  *wiren = new Node(250,300);
-    c.add(wire,wirep,wiren);
+    auto  *wire_p = new Node(150,300,true);
+    auto  *wire_n = new Node(250,300,true);
+    c.add(wire,wire_p,wire_n);
 
     app.exec();
 

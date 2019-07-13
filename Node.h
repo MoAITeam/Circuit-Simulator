@@ -34,7 +34,6 @@ public:
     void setObserver(NodeObserver *o);
     std::list<Component*> getComponents();
     bool isGround();
-    void setGround(bool v);
 
     bool operator==(Node& a);
 
