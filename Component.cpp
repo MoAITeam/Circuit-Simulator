@@ -66,10 +66,14 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     if (behavior[1]==0) {
         painter->setPen(QPen(Qt::red, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
         value.setNum(behavior[2]);
+        //QPixmap* mypix= new QPixmap(":/images/currentsource.png");
+
     }
     else {
-        painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        painter->setPen(QPen(Qt::green, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
         value.setNum(-behavior[1]);
+
+
     }
     if (behavior[0]==0) {
         painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
@@ -80,7 +84,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
         value.setNum(behavior[2]);
     }
     painter->drawLine(line);
-    //painter->drawText(this->boundingRect().center(),value);
+    painter->drawText(this->boundingRect().center(),value);
 }
 
 void Component::setCurrent(float value) {
