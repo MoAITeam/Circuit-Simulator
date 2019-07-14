@@ -25,7 +25,7 @@ void Circuit::setObserver(CircuitObserver *o) {
     }
 }
 
-void Circuit::add(Component *c, Node* p, Node* n) {
+void Circuit::add(Component *c, Node*& p, Node*& n) {
 
     for (auto &component : components)
         if (c==component)

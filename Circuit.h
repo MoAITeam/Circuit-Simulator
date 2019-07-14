@@ -17,7 +17,7 @@ public:
     Circuit(CircuitObserver* o=nullptr);
     ~Circuit();
 
-    void add(Component *c, Node* p, Node* n);
+    void add(Component *c, Node*& p, Node*& n);
     void removeNotify(Component *c) override;
     void removeNotify(Node *n) override;
     void checkLink(Node &n);
