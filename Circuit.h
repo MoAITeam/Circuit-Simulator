@@ -21,18 +21,18 @@ public:
     void removeNotify(Component *c) override;
     void removeNotify(Node *n) override;
     void checkLink(Node &n);
-    template <typename T> int getIndex(T*x,std::list<T*> v);
+    template <typename T> int getIndex(T*x,std::vector<T*> v);
 
     void setObserver(CircuitObserver* graphics);
     void moveNotify(Node &drag) override;
-    std::list<Node*> nonGround();
+    std::vector<Node*> nonGround();
     void print();
     void solve();
 
 private:
     CircuitObserver* observer;
-    std::list<Component*> components;
-    std::list<Node*> nodes;
+    std::vector<Component*> components;
+    std::vector<Node*> nodes;
     SparseMatrix* matrix; //Muore insieme, non puntatore
 };
 

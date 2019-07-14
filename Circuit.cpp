@@ -10,7 +10,7 @@ Circuit::Circuit(CircuitObserver *o):observer(o) {
 }
 
 Circuit::~Circuit() {
-    std::list<Node*> toDestroy=nodes;
+    std::vector<Node*> toDestroy=nodes;
     for (auto &node : toDestroy) {
         delete node;
     }
@@ -103,35 +103,49 @@ void Circuit::checkLink(Node &n) {
     }
 }
 
-template <class T> int Circuit::getIndex(T *x,std::list<T*> v){
-    int i=0;
+template <class T> int Circuit::getIndex(T *x,std::vector<T*> v){
+    int result, count=0, instances=0;
     for (auto &e : v){
-        if (e==x)
-            return i;
-        i++;
+        if (e==x) {
+            result=count;
+            instances++;
+        }
+        count++;
     }
+    if (instances==1)
+        return result;
+    if (instances>1)
+        throw new ModelException("getIndex found duplicated, unexpected behavior");
+    if (instances==0)
     return notFound;
 }
 
-std::list<Node*> Circuit::nonGround(){
-    auto nonGrounds=nodes;
-    for (auto &node:nodes)
-        if(node->isGround())
-            nonGrounds.remove(node);
+std::vector<Node*> Circuit::nonGround(){
+    std::vector<Node*> nonGrounds=nodes;
+    auto node=nonGrounds.begin();
+    while (node!=nonGrounds.end()) {
+        if ((*node)->isGround())
+            node = nonGrounds.erase(node);
+        else
+            node++;
+    }
     return nonGrounds;
 }
 
 void Circuit::removeNotify(Component *c) {
     matrix->removeComponent(getIndex(c,components));
-    components.remove(c);
+    auto toRemove=std::remove(components.begin(),components.end(),c);
+    //TODO check if more than one is being removed
+    components.erase(toRemove,components.end());
 }
 
 void Circuit::removeNotify(Node *n) {
-    if(!n->isGround())
+    if (!n->isGround())
         matrix->removeNode(getIndex(n, nonGround()));
-    nodes.remove(n);
+    auto toRemove = std::remove(nodes.begin(), nodes.end(), n);
+    //TODO check if more than one is being removed
+    nodes.erase(toRemove,nodes.end());
 }
-
 void Circuit::moveNotify(Node &drag) {
     checkLink(drag);
 }
@@ -142,16 +156,16 @@ void Circuit::print(){
 
 void Circuit::solve(){
     std::vector<float> solution=matrix->solve();
-    int i=0;
-    for(auto &component:components){
-        component->setVoltage(solution[components.size()-1-i]);
-        component->setCurrent(solution[2*components.size()-1-i]);
-        i++;
+    auto comp=components.begin();
+    while(comp!=components.end()){
+        (*comp)->setVoltage(solution[components.size()-1-(comp-components.begin())]);
+        (*comp)->setCurrent(solution[2*components.size()-1-(comp-components.begin())]);
+        comp++;
     }
-    i=0;
     auto nonGrounds=nonGround();
-    for(auto& node:nonGrounds){
-        node->setVoltage(solution[2*components.size()+i]);
-        i++;
+    auto node=nonGrounds.begin();
+    while(node!=nonGrounds.end()){
+        (*node)->setVoltage(solution[2*components.size()+(node-nonGrounds.begin())]);
+        node++;
     }
 }
