@@ -3,8 +3,7 @@
 //
 
 #include "Circuit.h"
-
-
+#include "ModelException.h"
 
 Circuit::Circuit(CircuitObserver *o):observer(o) {
     matrix=new SparseMatrix();
@@ -30,7 +29,7 @@ void Circuit::add(Component *c, Node* p, Node* n) {
 
     for (auto &component : components)
         if (c==component)
-        throw "Already added to circuit";
+        throw new ModelException("duplicated component won't add it...");
 
     bool found=false;
     for (auto &node : nodes)
@@ -44,7 +43,8 @@ void Circuit::add(Component *c, Node* p, Node* n) {
         matrix->add();
         nodes.push_back(p);
         p->setObserver(this);
-        observer->addNotify(p);
+        if(observer!=nullptr)
+            observer->addNotify(p);
     }
 
     found= false;
@@ -59,12 +59,14 @@ void Circuit::add(Component *c, Node* p, Node* n) {
         matrix->add();
         nodes.push_back(n);
         n->setObserver(this);
-        observer->addNotify(n);
+        if(observer!= nullptr)
+            observer->addNotify(n);
     }
 
     components.push_back(c);
     c->setObserver(this);
-    observer->addNotify(c);
+    if(observer!= nullptr)
+        observer->addNotify(c);
 
     c->connect(p, n);
 

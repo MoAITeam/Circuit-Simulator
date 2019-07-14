@@ -20,8 +20,7 @@ void EigenInterface::addCol() {
 }
 
 void EigenInterface::insertRow(int x) {
-    Matrix<float,Dynamic,Dynamic> updated = Matrix<float,Dynamic,Dynamic>::Zero(rows()+1, cols());  /*Matrix<float,Dynamic,Dynamic>::Zero(rows()+1, cols());*/
-
+    Matrix<float,Dynamic,Dynamic> updated = Matrix<float,Dynamic,Dynamic>::Zero(rows()+1, cols());
     updated.topRows(x)= this->topRows(x);
     updated.bottomRows(rows()-x) =  this->bottomRows(rows()-x);
     this->resize(rows()+1,cols());
