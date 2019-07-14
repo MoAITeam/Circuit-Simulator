@@ -33,7 +33,7 @@ private:
     CircuitObserver* observer;
     std::vector<Component*> components;
     std::vector<Node*> nodes;
-    SparseMatrix* matrix; //Muore insieme, non puntatore
+    SparseMatrix matrix;
 };
 
 

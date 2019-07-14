@@ -3,6 +3,7 @@
 //
 
 #include "SparseMatrix.h"
+#include "MatrixException.h"
 #include "Component.h"
 #include <iostream>
 

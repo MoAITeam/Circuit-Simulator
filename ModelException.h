@@ -6,11 +6,9 @@
 #define FIRSTSIMULATORTEST_MODELEXCEPTION_H
 
 #include <exception>
-
 class ModelException: public std::exception {
 public:
-    ModelException(std::string s):spec(s){
-    };
+    ModelException(std::string s):spec(s){};
     const char* what() const throw() override{
         std::string except="Model Exception: "+spec;
         return except.c_str();

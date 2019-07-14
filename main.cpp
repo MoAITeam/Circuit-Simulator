@@ -8,6 +8,7 @@
 #include "VoltageSource.h"
 #include "Wire.h"
 #include "ModelException.h"
+#include "MatrixException.h"
 
 int main(int argc, char **argv) {
 
@@ -27,8 +28,11 @@ int main(int argc, char **argv) {
         auto *curr_n = new Node(50, 100);
         c.add(curr, curr_p, curr_n);
         c.add(curr,curr_n,curr_p);
-    }catch (ModelException *e){
-        std::cout<<e->what()<<std::endl;
+    }catch (ModelException e){
+        //For now, exceptions are only printed and may still quit the program
+        std::cout<<e.what()<<std::endl;
+    }catch (MatrixException e){
+        std::cout<<e.what()<<std::endl;
     }
 
     auto *volt = new VoltageSource(10);
