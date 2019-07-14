@@ -89,3 +89,7 @@ void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 bool Node::isGround(){
     return gnd;
 }
+
+float Node::getVoltage() {
+    return voltage;
+}
