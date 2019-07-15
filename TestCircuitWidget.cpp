@@ -14,8 +14,23 @@
 #include "Component.h"
 #include "Resistor.h"
 #include "VoltageSource.h"
+#include "ModelException.h"
+#include "MatrixException.h"
+
+#define EPSILON 0.0001
 
 class TestCircuitWidget: public QObject {
+
+private:
+
+    bool isEqual(double a, double b)
+    {
+        float fa=fabs(a);
+        float fb=fabs(b);
+        float absd=fabs(fa-fb);
+        return (absd < (EPSILON));
+    }
+
 Q_OBJECT
 private slots:
 
@@ -68,36 +83,43 @@ private slots:
         auto *vol = new VoltageSource(30);
         auto *vol_p = new Node(50, 50);
         auto *vol_n = new Node(50, 100);
-        circuit->add(vol, vol_p, vol_n);
 
         auto *res1 = new Resistor(10);
         auto *res1_p = new Node(50, 100);
         auto *res1_n = new Node(100, 100);
-        circuit->add(res1, res1_p, res1_n);
 
         auto *res2 = new Resistor(10);
         auto *res2_p = new Node(100, 100);
         auto *res2_n = new Node(100, 50, 1); //se lo dichiari dopo di terra non fa
-        circuit->add(res2, res2_p, res2_n);
 
         auto *res3 = new Resistor(10);
         auto *res3_p = new Node(100, 50);
         auto *res3_n = new Node(50, 50);
-        circuit->add(res3, res3_p, res3_n);
 
-        //mainWindow->setCentralWidget(widget);
-        //QTest::keyPress(widget , Qt::Key::Key_S);
-        circuit->print();
-        circuit->solve();
-        float t1 = res1_p->getVoltage();
-        float t2 = res1_n->getVoltage();
-        float t3 = res2_n->getVoltage();
-        float t4 = vol_p->getVoltage();
-        QVERIFY(t1 == -20);
-        QVERIFY(t2 == -10);
-        QVERIFY(t3 == 0);
-        QVERIFY(t4 == 10);  //FIXME
-        //TODO e link? modifica il puntatore originale??
+        try {
+            circuit->add(vol, vol_p, vol_n);
+            circuit->add(res1, res1_p, res1_n);
+            circuit->add(res2, res2_p, res2_n);
+            circuit->add(res3, res3_p, res3_n);
+        }
+        catch (ModelException e){
+            //For now, exceptions are only printed and may still quit the program
+            std::cerr<<e.what()<<std::endl;
+        }catch (MatrixException e){
+            //Should be caught by model
+            std::cerr<<e.what()<<std::endl;
+        }
+
+        QTest::keyPress(widget , Qt::Key::Key_S);
+
+        float c1 = res1->getCurrent();
+        float c2 = res2->getCurrent();
+        float c3 = res3->getCurrent();
+        float c4 = vol->getCurrent();
+        QVERIFY(isEqual(c1,1));
+        QVERIFY(isEqual(c2,1));
+        QVERIFY(isEqual(c3,1));
+        QVERIFY(isEqual(c4,1));
 
     };
 
