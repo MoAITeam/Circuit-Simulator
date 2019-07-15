@@ -14,9 +14,27 @@
 #include "Component.h"
 #include "Resistor.h"
 #include "VoltageSource.h"
+#include "CurrentSource.h"
+#include "Wire.h"
+#include "ModelException.h"
+#include "MatrixException.h"
+
+#define EPSILON 0.1
 
 class TestCircuitWidget: public QObject {
-Q_OBJECT
+
+    Q_OBJECT
+
+private:
+    bool isEqual(float value1,float value2){
+
+        if(fabs(fabs(value1)-fabs(value2)) < (EPSILON))
+            return true;
+        else
+            return false;
+    }
+
+
 private slots:
 
     void testAddItem() {
@@ -61,46 +79,135 @@ private slots:
 
     void testSampleCircuit() {
 
+
+
         QMainWindow *mainWindow = new QMainWindow();
         auto circuit = new Circuit;
         auto widget = new CircuitWidget(circuit);
 
+
         auto *vol = new VoltageSource(30);
         auto *vol_p = new Node(50, 50);
         auto *vol_n = new Node(50, 100);
-        circuit->add(vol, vol_p, vol_n);
+
 
         auto *res1 = new Resistor(10);
         auto *res1_p = new Node(50, 100);
         auto *res1_n = new Node(100, 100);
-        circuit->add(res1, res1_p, res1_n);
+
 
         auto *res2 = new Resistor(10);
         auto *res2_p = new Node(100, 100);
         auto *res2_n = new Node(100, 50, 1); //se lo dichiari dopo di terra non fa
-        circuit->add(res2, res2_p, res2_n);
+
 
         auto *res3 = new Resistor(10);
         auto *res3_p = new Node(100, 50);
         auto *res3_n = new Node(50, 50);
-        circuit->add(res3, res3_p, res3_n);
 
-        //mainWindow->setCentralWidget(widget);
-        //QTest::keyPress(widget , Qt::Key::Key_S);
-        circuit->print();
-        circuit->solve();
+
+try{
+    circuit->add(vol, vol_p, vol_n);
+    circuit->add(res1, res1_p, res1_n);
+    circuit->add(res2, res2_p, res2_n);
+    circuit->add(res3, res3_p, res3_n);
+    }catch (ModelException e){
+    //For now, exceptions are only printed and may still quit the program
+    std::cout<<e.what()<<std::endl;
+    }catch (MatrixException e){
+    std::cout<<e.what()<<std::endl;
+    }
+
+QTest::keyPress(widget , Qt::Key::Key_S);
+
         float t1 = res1_p->getVoltage();
-        float t2 = res1_n->getVoltage();
-        float t3 = res2_n->getVoltage();
+        float t2 = res2_p->getVoltage();
+        float t3 = res3_p->getVoltage();
         float t4 = vol_p->getVoltage();
-        QVERIFY(t1 == -20);
-        QVERIFY(t2 == -10);
-        QVERIFY(t3 == 0);
-        QVERIFY(t4 == 10);  //FIXME
-        //TODO e link? modifica il puntatore originale??
+        QVERIFY(isEqual(t1,-20));
+        QVERIFY(isEqual(t2,-10));
+        QVERIFY(isEqual(t3,0));
+        QVERIFY(isEqual(t4,10));
 
     };
 
+
+    void testComplicatedCircuit(){
+
+        QMainWindow *mainWindow = new QMainWindow();
+        auto circuit = new Circuit;
+        auto widget = new CircuitWidget(circuit);
+
+        auto *curr = new CurrentSource(10);
+        auto *curr_p = new Node(50, 50);
+        auto *curr_n = new Node(50, 100);
+        circuit->add(curr, curr_p, curr_n);
+
+        auto *res1 = new Resistor(5);
+        auto *res1_p = new Node(50, 100);
+        auto *res1_n = new Node(100, 100);
+        circuit->add(res1, res1_p, res1_n);
+
+        auto *res2 = new Resistor(5);
+        auto *res2_p = new Node(100, 100);
+        auto *res2_n = new Node(100, 50);
+        circuit->add(res2, res2_p, res2_n);
+
+        auto *res3 = new Resistor(5);
+        auto *res3_p = new Node(100, 50);
+        auto *res3_n = new Node(50, 50);
+        circuit->add(res3, res3_p, res3_n);
+
+        auto *wir= new Wire();
+        auto *wir_p= new Node(100,100,1);
+        auto *wir_n= new Node(150,100,1);
+        circuit->add(wir,wir_p,wir_n);
+
+        auto *res4= new Resistor(5);
+        auto *res4_p= new Node(150,100);
+        auto *res4_n=new Node(200,100);
+        circuit->add(res4,res4_p,res4_n);
+
+        auto *vol= new VoltageSource(10);
+        auto *vol_p= new Node(200,100);
+        auto *vol_n= new Node(200,50);
+        circuit->add(vol,vol_p,vol_n);
+
+        auto *res5 = new Resistor(5);
+        auto *res5_p = new Node(200, 50);
+        auto *res5_n = new Node(150, 50);
+        circuit->add(res5, res5_p, res5_n);
+
+        auto *res6 = new Resistor(5);
+        auto *res6_p = new Node(150, 50);
+        auto *res6_n = new Node(150, 100);
+        circuit->add(res6, res6_p, res6_n);
+
+        circuit->solve();
+        float t1=curr_p->getVoltage();
+        float t2= res1_p->getVoltage();
+        float t3= res2_p->getVoltage();
+        float t4= res3_p->getVoltage();
+        float t5= wir_p->getVoltage();
+        float t6= res4_n->getVoltage();
+        float t7= vol_n->getVoltage();
+        float t8= res5_n->getVoltage();
+        float t9= res6_p->getVoltage();
+
+        QVERIFY(isEqual(t1,-100) );
+        QVERIFY(isEqual(t2,50) );
+        QVERIFY(isEqual(t3,0) );
+        QVERIFY(isEqual(t4,-50) );
+        QVERIFY(isEqual(t5,0) );
+        QVERIFY(isEqual(t6,3.3333) );
+        QVERIFY(isEqual(t7,-6.6666) );
+        QVERIFY(isEqual(t8,-3.3333) );
+        QVERIFY(isEqual(t9,-3.3333) );
+
+
+
+
+    }
 };
 
 QTEST_MAIN(TestCircuitWidget)
