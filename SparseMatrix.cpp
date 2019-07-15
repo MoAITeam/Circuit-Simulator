@@ -3,9 +3,9 @@
 //
 
 #include "SparseMatrix.h"
-#include "MatrixException.h"
 #include "Component.h"
 #include <iostream>
+#include "MatrixException.h"
 
 SparseMatrix::SparseMatrix(): components(0) {
     terms=new EigenInterface();
@@ -28,6 +28,7 @@ void SparseMatrix::add(const float behavior[3],int a, int b) {
     terms->insertRow(0);
     matrix()(0,0)=1;
     (*terms)(0,0)=0;
+    
 
     int index=components+1;
     insertRow(index);
