@@ -71,6 +71,14 @@ void Component::setVoltage(float value) {
     voltage=value;
 }
 
+float Component::getCurrent() {
+    return current;
+}
+
+float Component::getVoltage() {
+    return voltage;
+}
+
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     int d1=sqrt(pow(event->pos().x()-nodes.first->x(),2)+pow((event->pos().y()-nodes.first->y()),2));
     int d2=sqrt(pow(event->pos().x()-nodes.second->x(),2)+pow((event->pos().y()-nodes.second->y()),2));

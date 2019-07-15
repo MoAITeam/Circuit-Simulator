@@ -34,6 +34,9 @@ public:
     void setCurrent(float value);
     void setVoltage(float value);
 
+    float getCurrent();
+    float getVoltage();
+
     float behavior[3];
 
 protected:
