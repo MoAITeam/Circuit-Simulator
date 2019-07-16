@@ -1,5 +1,4 @@
 #include <iostream>
-#include "Component.h"
 #include "Circuit.h"
 #include "CircuitWidget.h"
 #include <QApplication>

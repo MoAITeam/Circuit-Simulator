@@ -33,8 +33,8 @@ void SparseMatrix::add(const float behavior[3],int a, int b) {
     int index=components+1;
     insertRow(index);
     insertCol(index);
-
     terms->insertRow(index);
+
     matrix()(index,0)=behavior[0];
     matrix()(index,index)=behavior[1];
     (*terms)(index)=behavior[2];

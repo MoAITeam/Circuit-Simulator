@@ -181,11 +181,11 @@ void Circuit::print(){
 void Circuit::solve(){
     bool atLeastOneGround=false;
     for (auto &n : nodes) {
-        if (n->isGround() == true)
+        if (n->isGround())
             atLeastOneGround = true;
     }
 
-    if(atLeastOneGround==false)
+    if(!atLeastOneGround)
         throw ModelException("No ground selected!");
 
     std::vector<float> solution=matrix.solve();
