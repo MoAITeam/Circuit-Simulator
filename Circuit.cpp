@@ -80,11 +80,11 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
     if(observer!= nullptr)
         observer->addNotify(c);
 
-    int a=getIndex(p,nonGround());
+    int a=getIndex(p,nonGround());   //find the indexes of comp's nodes in the list
     int b=getIndex(n,nonGround());
 
     c->connect(p, n);
-    matrix.add(c->behavior,a,b);
+    matrix.add(c->behavior,a,b); //here indexes of nodes are necessary
 
 }
 

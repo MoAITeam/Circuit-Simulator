@@ -73,7 +73,7 @@ private slots:
         bool status = false;
         if (widget->scene()->items().size() == 0) //items has always one void
             status = true;
-        QVERIFY(status == true);
+        QVERIFY(status);
     };
 
 

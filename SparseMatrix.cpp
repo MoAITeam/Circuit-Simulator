@@ -41,10 +41,10 @@ void SparseMatrix::add(const float behavior[3],int a, int b) {
 
     components++;
 
-    int i=a>b?1:-1;
+    int i=a>b?1:-1;  //a,b are the indexes in the list of the nodes we want to insert in our sparse
 
     if(a!=notFound) {
-        matrix()(0, 2 * components + a) = i;
+        matrix()(0, 2 * components + a) = i;                   //i is necessary to establish voltage and current directions
         matrix()(2 * components + a, components) = -i;
     }
 
@@ -58,7 +58,7 @@ void SparseMatrix::add(const float behavior[3],int a, int b) {
 void SparseMatrix::update(int i,int a,int b){
 
     int index=components-i-1;
-    int nodes=cols()-2*components;
+    int nodes=cols()-2*components;              //needy when we modify the circuit moving comps or nodes
     row(index).rightCols(nodes).setZero();
     col(index+components).bottomRows(nodes).setZero();
 
@@ -107,7 +107,7 @@ void SparseMatrix::print(){
 std::vector<float> SparseMatrix::solve(){
 
     VectorXf solution;
-    solution=(*this).colPivHouseholderQr().solve((*terms).col(0));
+    solution=(*this).colPivHouseholderQr().solve((*terms).col(0));   //householder method: more stable than gauss and it works with orthogonal matrixes -> A*At=I
     std::vector<float> sol;
     sol.resize(solution.size());
     VectorXf::Map(&sol[0],solution.size())=solution;
