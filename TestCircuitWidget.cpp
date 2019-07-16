@@ -129,6 +129,14 @@ QTest::keyPress(widget , Qt::Key::Key_S);
         QVERIFY(isEqual(t3,0));
         QVERIFY(isEqual(t4,10));
 
+        float v1=res1->getCurrent();
+        float v2=res2->getCurrent();
+        float v3=res3->getCurrent();
+
+        QVERIFY(isEqual(v1,-1));
+        QVERIFY(isEqual(v2,1));
+        QVERIFY(isEqual(v3,-1));
+
     };
 
 
