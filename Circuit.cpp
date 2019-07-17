@@ -18,7 +18,7 @@ Circuit::~Circuit() {
 
 void Circuit::setObserver(CircuitObserver *o) {
     observer=o;
-    for (auto &component : components) {
+    for (const auto &component : components) {
         observer->addNotify(component);
         observer->addNotify(component->getNodes().first);
         observer->addNotify(component->getNodes().second);
@@ -34,6 +34,7 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
     if(*p==*n) {
         throw ModelException("Connecting component to the same node, component won't be connected...");
     }
+
 
     bool found=false;
     for (auto &node : nodes)
@@ -72,6 +73,13 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
 
         if(observer!= nullptr) {
             observer->addNotify(n);
+        }
+    }
+
+    for(auto& component:components){
+        nodePair toCheck=component->getNodes();
+        if(((p==toCheck.first)||(p==toCheck.second))&&((n==toCheck.first)||(n==toCheck.second))) {
+            delete component;
         }
     }
 
@@ -154,7 +162,6 @@ void Circuit::removeNotify(Component *c) {
     matrix.removeComponent(getIndex(c,components));
 
     //Implementation of the erase-remove idiom
-    //FIXME should I just use a list?
 
     auto removeTail=std::remove(components.begin(),components.end(),c); //moves to the end
     if(components.end()-removeTail>1)
@@ -170,7 +177,7 @@ void Circuit::removeNotify(Node *n) {
         throw ModelException("found more than one node to remove when expected one, undefined behavoir");
     nodes.erase(removeTail,nodes.end());
 }
-void Circuit::moveNotify(Node &drag) {
+void Circuit::update(Node &drag) {
     checkLink(drag);
 }
 

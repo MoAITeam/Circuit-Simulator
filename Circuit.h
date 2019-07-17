@@ -24,7 +24,7 @@ public:
     template <typename T> int getIndex(T*x,std::vector<T*> v);
 
     void setObserver(CircuitObserver* graphics);
-    void moveNotify(Node &drag) override;
+    void update(Node &drag) override;
     std::vector<Node*> nonGround();
     void print();
     void solve();

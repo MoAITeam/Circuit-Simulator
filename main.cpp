@@ -30,8 +30,9 @@ int main(int argc, char **argv) {
 
     auto *wire = new Wire();
     auto  *wire_p = new Node(150,300,true);
-    auto  *wire_n = new Node(250,300,true);
+    auto  *wire_n = new Node(250,300);
     c.add(wire,wire_p,wire_n);
+
 
     app.exec();
 

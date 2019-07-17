@@ -70,7 +70,7 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     for (auto component : components) {
         component->redraw();
     }
-    observer->moveNotify(*this);
+    observer->update(*this);
 }
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
