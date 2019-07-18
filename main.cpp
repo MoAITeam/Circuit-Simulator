@@ -6,16 +6,17 @@
 #include "CurrentSource.h"
 #include "VoltageSource.h"
 #include "Wire.h"
+#include "MainWindow.h"
 
 int main(int argc, char **argv) {
 
     QApplication app(argc,argv);
-    QMainWindow mainWindow;
     CircuitWidget* graph;
     Circuit c;
     graph=new CircuitWidget(&c);
+    MainWindow mainWindow(graph);
     c.setObserver(graph);
-    mainWindow.setCentralWidget(graph);
+    mainWindow.setGeometry(100, 100, 800, 500);
     mainWindow.show();
 
     auto *curr = new CurrentSource(10);

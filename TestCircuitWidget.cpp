@@ -77,7 +77,7 @@ private slots:
     };
 
 
-    void testSampleCircuit() {
+    void testSampleCircuit() { //COMMENTA
 
 
 

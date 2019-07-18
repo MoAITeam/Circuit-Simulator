@@ -9,8 +9,9 @@
 #include "Resistor.h"
 
 CircuitWidget::CircuitWidget(Circuit* c):circuit(c){
+
     QGraphicsScene* scene = new QGraphicsScene(this);
-    scene->setSceneRect(0, 0, 400, 400);
+    scene->setSceneRect(0, 0, 800, 800);
     circuit->setObserver(this);
     setScene(scene);
 }

@@ -3,9 +3,9 @@
     <file>images/currentsource.png</file>
     <file>images/voltagesource.png</file>
     <file>images/resistance.png</file>
-
-
-
+    <file>images/pointer.png</file>
+    <file>images/delete.png</file>
+    <file>images/linepointer.png</file>
 
 
 </qresource>
