@@ -10,12 +10,14 @@ set(CMAKE_AUTORCC  ON)
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Test REQUIRED)
+find_package(PNG REQUIRED)
+
 
 set(CMAKE_AUTOMOC ON)
 
-set(SOURCE_FILES CurrentSource.cpp CurrentSource.h VoltageSource.cpp VoltageSource.h Wire.cpp Wire.h Resistor.cpp Resistor.h Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h EigenInterface.cpp SparseMatrix.cpp SparseMatrix.h ModelException.h MatrixException.h)
+set(SOURCE_FILES MainWindow.cpp MainWindow.h components.qrc CurrentSource.cpp CurrentSource.h VoltageSource.cpp VoltageSource.h Wire.cpp Wire.h Resistor.cpp Resistor.h Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitWidget.cpp CircuitWidget.h CircuitObserver.h ComponentObserver.h NodeObserver.h EigenInterface.cpp SparseMatrix.cpp SparseMatrix.h ModelException.h MatrixException.h)
 
-add_executable(FirstSimulatorTest main.cpp ${SOURCE_FILES} MainWindow.cpp MainWindow.h)
+add_executable(FirstSimulatorTest main.cpp ${SOURCE_FILES} )
 add_executable(FirstSimulatorTest-Test TestCircuitWidget.cpp ${SOURCE_FILES})
 
 target_link_libraries (FirstSimulatorTest Eigen3::Eigen Qt5::Widgets)
