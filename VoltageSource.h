@@ -7,17 +7,16 @@
 
 
 #include "Component.h"
+#include <QPixmap>
 
 class VoltageSource : public Component {
 
 public:
-    VoltageSource(float value):Component(1,0,value){
+    VoltageSource(float value):Component(1,0,value,new QPixmap(":/images/voltagesource.png")){
         voltage=value;
     };
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
-
-
 };
 
 

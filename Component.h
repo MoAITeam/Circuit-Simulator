@@ -17,7 +17,7 @@ typedef std::pair<Node*,Node*> nodePair;
 class Component: public  QGraphicsItem{
 public:
 
-    Component(float a,float b, float c);
+    Component(float a,float b, float c,QPixmap* pic);
     ~Component();
     void connect(Node* p, Node* n);
 
@@ -39,15 +39,14 @@ public:
     float getVoltage();
 
     float behavior[3];
-
 protected:
     float current;
     float voltage;
+    nodePair nodes;
+  QPixmap* image;
 
 private:
     ComponentObserver* observer;
-    nodePair nodes;
-
 };
 
 #endif //FIRSTSIMULATORTEST_COMPONENT_H

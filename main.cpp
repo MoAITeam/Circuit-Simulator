@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Circuit.h"
-#include "CircuitWidget.h"
+#include "CircuitScene.h"
 #include <QApplication>
 #include <QMainWindow>
 #include "CurrentSource.h"
@@ -8,14 +8,16 @@
 #include "Wire.h"
 #include "MainWindow.h"
 
+
+
 int main(int argc, char **argv) {
 
     QApplication app(argc,argv);
     Q_INIT_RESOURCE(components);
 
-    CircuitWidget* graph;
+    CircuitScene* graph;
     Circuit c;
-    graph=new CircuitWidget(&c);
+    graph=new CircuitScene(&c);
     MainWindow mainWindow(graph);
     c.setObserver(graph);
     mainWindow.setGeometry(100, 100, 800, 500);

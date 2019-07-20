@@ -61,6 +61,7 @@ void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     //if(event->button()==Qt::LeftButton) {
         for (auto component : components) {
             component->redraw();
+            scene()->update();  //FIXME ELIMINARE
     }
     QGraphicsItem::mouseMoveEvent(event);
 }

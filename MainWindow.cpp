@@ -2,12 +2,12 @@
 // Created by cipher on 18/07/19.
 //
 
-#include <QtWidgets/QGridLayout>
 #include "MainWindow.h"
 
 #include <QtWidgets>
 
-MainWindow::MainWindow(CircuitWidget *view) {
+
+MainWindow::MainWindow(CircuitScene *scene) {
 
 
     createToolBox();
@@ -17,6 +17,7 @@ MainWindow::MainWindow(CircuitWidget *view) {
 
 
     auto *layout= new QHBoxLayout;
+    auto view= new QGraphicsView(scene);
     layout->addWidget(toolBox);
     layout->addWidget(view);
 

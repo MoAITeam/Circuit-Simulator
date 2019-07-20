@@ -11,7 +11,7 @@
 class Wire :public Component{
 
 public:
-    Wire():Component(1,0,0){};
+    Wire():Component(1,0,0, nullptr){};
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
 
 };

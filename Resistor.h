@@ -11,7 +11,7 @@
 class Resistor: public Component{
 
 public:
-    Resistor(float res):Component(1,-res,0){};
+    Resistor(float res):Component(1,-res,0,new QPixmap(":/images/resistance.png")){};
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
 
 

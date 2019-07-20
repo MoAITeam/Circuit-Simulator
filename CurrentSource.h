@@ -11,7 +11,7 @@
 class CurrentSource : public Component{
 
 public:
-    CurrentSource(float value):Component(0,1,value){
+    CurrentSource(float value):Component(0,1,value,new QPixmap(":/images/currentsource.png")){
         current=value;
     };
 

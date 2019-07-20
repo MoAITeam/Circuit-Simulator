@@ -4,7 +4,7 @@
 //
 
 
-#include "CircuitWidget.h"
+#include "CircuitScene.h"
 
 #include <QtWidgets>
 
@@ -15,7 +15,7 @@ class MainWindow: public QMainWindow{
     Q_OBJECT
 
 public:
-    MainWindow(CircuitWidget *view);
+    MainWindow(CircuitScene *scene);
 private:
     void createToolBox();
     void createActions();

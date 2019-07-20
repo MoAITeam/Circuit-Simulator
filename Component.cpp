@@ -8,9 +8,11 @@
 #include <iostream>
 #include <cmath>
 #include <QGraphicsSceneMouseEvent>
+#include <QtGui/QtGui>
 
-Component::Component(float a,float b,float c): behavior{a,b,c}, nodes{nullptr, nullptr} {
 
+Component::Component(float a,float b,float c,QPixmap *pic): behavior{a,b,c}, nodes{nullptr, nullptr} {
+image=pic;
 }
 
 Component::~Component() {
@@ -18,6 +20,7 @@ Component::~Component() {
     observer->removeNotify(this);
     nodes.first->disconnect(this);
     nodes.second->disconnect(this);
+
 }
 
 void Component::setObserver(ComponentObserver* o){
@@ -57,10 +60,29 @@ QRectF Component::boundingRect() const {
 }
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
+
     QPoint n1(nodes.first->x(),nodes.first->y());
     QPoint n2(nodes.second->x(),nodes.second->y());
     QLineF line(n1,n2);
     painter->drawLine(line);
+
+    if(image!= nullptr) {
+        QPointF center(boundingRect().center().x(), boundingRect().center().y());
+        float useful_angle = qAtan(boundingRect().width() / boundingRect().height()) * 180 / M_PI;
+        if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
+            (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
+            painter->translate(center);
+            painter->rotate(-useful_angle);
+        } else {
+            painter->translate(center);
+            painter->rotate(useful_angle);
+        }
+
+        painter->drawPixmap(-50, -50, 100, 100, *image);
+        painter->resetTransform();
+    }
+
+
 }
 
 void Component::setCurrent(float value) {
