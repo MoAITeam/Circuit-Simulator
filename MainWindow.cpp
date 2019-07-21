@@ -9,7 +9,6 @@
 
 MainWindow::MainWindow(CircuitScene *scene) {
 
-
     createToolBox();
     createActions();
     createMenus();
@@ -17,6 +16,7 @@ MainWindow::MainWindow(CircuitScene *scene) {
 
 
     auto *layout= new QHBoxLayout;
+    this->scene=scene;
     auto view= new QGraphicsView(scene);
     layout->addWidget(toolBox);
     layout->addWidget(view);
@@ -57,8 +57,14 @@ void MainWindow::createActions() {
 
     QIcon icon= QIcon(":/images/delete.png");
     deleteAction=new QAction(icon,tr("&Delete"),this);
+    connect(deleteAction, &QAction::triggered, this, &MainWindow::deleteItems);
 
+}
 
+void MainWindow::deleteItems() {
+    QList<QGraphicsItem *> selectedItems = scene->selectedItems();
+    for (auto it : selectedItems)
+        delete it;
 }
 
 void MainWindow::createToolbars() {
@@ -68,8 +74,6 @@ void MainWindow::createToolbars() {
 
     exitAction = new QAction(tr("&Exit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);
-
-
 
 }
 
@@ -91,8 +95,6 @@ QWidget* MainWindow::createCellWidget(const QString &text, const QString &image 
     widget->setLayout(layout);
 
     return widget;
-
-
 }
 
 void MainWindow::createMenus() {

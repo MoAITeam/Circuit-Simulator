@@ -12,6 +12,8 @@
 
 
 Component::Component(float a,float b,float c): behavior{a,b,c}, nodes{nullptr, nullptr} {
+    //setFlag(ItemIsMovable);
+    setFlag(QGraphicsItem::ItemIsSelectable,true);
 }
 
 Component::~Component() {
@@ -60,7 +62,8 @@ QRectF Component::boundingRect() const {
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-    QPoint n1(nodes.first->x(),nodes.first->y());
+    if (isSelected())
+        painter->setPen(QPen(Qt::green, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));    QPoint n1(nodes.first->x(),nodes.first->y());
     QPoint n2(nodes.second->x(),nodes.second->y());
     QLineF line(n1,n2);
     painter->drawLine(line);
@@ -101,6 +104,7 @@ float Component::getVoltage() {
 }
 
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    //mousePress=event->pos();
     int d1=sqrt(pow(event->pos().x()-nodes.first->x(),2)+pow((event->pos().y()-nodes.first->y()),2));
     int d2=sqrt(pow(event->pos().x()-nodes.second->x(),2)+pow((event->pos().y()-nodes.second->y()),2));
     int length=sqrt(pow(nodes.second->x()-nodes.first->x(),2)+pow((nodes.second->y()-nodes.first->y()),2));
@@ -109,5 +113,17 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         std::cout << "Voltage Value:" << abs(voltage) << std::endl;
     }
     QGraphicsItem::mousePressEvent(event);
+
+}
+
+void Component::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    QGraphicsItem::mouseMoveEvent(event);
+    /*float diffx=event->pos().x()-mousePress.x();
+    float diffy=event->pos().y()-mousePress.y();
+    nodes.first->setX(nodes.first->x()+diffx);
+    nodes.first->setY(nodes.first->y()+diffy);
+    nodes.second->setX(nodes.second->x()+diffx);
+    nodes.second->setY(nodes.second->y()+diffy);*/
+
 
 }

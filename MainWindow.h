@@ -21,8 +21,11 @@ private:
     void createActions();
     void createMenus();
     void createToolbars();
-    QWidget *createCellWidget(const QString &text,const QString &image);
 
+    void deleteItems();
+
+    QWidget *createCellWidget(const QString &text,const QString &image);
+    QGraphicsScene *scene;
 
 
 
@@ -32,8 +35,6 @@ private:
 
     QMenu *fileMenu;
     QMenu *itemMenu;
-
-    QComboBox *sceneScaleCombo;
 
     QAction *deleteAction;
     QAction *exitAction;

@@ -28,9 +28,10 @@ public:
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
-    //void mouseMoveEvent(QGraphicsSceneMouseEvent* ) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* ) override;
 
-    void setObserver(ComponentObserver *o);
+
+        void setObserver(ComponentObserver *o);
     nodePair getNodes();
 
     void setCurrent(float value);
@@ -47,6 +48,7 @@ protected:
     QPixmap pixmap;
 
 private:
+    QPointF mousePress;
     ComponentObserver* observer;
 };
 #endif //FIRSTSIMULATORTEST_COMPONENT_H
