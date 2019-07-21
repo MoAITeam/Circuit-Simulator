@@ -12,9 +12,6 @@
 
 int main(int argc, char **argv) {
 
-    //Per Mac
-    QCoreApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
-
     QApplication app(argc,argv);
     Q_INIT_RESOURCE(components);
 

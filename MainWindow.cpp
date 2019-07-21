@@ -11,9 +11,9 @@ MainWindow::MainWindow(CircuitScene *scene) {
 
     createToolBox();
     createActions();
+    menuBar()->setNativeMenuBar(false);
     createMenus();
     createToolbars();
-
 
     auto *layout= new QHBoxLayout;
     this->scene=scene;
