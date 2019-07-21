@@ -5,6 +5,7 @@
 #include "MainWindow.h"
 
 #include <QtWidgets>
+#include <iostream>
 
 
 MainWindow::MainWindow(CircuitScene *scene) {
@@ -38,9 +39,9 @@ void MainWindow::createToolBox() {
     buttonGroup->setExclusive(true);
 
     auto *toolboxLayout= new QGridLayout;
-    toolboxLayout->addWidget(createCellWidget(tr("Resistor"),":/images/resistance.png"),0,0);
-    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png"),0,1);
-    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png"),1,0);
+    toolboxLayout->addWidget(createCellWidget(tr("Resistor"),":/images/resistance.png",Resistor),0,0);
+    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png",VoltageSource),0,1);
+    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png",CurrentSource),1,0);
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
@@ -79,7 +80,7 @@ void MainWindow::createToolbars() {
 }
 
 
-QWidget* MainWindow::createCellWidget(const QString &text, const QString &image ) {
+QWidget* MainWindow::createCellWidget(const QString &text, const QString &image, int id ) {
 
     QToolButton *button= new QToolButton;
     button->setText(text);
@@ -87,6 +88,7 @@ QWidget* MainWindow::createCellWidget(const QString &text, const QString &image 
     button->setIconSize(QSize(50,50));
     button->setCheckable(true);
     buttonGroup->addButton(button,Qt::NoModifier);
+    buttonGroup->setId(button,id);
 
     auto *layout= new QGridLayout;
     layout->addWidget(button,0,0,Qt::AlignCenter);
@@ -106,3 +108,19 @@ void MainWindow::createMenus() {
     itemMenu->addAction(deleteAction);
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event) {
+    int id=buttonGroup->checkedId();
+    switch (id){
+        case CurrentSource:
+            std::cout<<"current source"<<std::endl;
+            break;
+        case Resistor:
+            std::cout<<"resistor"<<std::endl;
+            break;
+        case VoltageSource:
+            std::cout<<"voltage source"<<std::endl;
+            break;
+        default:
+            std::cout<<"nothing"<<std::endl;
+    }
+}
