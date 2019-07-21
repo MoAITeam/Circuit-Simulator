@@ -15,7 +15,7 @@ class Node;
 typedef std::pair<Node*,Node*> nodePair;
 
 //FIXME resource manager?
-class Component: public  QGraphicsPixmapItem{
+class Component: public  QGraphicsItem{
 public:
 
     Component(float a,float b, float c);
@@ -28,7 +28,7 @@ public:
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
-
+    //void mouseMoveEvent(QGraphicsSceneMouseEvent* ) override;
 
     void setObserver(ComponentObserver *o);
     nodePair getNodes();
@@ -44,6 +44,7 @@ protected:
     float current;
     float voltage;
     nodePair nodes;
+    QPixmap pixmap;
 
 private:
     ComponentObserver* observer;

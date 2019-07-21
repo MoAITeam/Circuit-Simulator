@@ -12,7 +12,6 @@
 
 
 Component::Component(float a,float b,float c): behavior{a,b,c}, nodes{nullptr, nullptr} {
-
 }
 
 Component::~Component() {
@@ -66,7 +65,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     QLineF line(n1,n2);
     painter->drawLine(line);
 
-    if(!pixmap().isNull()) {
+    if(!pixmap.isNull()) {
         QPointF center(boundingRect().center().x(), boundingRect().center().y());
         float useful_angle = qAtan(boundingRect().width() / boundingRect().height()) * 180 / M_PI;
         if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
@@ -78,7 +77,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
             painter->rotate(useful_angle);
         }
 
-        painter->drawPixmap(-50, -50, 100, 100, pixmap());
+        painter->drawPixmap(-50, -50, 100, 100, pixmap);
         painter->resetTransform();
     }
 
