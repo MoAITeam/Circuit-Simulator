@@ -21,9 +21,10 @@ MainWindow::MainWindow(CircuitScene *scene) {
     layout->addWidget(toolBox);
     layout->addWidget(view);
 
-    QWidget *widget=new QWidget;
-    widget->setLayout(layout);
-    setCentralWidget(widget);
+    QWidget *w=new QWidget;
+    w->setLayout(layout);
+
+    setCentralWidget(w);
 
     setWindowTitle(tr("Circuit Simulator"));
     setUnifiedTitleAndToolBarOnMac(true);
@@ -102,6 +103,6 @@ void MainWindow::createMenus() {
     //fileMenu->addAction(exitAction);
 
     itemMenu= menuBar()->addMenu(tr("&Item"));
-    //itemMenu->addAction(deleteAction);
+    itemMenu->addAction(deleteAction);
 }
 

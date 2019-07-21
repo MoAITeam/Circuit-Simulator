@@ -28,7 +28,6 @@ private:
     QGraphicsScene *scene;
 
 
-
     QToolBar *editToolBar;
     QToolBar *pointerToolbar;
 
