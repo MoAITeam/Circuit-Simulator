@@ -13,7 +13,6 @@ class NodeObserver {
 public:
     virtual void update(Node &n)=0;
     virtual void removeNotify(Node *n)=0;
-
 };
 
 

@@ -41,7 +41,7 @@ void MainWindow::createToolBox() {
     toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png"),0,1);
     toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png"),1,0);
     toolboxLayout->setRowStretch(3,10);
-    toolboxLayout->setColumnStretch(2,10);
+    toolboxLayout->setColumnStretch(3,10);
 
     auto itemWidget= new QWidget;
     itemWidget->setLayout(toolboxLayout);

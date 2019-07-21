@@ -25,12 +25,12 @@ int main(int argc, char **argv) {
 
     auto *curr = new CurrentSource(10);
     auto *curr_p = new Node(50, 50);
-    auto *curr_n = new Node(50, 100);
+    auto *curr_n = new Node(50,250);
     c.add(curr, curr_p, curr_n);
 
     auto *volt = new VoltageSource(10);
     auto  *volt_p = new Node(350,50);
-    auto  *volt_n = new Node(350,100);
+    auto  *volt_n = new Node(350,250);
     c.add(volt,volt_p,volt_n);
 
     auto *wire = new Wire();

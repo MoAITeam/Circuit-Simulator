@@ -4,6 +4,12 @@
 
 #include "Resistor.h"
 
+Resistor::Resistor(float res):Component(1,-res,0){
+    resistance=res;
+    QPixmap pic=QPixmap(":/images/resistance.png");
+    setPixmap(pic);
+};
+
 void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {
 
     painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));

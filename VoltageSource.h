@@ -12,12 +12,9 @@
 class VoltageSource : public Component {
 
 public:
-    VoltageSource(float value):Component(1,0,value,new QPixmap(":/images/voltagesource.png")){
-        voltage=value;
-    };
+    VoltageSource(float value);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
 };
-
 
 #endif //FIRSTSIMULATORTEST_VOLTAGESOURCE_H

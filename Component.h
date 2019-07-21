@@ -14,10 +14,11 @@
 class Node;
 typedef std::pair<Node*,Node*> nodePair;
 
-class Component: public  QGraphicsItem{
+//FIXME resource manager?
+class Component: public  QGraphicsPixmapItem{
 public:
 
-    Component(float a,float b, float c,QPixmap* pic);
+    Component(float a,float b, float c);
     ~Component();
     void connect(Node* p, Node* n);
 
@@ -43,10 +44,8 @@ protected:
     float current;
     float voltage;
     nodePair nodes;
-  QPixmap* image;
 
 private:
     ComponentObserver* observer;
 };
-
 #endif //FIRSTSIMULATORTEST_COMPONENT_H
