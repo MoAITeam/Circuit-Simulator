@@ -36,6 +36,13 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             auto *p = new Node(mousePressPoint.x(), mousePressPoint.y());
             auto *n = new Node(event->scenePos().x(), event->scenePos().y());
             circuit->add(r, p, n);
+            /*QList<QGraphicsItem*> list=QList<QGraphicsItem*>();
+            list.append(r);
+            list.append(p);
+            list.append(n);
+            auto *g = QGraphicsScene::createItemGroup(list);
+            g->setFlag(QGraphicsItem::ItemIsMovable);
+            addItem(g);*/
         }
     }
 }

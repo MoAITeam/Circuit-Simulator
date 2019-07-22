@@ -23,14 +23,13 @@ public:
     void connect(Node* p, Node* n);
 
     QRectF boundingRect() const override;
-    QPainterPath shape() const ;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
     void redraw();
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent* ) override;
-
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* )override;
 
         void setObserver(ComponentObserver *o);
     nodePair getNodes();

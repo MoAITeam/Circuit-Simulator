@@ -6,7 +6,7 @@
 
 Resistor::Resistor(float res):Component(1,-res,0){
     resistance=res;
-    pixmap = QPixmap(":/images/resistor.png");
+    pixmap = QPixmap(":/images/resistance.png");
 }
 
 void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

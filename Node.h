@@ -31,6 +31,7 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
     void setVoltage(float value);
     float getVoltage();
+    void checkLink();
 
     void setObserver(NodeObserver *o);
     std::list<Component*> getComponents();
