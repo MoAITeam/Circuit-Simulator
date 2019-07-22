@@ -23,6 +23,7 @@ public:
     void connect(Node* p, Node* n);
 
     QRectF boundingRect() const override;
+    QPainterPath shape() const ;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
     void redraw();
 

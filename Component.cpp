@@ -9,6 +9,7 @@
 #include <cmath>
 #include <QGraphicsSceneMouseEvent>
 #include <QtGui/QtGui>
+#define FLT_EPSILON 0.001
 
 
 Component::Component(float a,float b,float c): behavior{a,b,c}, nodes{nullptr, nullptr} {
@@ -21,6 +22,7 @@ Component::~Component() {
     observer->removeNotify(this);
     nodes.first->disconnect(this);
     nodes.second->disconnect(this);
+    scene()->update();
 
 }
 
@@ -64,6 +66,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
 
     if (isSelected())
         painter->setPen(QPen(Qt::green, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));    QPoint n1(nodes.first->x(),nodes.first->y());
+
     QPoint n2(nodes.second->x(),nodes.second->y());
     QLineF line(n1,n2);
     painter->drawLine(line);
@@ -92,7 +95,10 @@ void Component::setCurrent(float value) {
 }
 
 void Component::setVoltage(float value) {
-    voltage=value;
+    if(value<FLT_EPSILON)
+        voltage=0;
+    else
+        voltage=value;
 }
 
 float Component::getCurrent() {
@@ -132,4 +138,17 @@ void Component::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     nodes.second->setY(nodes.second->y()+diffy);*/
 
 
+}
+
+QPainterPath Component::shape() const
+{
+    QPainterPath path;
+    QPolygon polygon;
+    polygon << QPoint(nodes.first->x()-10,nodes.first->y()-10);
+    polygon << QPoint(nodes.first->x()+10,nodes.first->y()+10);
+    polygon << QPoint(nodes.second->x()+10, nodes.second->y()+10);
+    polygon << QPoint(nodes.second->x()-10, nodes.second->y() - 10);
+    path.addPolygon(polygon);
+
+    return path;
 }
