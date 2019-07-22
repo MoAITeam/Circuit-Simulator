@@ -3,6 +3,9 @@
 //
 
 #include "MainWindow.h"
+#include "CurrentSource.h"
+#include "VoltageSource.h"
+#include "Resistor.h"
 
 #include <QtWidgets>
 #include <iostream>
@@ -39,9 +42,10 @@ void MainWindow::createToolBox() {
     buttonGroup->setExclusive(true);
 
     auto *toolboxLayout= new QGridLayout;
-    toolboxLayout->addWidget(createCellWidget(tr("Resistor"),":/images/resistance.png",Resistor),0,0);
+    toolboxLayout->addWidget(createCellWidget(tr("Resistor"),":/images/resistor.png",Resistor),0,0);
     toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png",VoltageSource),0,1);
     toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png",CurrentSource),1,0);
+    toolboxLayout->addWidget(createCellWidget("Wire",":/images/wire.png",Wire),1,1);
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
@@ -61,12 +65,19 @@ void MainWindow::createActions() {
     deleteAction=new QAction(icon,tr("&Delete"),this);
     connect(deleteAction, &QAction::triggered, this, &MainWindow::deleteItems);
 
+
+    exitAction = new QAction(tr("&Exit"), this);
+    exitAction->setShortcuts(QKeySequence::Quit);
+    exitAction->setStatusTip(tr("Quit Scenediagram example"));
+    connect(exitAction, &QAction::triggered, this, &QWidget::close);
+
 }
 
 void MainWindow::deleteItems() {
     QList<QGraphicsItem *> selectedItems = scene->selectedItems();
     for (auto it : selectedItems)
         delete it;
+
 }
 
 void MainWindow::createToolbars() {
@@ -102,7 +113,7 @@ QWidget* MainWindow::createCellWidget(const QString &text, const QString &image,
 
 void MainWindow::createMenus() {
     fileMenu=menuBar()->addMenu(tr("&File"));
-    //fileMenu->addAction(exitAction);
+    fileMenu->addAction(exitAction);
 
     itemMenu= menuBar()->addMenu(tr("&Item"));
     //itemMenu->addAction(deleteAction);
@@ -124,3 +135,4 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
             std::cout<<"nothing"<<std::endl;
     }
 }
+

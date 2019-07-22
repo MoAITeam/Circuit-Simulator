@@ -3,6 +3,7 @@
 //
 
 #include "VoltageSource.h"
+#include "ResourceManager.h"
 
 void VoltageSource::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {
 
@@ -12,5 +13,5 @@ void VoltageSource::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg,
 
 VoltageSource::VoltageSource(float value):Component(1,0,value) {
     voltage=value;
-    pixmap = QPixmap(":/images/voltagesource.png");
+    pixmap = QPixmap(ResourceManager::getImage("VoltageSource")); //FIXME UTILIZZO SINGLETON
 }
