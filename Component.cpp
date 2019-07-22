@@ -12,8 +12,8 @@
 
 
 Component::Component(float a,float b,float c): behavior{a,b,c}, nodes{nullptr, nullptr} {
+    setFlag(ItemIsSelectable,true);
     //setFlag(ItemIsMovable);
-    setFlag(QGraphicsItem::ItemIsSelectable,true);
 }
 
 Component::~Component() {
@@ -114,6 +114,12 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     }
     QGraphicsItem::mousePressEvent(event);
 
+}
+
+void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    //nodes.first->checkLink();
+    //nodes.second->checkLink();
+    QGraphicsItem::mouseReleaseEvent(event);
 }
 
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {

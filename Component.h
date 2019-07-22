@@ -29,7 +29,7 @@ public:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent* ) override;
-
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* )override;
 
         void setObserver(ComponentObserver *o);
     nodePair getNodes();

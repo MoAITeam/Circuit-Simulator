@@ -26,6 +26,7 @@ Node::~Node(){
 
 void Node::connect(Component *c) {
     components.push_back(c);
+    //setParentItem(c);
 }
 
 void Node::disconnect(Component *c){
@@ -71,6 +72,10 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     for (auto component : components) {
         component->redraw();
     }
+    checkLink();
+}
+
+void Node::checkLink(){
     observer->update(*this);
 }
 
