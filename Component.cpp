@@ -9,6 +9,7 @@
 #include <cmath>
 #include <QGraphicsSceneMouseEvent>
 #include <QtGui/QtGui>
+#define FLT_EPSILON 0.001
 
 
 Component::Component(float a,float b,float c): behavior{a,b,c}, nodes{nullptr, nullptr} {
@@ -21,6 +22,7 @@ Component::~Component() {
     observer->removeNotify(this);
     nodes.first->disconnect(this);
     nodes.second->disconnect(this);
+    scene()->update();
 
 }
 
@@ -92,7 +94,10 @@ void Component::setCurrent(float value) {
 }
 
 void Component::setVoltage(float value) {
-    voltage=value;
+    if(value<FLT_EPSILON)
+        voltage=0;
+    else
+        voltage=value;
 }
 
 float Component::getCurrent() {
