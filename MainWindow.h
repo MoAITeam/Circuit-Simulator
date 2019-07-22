@@ -16,13 +16,14 @@ class MainWindow: public QMainWindow{
 
 public:
     MainWindow(CircuitScene *scene);
-    enum types {Resistor, CurrentSource, VoltageSource};
 private:
     void createToolBox();
     void createActions();
     void createMenus();
     void createToolbars();
     void keyPressEvent(QKeyEvent *event) override;
+
+    enum types {Resistor, CurrentSource, VoltageSource};
 
     void deleteItems();
 
