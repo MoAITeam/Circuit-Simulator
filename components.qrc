@@ -6,6 +6,7 @@
     <file>images/pointer.png</file>
     <file>images/delete.png</file>
     <file>images/linepointer.png</file>
+    <file>images/wire.png</file>
 
 </qresource>
 </RCC>
