@@ -23,7 +23,9 @@ private:
     void createToolbars();
     void keyPressEvent(QKeyEvent *event) override;
 
-    enum types {Resistor, CurrentSource, VoltageSource};
+    void buttonGroupClicked(int id);
+
+    enum types {Resistor, CurrentSource, VoltageSource, Wire};
 
     void deleteItems();
 
