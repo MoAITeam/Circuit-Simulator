@@ -131,6 +131,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         case VoltageSource:
             std::cout<<"voltage source"<<std::endl;
             break;
+        case Wire:
+            std::cout<<"wire"<<std::endl;
+            break;
         default:
             std::cout<<"nothing"<<std::endl;
     }

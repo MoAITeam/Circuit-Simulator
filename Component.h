@@ -25,11 +25,11 @@ public:
     QRectF boundingRect() const override;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
     void redraw();
+    QPainterPath shape() const ;
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent* ) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* )override;
 
         void setObserver(ComponentObserver *o);
     nodePair getNodes();

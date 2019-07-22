@@ -140,3 +140,16 @@ void Component::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 
 }
+
+QPainterPath Component::shape() const
+{
+    QPainterPath path;
+    QPolygon polygon;
+    polygon << QPoint(nodes.first->x()-10,nodes.first->y()-10);
+    polygon << QPoint(nodes.first->x()+10,nodes.first->y()+10);
+    polygon << QPoint(nodes.second->x()+10, nodes.second->y()+10);
+    polygon << QPoint(nodes.second->x()-10, nodes.second->y() - 10);
+    path.addPolygon(polygon);
+
+    return path;
+}
