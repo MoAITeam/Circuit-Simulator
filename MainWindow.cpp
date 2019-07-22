@@ -5,25 +5,27 @@
 #include "MainWindow.h"
 
 #include <QtWidgets>
+#include <iostream>
 
 
 MainWindow::MainWindow(CircuitScene *scene) {
 
-
     createToolBox();
     createActions();
+    menuBar()->setNativeMenuBar(false);
     createMenus();
     createToolbars();
 
-
     auto *layout= new QHBoxLayout;
+    this->scene=scene;
     auto view= new QGraphicsView(scene);
     layout->addWidget(toolBox);
     layout->addWidget(view);
 
-    QWidget *widget=new QWidget;
-    widget->setLayout(layout);
-    setCentralWidget(widget);
+    QWidget *w=new QWidget;
+    w->setLayout(layout);
+
+    setCentralWidget(w);
 
     setWindowTitle(tr("Circuit Simulator"));
     setUnifiedTitleAndToolBarOnMac(true);
@@ -37,9 +39,9 @@ void MainWindow::createToolBox() {
     buttonGroup->setExclusive(true);
 
     auto *toolboxLayout= new QGridLayout;
-    toolboxLayout->addWidget(createCellWidget(tr("Resistor"),":/images/resistance.png"),0,0);
-    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png"),0,1);
-    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png"),1,0);
+    toolboxLayout->addWidget(createCellWidget(tr("Resistor"),":/images/resistance.png",Resistor),0,0);
+    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png",VoltageSource),0,1);
+    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png",CurrentSource),1,0);
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
@@ -57,8 +59,14 @@ void MainWindow::createActions() {
 
     QIcon icon= QIcon(":/images/delete.png");
     deleteAction=new QAction(icon,tr("&Delete"),this);
+    connect(deleteAction, &QAction::triggered, this, &MainWindow::deleteItems);
 
+}
 
+void MainWindow::deleteItems() {
+    QList<QGraphicsItem *> selectedItems = scene->selectedItems();
+    for (auto it : selectedItems)
+        delete it;
 }
 
 void MainWindow::createToolbars() {
@@ -69,12 +77,10 @@ void MainWindow::createToolbars() {
     exitAction = new QAction(tr("&Exit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);
 
-
-
 }
 
 
-QWidget* MainWindow::createCellWidget(const QString &text, const QString &image ) {
+QWidget* MainWindow::createCellWidget(const QString &text, const QString &image, int id ) {
 
     QToolButton *button= new QToolButton;
     button->setText(text);
@@ -82,6 +88,7 @@ QWidget* MainWindow::createCellWidget(const QString &text, const QString &image 
     button->setIconSize(QSize(50,50));
     button->setCheckable(true);
     buttonGroup->addButton(button,Qt::NoModifier);
+    buttonGroup->setId(button,id);
 
     auto *layout= new QGridLayout;
     layout->addWidget(button,0,0,Qt::AlignCenter);
@@ -91,8 +98,6 @@ QWidget* MainWindow::createCellWidget(const QString &text, const QString &image 
     widget->setLayout(layout);
 
     return widget;
-
-
 }
 
 void MainWindow::createMenus() {
@@ -103,3 +108,19 @@ void MainWindow::createMenus() {
     itemMenu->addAction(deleteAction);
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event) {
+    int id=buttonGroup->checkedId();
+    switch (id){
+        case CurrentSource:
+            std::cout<<"current source"<<std::endl;
+            break;
+        case Resistor:
+            std::cout<<"resistor"<<std::endl;
+            break;
+        case VoltageSource:
+            std::cout<<"voltage source"<<std::endl;
+            break;
+        default:
+            std::cout<<"nothing"<<std::endl;
+    }
+}

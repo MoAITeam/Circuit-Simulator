@@ -21,9 +21,14 @@ private:
     void createActions();
     void createMenus();
     void createToolbars();
-    QWidget *createCellWidget(const QString &text,const QString &image);
+    void keyPressEvent(QKeyEvent *event) override;
 
+    enum types {Resistor, CurrentSource, VoltageSource};
 
+    void deleteItems();
+
+    QWidget *createCellWidget(const QString &text,const QString &image, int id);
+    QGraphicsScene *scene;
 
 
     QToolBar *editToolBar;
@@ -32,8 +37,6 @@ private:
 
     QMenu *fileMenu;
     QMenu *itemMenu;
-
-    QComboBox *sceneScaleCombo;
 
     QAction *deleteAction;
     QAction *exitAction;
