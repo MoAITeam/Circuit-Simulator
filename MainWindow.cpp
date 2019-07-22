@@ -100,6 +100,6 @@ void MainWindow::createMenus() {
     //fileMenu->addAction(exitAction);
 
     itemMenu= menuBar()->addMenu(tr("&Item"));
-    //itemMenu->addAction(deleteAction);
+    itemMenu->addAction(deleteAction);
 }
 
