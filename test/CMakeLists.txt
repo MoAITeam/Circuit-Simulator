@@ -11,7 +11,7 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Test REQUIRED)
 
 #file(GLOB Sources "components.qrc CurrentSource.cpp CurrentSource.h VoltageSource.cpp VoltageSource.h Wire.cpp Wire.h Resistor.cpp Resistor.h Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitScene.cpp CircuitScene.h CircuitObserver.h ComponentObserver.h NodeObserver.h EigenInterface.cpp SparseMatrix.cpp SparseMatrix.h ModelException.h MatrixException.h MainWindow.cpp MainWindow.h" )
-set(SOURCE_FILES ${dir} )
 
-add_executable(runGameTest TestCircuitWidget.cpp ${dir})
-target_link_libraries (runGameTest Eigen3::Eigen Qt5::Widgets Qt5::Test core ${dir})
+
+add_executable(runGameTest TestCircuitWidget.cpp ${Sources})
+target_link_libraries (runGameTest Eigen3::Eigen Qt5::Widgets Qt5::Test core)

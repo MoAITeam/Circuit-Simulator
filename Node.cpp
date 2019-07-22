@@ -7,7 +7,6 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsScene>
 #include <iostream>
-#define FLT_EPSILON 0.001
 
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setFlag(ItemIsMovable);
@@ -85,10 +84,7 @@ void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
 }
 
 void Node::setVoltage(float value) {
-    if(value<FLT_EPSILON)
-        voltage=0;
-    else
-        voltage=value;
+    voltage=value;
 }
 
 void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {

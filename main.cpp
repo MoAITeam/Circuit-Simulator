@@ -7,7 +7,7 @@
 #include "VoltageSource.h"
 #include "Wire.h"
 #include "MainWindow.h"
-#include "ResourceManager.h"
+
 
 
 int main(int argc, char **argv) {
@@ -15,7 +15,6 @@ int main(int argc, char **argv) {
     QApplication app(argc,argv);
     Q_INIT_RESOURCE(components);
 
-    ResourceManager resourceManager;
     CircuitScene* graph;
     Circuit c;
     graph=new CircuitScene(&c);
