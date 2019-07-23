@@ -22,7 +22,11 @@ Component::~Component() {
     observer->removeNotify(this);
     nodes.first->disconnect(this);
     nodes.second->disconnect(this);
-    scene()->update();
+    QPointF length;
+    length.setX(qAbs(nodes.first->x()-nodes.second->x()));
+    length.setY(qAbs(nodes.first->y()-nodes.second->y()));
+    QPointF m=(nodes.first->pos()+nodes.second->pos())/2;
+    scene()->update(QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+50,m.y()+length.y()/2+50)));
 }
 
 void Component::setObserver(ComponentObserver* o){
