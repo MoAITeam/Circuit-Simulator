@@ -20,12 +20,15 @@ public:
 
     Component(float a,float b, float c);
     ~Component();
+
+    enum types {Resistor, CurrentSource, VoltageSource, Wire};
+
     void connect(Node* p, Node* n);
 
     QRectF boundingRect() const override;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
     void redraw();
-    QPainterPath shape() const ;
+    QPainterPath shape() const override;
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;

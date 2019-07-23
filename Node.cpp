@@ -7,6 +7,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsScene>
 #include <iostream>
+#include <cmath>
 #define FLT_EPSILON 0.001
 
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
@@ -63,16 +64,16 @@ void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     //if(event->button()==Qt::LeftButton) {
         for (auto component : components) {
             component->redraw();
-            scene()->update();  //FIXME ELIMINARE
     }
+    scene()->update();//FIXME more components to update, scenes
     QGraphicsItem::mouseMoveEvent(event);
 }
 
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseReleaseEvent(event);
-    for (auto component : components) {
-        component->redraw();
-    }
+    this->setX((((int)this->x())/20)*20);
+    this->setY((((int)this->y())/20)*20);
+    scene()->update();
     checkLink();
 }
 
@@ -85,7 +86,7 @@ void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
 }
 
 void Node::setVoltage(float value) {
-    if(value<FLT_EPSILON)
+    if(abs(value)<FLT_EPSILON)
         voltage=0;
     else
         voltage=value;

@@ -10,7 +10,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QtGui/QtGui>
 #include <QLabel>
-
+#define FLT_EPSILON 0.001
 
 Component::Component(float a,float b,float c): behavior{a,b,c}, nodes{nullptr, nullptr} {
     setFlag(ItemIsSelectable,true);
@@ -63,17 +63,21 @@ QRectF Component::boundingRect() const {
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-    QString string="";
     if (isSelected()) {
         painter->setPen(QPen(Qt::green, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        string=QString().number(current);
+
     }
     QPoint n1(nodes.first->x(),nodes.first->y());
     QPoint n2(nodes.second->x(),nodes.second->y());
     QLineF line(n1,n2);
+    bool notImage;
+    if(line.length()<100)
+        notImage=true;
+    else
+        notImage=false;
+
     painter->drawLine(line);
 
-    painter->drawText(20,20,string);
 
     if(!pixmap.isNull()) {
         QPointF center(boundingRect().center().x(), boundingRect().center().y());
@@ -86,20 +90,29 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
             painter->translate(center);
             painter->rotate(useful_angle);
         }
-
+if(!notImage)
         painter->drawPixmap(-50, -50, 100, 100, pixmap);
+        else
+            painter->drawPixmap(-50,-line.length()/2,100,line.length(),pixmap);
         painter->resetTransform();
+        redraw();
     }
 
 
 }
 
 void Component::setCurrent(float value) {
-    current=value;
+    if(abs(value)<FLT_EPSILON)
+        current=0;
+    else
+        current=value;
 }
 
 void Component::setVoltage(float value) {
-    voltage=value;
+    if(abs(value)<FLT_EPSILON)
+        voltage=0;
+    else
+        voltage=value;
 }
 
 float Component::getCurrent() {
@@ -123,11 +136,11 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 }
 
-void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+/*void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     //nodes.first->checkLink();
     //nodes.second->checkLink();
     QGraphicsItem::mouseReleaseEvent(event);
-}
+}*/
 
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseMoveEvent(event);

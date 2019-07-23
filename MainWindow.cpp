@@ -6,6 +6,8 @@
 #include "CurrentSource.h"
 #include "VoltageSource.h"
 #include "Resistor.h"
+#include "Component.h"
+#include "CircuitScene.h"
 
 #include <QtWidgets>
 #include <iostream>
@@ -40,12 +42,13 @@ void MainWindow::createToolBox() {
 
     buttonGroup = new QButtonGroup(this);
     buttonGroup->setExclusive(true);
+    connect(buttonGroup,QOverload<int>::of((&QButtonGroup::buttonClicked)),this,&MainWindow::buttonGroupClicked);
 
     auto *toolboxLayout= new QGridLayout;
-    toolboxLayout->addWidget(createCellWidget(tr("Resistor"),":/images/resistor.png",Resistor),0,0);
-    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png",VoltageSource),0,1);
-    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png",CurrentSource),1,0);
-    toolboxLayout->addWidget(createCellWidget("Wire",":/images/wire.png",Wire),1,1);
+    toolboxLayout->addWidget(createCellWidget(tr("Resistor"),":/images/resistor.png",Component::Resistor),0,0);
+    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png",Component::VoltageSource),0,1);
+    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png",Component::CurrentSource),1,0);
+    toolboxLayout->addWidget(createCellWidget("Wire",":/images/wire.png",Component::Wire),1,1);
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
@@ -119,23 +122,9 @@ void MainWindow::createMenus() {
     //itemMenu->addAction(deleteAction);
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event) {
-    int id=buttonGroup->checkedId();
-    switch (id){
-        case CurrentSource:
-            std::cout<<"current source"<<std::endl;
-            break;
-        case Resistor:
-            std::cout<<"resistor"<<std::endl;
-            break;
-        case VoltageSource:
-            std::cout<<"voltage source"<<std::endl;
-            break;
-        case Wire:
-            std::cout<<"wire"<<std::endl;
-            break;
-        default:
-            std::cout<<"nothing"<<std::endl;
-    }
-}
 
+void MainWindow::buttonGroupClicked(int id) {
+
+    scene->setType(Component::types(id));
+    scene->setMode(CircuitScene::modes(id));
+}

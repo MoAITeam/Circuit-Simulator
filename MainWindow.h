@@ -21,16 +21,13 @@ private:
     void createActions();
     void createMenus();
     void createToolbars();
-    void keyPressEvent(QKeyEvent *event) override;
 
     void buttonGroupClicked(int id);
-
-    enum types {Resistor, CurrentSource, VoltageSource, Wire};
 
     void deleteItems();
 
     QWidget *createCellWidget(const QString &text,const QString &image, int id);
-    QGraphicsScene *scene;
+    CircuitScene *scene;
 
 
     QToolBar *editToolBar;
