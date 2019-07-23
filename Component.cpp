@@ -26,6 +26,10 @@ Component::~Component() {
     length.setX(qAbs(nodes.first->x()-nodes.second->x()));
     length.setY(qAbs(nodes.first->y()-nodes.second->y()));
     QPointF m=(nodes.first->pos()+nodes.second->pos())/2;
+    if (nodes.first->getComponents().size()==0)
+        delete nodes.first;
+    if (nodes.second->getComponents().size()==0)
+        delete nodes.second;
     scene()->update(QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+50,m.y()+length.y()/2+50)));
 }
 

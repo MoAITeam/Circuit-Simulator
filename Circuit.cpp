@@ -10,9 +10,9 @@ Circuit::Circuit(CircuitObserver *o):observer(o) {
 }
 
 Circuit::~Circuit() {
-    std::vector<Node*> toDestroy=nodes;
-    for (auto &node : toDestroy) {
-        delete node;
+    std::vector<Component*> toDestroy=components;
+    for (auto &c : toDestroy) {
+        delete c;
     }
 }
 
