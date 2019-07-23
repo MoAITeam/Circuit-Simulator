@@ -9,18 +9,19 @@
 #include "VoltageSource.h"
 #include "CurrentSource.h"
 #include "Wire.h"
+#define sceneSize 1000
 
 
 CircuitScene::CircuitScene(Circuit* c):circuit(c){
 
-    setSceneRect(0, 0, 1000, 1000);
+    setSceneRect(0, 0, sceneSize, sceneSize);
     circuit->setObserver(this);
 
-    for(int x=0; x<=1000; x+=20)
+    for(int x=0; x<=sceneSize; x+=nodeGridSize)
         addLine(x,0,x,1000,QPen(Qt::lightGray));
 
-    for(int y=0; y<=1000; y+=20)
-        addLine(0,y,1000,y, QPen(Qt::lightGray));
+    for(int y=0; y<=sceneSize; y+=nodeGridSize)
+        addLine(0,y,sceneSize,y, QPen(Qt::lightGray));
 
 }
 
