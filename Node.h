@@ -28,7 +28,6 @@ public:
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* ) override;
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
     void setVoltage(float value);
     float getVoltage();

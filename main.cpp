@@ -25,8 +25,8 @@ int main(int argc, char **argv) {
     mainWindow.show();
 
     auto *wire = new Wire();
-    auto  *wire_p = new Node(150,300,true);
-    auto  *wire_n = new Node(250,300);
+    auto  *wire_p = new Node(160,300,true);
+    auto  *wire_n = new Node(240,300);
     c.add(wire,wire_p,wire_n);
 
 
@@ -36,8 +36,9 @@ int main(int argc, char **argv) {
 }
 
 // TODO :RIMUOVERE SCENE UPDATE
-//-GRIGLIA PIU LEGGERA
-//_MAXED WINDOW BUG (BUTTONFROUP)
+//DISTRUGGERE NODI CON NULLA ATTACCATO
+//GRIGLIA PIU LEGGERA
+//MAXED WINDOW BUG (BUTTONFROUP)
 //DECIDERE SOLUZIONE GRAFICA
 //DECIDERE INSERIMENTO VALORI
 //DECIDERE SCELTA NODO DI TERRA

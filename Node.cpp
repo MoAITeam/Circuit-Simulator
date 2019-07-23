@@ -82,10 +82,6 @@ void Node::checkLink(){
     observer->update(*this);
 }
 
-void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
-    delete this;
-}
-
 void Node::setVoltage(float value) {
     if(abs(value)<FLT_EPSILON)
         voltage=0;

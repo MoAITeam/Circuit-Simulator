@@ -22,7 +22,7 @@ Component::~Component() {
     observer->removeNotify(this);
     nodes.first->disconnect(this);
     nodes.second->disconnect(this);
-
+    scene()->update();
 }
 
 void Component::setObserver(ComponentObserver* o){
@@ -44,10 +44,6 @@ void Component::connect(Node* p, Node* n){
 
 nodePair Component::getNodes() {
     return nodes;
-}
-
-void Component::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {
-    delete this;
 }
 
 void Component::redraw(){
