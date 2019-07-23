@@ -10,6 +10,7 @@
 #include <QGraphicsItem>
 #include "NodeObserver.h"
 #define NodeSize 10
+#define nodeGridSize 20
 
 class Component;
 

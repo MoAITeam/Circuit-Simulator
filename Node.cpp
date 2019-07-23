@@ -71,8 +71,8 @@ void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseReleaseEvent(event);
-    this->setX((((int)this->x())/20)*20);
-    this->setY((((int)this->y())/20)*20);
+    this->setX(((((int)this->x())+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
+    this->setY(((((int)this->y())+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
     scene()->update();
     checkLink();
 

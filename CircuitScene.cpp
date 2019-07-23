@@ -31,16 +31,16 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    mousePressPoint.setX(((int)event->scenePos().x()/20)*20);
-    mousePressPoint.setY(((int)event->scenePos().y()/20)*20);
+    mousePressPoint.setX((((int)event->scenePos().x()+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
+    mousePressPoint.setY((((int)event->scenePos().y()+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
     QGraphicsScene::mousePressEvent(event);
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
     QPointF mouseReleasePoint;
-    mouseReleasePoint.setX(((int)event->scenePos().x()/20)*20);
-    mouseReleasePoint.setY(((int)event->scenePos().y()/20)*20);
+    mouseReleasePoint.setX((((int)event->scenePos().x()+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
+    mouseReleasePoint.setY((((int)event->scenePos().y()+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
     QPointF length;
     length.setX(qAbs(mousePressPoint.x()-mouseReleasePoint.x()));
     length.setY(qAbs(mousePressPoint.y()-mouseReleasePoint.y()));
