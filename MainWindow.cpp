@@ -24,8 +24,8 @@ MainWindow::MainWindow(CircuitScene *scene) {
     auto *layout= new QHBoxLayout;
     this->scene=scene;
     auto view= new QGraphicsView(scene);
-    layout->addWidget(toolBox);
-    layout->addWidget(view);
+    layout->addWidget(toolBox,1);
+    layout->addWidget(view,5);
 
     QWidget *w=new QWidget;
     w->setLayout(layout);
@@ -71,7 +71,7 @@ void MainWindow::createActions() {
 
     exitAction = new QAction(tr("&Exit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);
-    exitAction->setStatusTip(tr("Quit Scenediagram example"));
+    exitAction->setStatusTip(tr("Quit example"));
     connect(exitAction, &QAction::triggered, this, &QWidget::close);
 
 }

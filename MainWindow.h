@@ -29,10 +29,7 @@ private:
     QWidget *createCellWidget(const QString &text,const QString &image, int id);
     CircuitScene *scene;
 
-
     QToolBar *editToolBar;
-    QToolBar *pointerToolbar;
-
 
     QMenu *fileMenu;
     QMenu *itemMenu;

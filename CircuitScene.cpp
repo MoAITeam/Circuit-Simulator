@@ -9,7 +9,7 @@
 #include "VoltageSource.h"
 #include "CurrentSource.h"
 #include "Wire.h"
-#define sceneSize 1000
+#define sceneSize 1100
 
 QColor CircuitScene::gridColor = QColor(237,237,237,125);
 
@@ -40,9 +40,6 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
     QPointF mouseReleasePoint=Node::toGrid(event->scenePos());
-    QPointF length;
-    length.setX(qAbs(mousePressPoint.x()-mouseReleasePoint.x()));
-    length.setY(qAbs(mousePressPoint.y()-mouseReleasePoint.y()));
     if (event->button() == Qt::RightButton) {
         //Aggiungere il nodo solo se ha senso
         if(sqrt(pow(mousePressPoint.x()-mouseReleasePoint.x(),2)+pow(mousePressPoint.y()-mouseReleasePoint.y(),2))>NodeSize) {
@@ -65,13 +62,11 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
             }
             if(c!= nullptr) {
-                auto *p = new Node(mousePressPoint.x(), mousePressPoint.y());
-                auto *n = new Node(mouseReleasePoint.x(), mouseReleasePoint.y());
+                auto *p = new Node(mousePressPoint);
+                auto *n = new Node(mouseReleasePoint);
 
                 circuit->add(c, p, n);
-                QPointF m=(p->pos()+n->pos())/2;
-                update(QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+50,m.y()+length.y()/2+50)));
-
+                c->update();
             }
         }
     }

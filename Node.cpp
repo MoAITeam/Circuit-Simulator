@@ -12,8 +12,14 @@
 
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setFlag(ItemIsMovable);
-    this->setX(x);
-    this->setY(y);
+    setX(x);
+    setY(y);
+}
+
+Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGround){
+    setFlag(ItemIsMovable);
+    setX(point.x());
+    setY(point.y());
 }
 
 Node::~Node(){
@@ -61,19 +67,19 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 }
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    //if(event->button()==Qt::LeftButton) {
         for (auto component : components) {
             component->redraw();
     }
-    scene()->update();//FIXME more components to update, scenes
     QGraphicsItem::mouseMoveEvent(event);
 }
 
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseReleaseEvent(event);
     this->setPos(Node::toGrid(this->pos()));
-    scene()->update(); //FIXME remove
     checkLink();
+    for (auto component : components) {
+        component->redraw();
+    }
 
 }
 

@@ -19,6 +19,7 @@ class NodeObserver;
 class Node: public QGraphicsItem{
 public:
     Node(float x, float y,bool isGround=false);
+    Node(QPointF point,bool isGround=false);
     ~Node();
     void connect(Component *c);
     void disconnect(Component *c);

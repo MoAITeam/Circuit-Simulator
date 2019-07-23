@@ -30,7 +30,7 @@ Component::~Component() {
         delete nodes.first;
     if (nodes.second->getComponents().size()==0)
         delete nodes.second;
-    scene()->update(QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+50,m.y()+length.y()/2+50)));
+    update();
 }
 
 void Component::setObserver(ComponentObserver* o){
@@ -62,7 +62,13 @@ void Component::redraw(){
 QRectF Component::boundingRect() const {
     QPoint n1(nodes.first->x(),nodes.first->y());
     QPoint n2(nodes.second->x(),nodes.second->y());
-    return QRectF(n1,n2).normalized();
+    QPoint m=(n1+n2)/2;
+    QPoint length;
+    length.setX(qAbs(n1.x()-n2.x()));
+    length.setY(qAbs(n1.y()-n2.y()));
+    //return QRectF(n1,n2).normalized();
+    return QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+50,m.y()+length.y()/2+50));
+
 }
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
@@ -85,7 +91,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
 
     if(!pixmap.isNull()) {
         QPointF center(boundingRect().center().x(), boundingRect().center().y());
-        float useful_angle = qAtan(boundingRect().width() / boundingRect().height()) * 180 / M_PI;
+        float useful_angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
         if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
             (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
             painter->translate(center);
