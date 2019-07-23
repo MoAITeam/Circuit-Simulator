@@ -11,6 +11,7 @@
 #include "Wire.h"
 #define sceneSize 1000
 
+QColor CircuitScene::gridColor = QColor(237,237,237,125);
 
 CircuitScene::CircuitScene(Circuit* c):circuit(c){
 
@@ -18,10 +19,10 @@ CircuitScene::CircuitScene(Circuit* c):circuit(c){
     circuit->setObserver(this);
 
     for(int x=0; x<=sceneSize; x+=nodeGridSize)
-        addLine(x,0,x,1000,QPen(Qt::lightGray));
+        addLine(x,0,x,1000,QPen(gridColor));
 
     for(int y=0; y<=sceneSize; y+=nodeGridSize)
-        addLine(0,y,sceneSize,y, QPen(Qt::lightGray));
+        addLine(0,y,sceneSize,y, QPen(gridColor));
 
 }
 
@@ -32,16 +33,13 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    mousePressPoint.setX((((int)event->scenePos().x()+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
-    mousePressPoint.setY((((int)event->scenePos().y()+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
+    mousePressPoint=Node::toGrid(event->scenePos());
     QGraphicsScene::mousePressEvent(event);
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
-    QPointF mouseReleasePoint;
-    mouseReleasePoint.setX((((int)event->scenePos().x()+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
-    mouseReleasePoint.setY((((int)event->scenePos().y()+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
+    QPointF mouseReleasePoint=Node::toGrid(event->scenePos());
     QPointF length;
     length.setX(qAbs(mousePressPoint.x()-mouseReleasePoint.x()));
     length.setY(qAbs(mousePressPoint.y()-mouseReleasePoint.y()));

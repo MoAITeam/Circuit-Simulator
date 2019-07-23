@@ -27,6 +27,7 @@ public:
     void setMode(CircuitScene::modes mode);
 
 private:
+    static QColor gridColor;
     Component::types  myType;
     CircuitScene::modes myMode;
     Circuit* circuit;

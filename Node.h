@@ -31,6 +31,7 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
     void setVoltage(float value);
     float getVoltage();
+    static QPointF toGrid(QPointF n);
     void checkLink();
 
     void setObserver(NodeObserver *o);

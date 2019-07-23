@@ -71,9 +71,8 @@ void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseReleaseEvent(event);
-    this->setX(((((int)this->x())+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
-    this->setY(((((int)this->y())+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
-    scene()->update();
+    this->setPos(Node::toGrid(this->pos()));
+    scene()->update(); //FIXME remove
     checkLink();
 
 }
@@ -100,4 +99,10 @@ bool Node::isGround(){
 
 float Node::getVoltage() {
     return voltage;
+}
+
+QPointF Node::toGrid(QPointF n){
+    n.setX(((((int)n.x())+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
+    n.setY(((((int)n.y())+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
+    return n;
 }
