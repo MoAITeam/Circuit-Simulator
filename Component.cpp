@@ -90,12 +90,11 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
             painter->translate(center);
             painter->rotate(useful_angle);
         }
-if(!notImage)
-        painter->drawPixmap(-50, -50, 100, 100, pixmap);
+        if(!notImage)
+            painter->drawPixmap(-50, -50, 100, 100, pixmap);
         else
             painter->drawPixmap(-50,-line.length()/2,100,line.length(),pixmap);
         painter->resetTransform();
-        redraw();
     }
 
 

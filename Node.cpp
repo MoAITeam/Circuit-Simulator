@@ -75,6 +75,7 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     this->setY((((int)this->y())/20)*20);
     scene()->update();
     checkLink();
+
 }
 
 void Node::checkLink(){

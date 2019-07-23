@@ -41,7 +41,9 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QPointF mouseReleasePoint;
     mouseReleasePoint.setX(((int)event->scenePos().x()/20)*20);
     mouseReleasePoint.setY(((int)event->scenePos().y()/20)*20);
-    QPointF length=mousePressPoint-mouseReleasePoint;
+    QPointF length;
+    length.setX(qAbs(mousePressPoint.x()-mouseReleasePoint.x()));
+    length.setY(qAbs(mousePressPoint.y()-mouseReleasePoint.y()));
     if (event->button() == Qt::RightButton) {
         //Aggiungere il nodo solo se ha senso
         if(sqrt(pow(mousePressPoint.x()-mouseReleasePoint.x(),2)+pow(mousePressPoint.y()-mouseReleasePoint.y(),2))>NodeSize) {
