@@ -22,7 +22,7 @@ private:
     void createMenus();
     void createToolbars();
 
-    void buttonGroupClicked(int id);
+    void buttonGroupClicked(int type);
 
     void deleteItems();
 

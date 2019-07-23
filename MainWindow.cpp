@@ -24,6 +24,8 @@ MainWindow::MainWindow(CircuitScene *scene) {
     auto *layout= new QHBoxLayout;
     this->scene=scene;
     auto view= new QGraphicsView(scene);
+    view->centerOn(0,0);
+
     layout->addWidget(toolBox,1);
     layout->addWidget(view,5);
 
@@ -123,8 +125,7 @@ void MainWindow::createMenus() {
 }
 
 
-void MainWindow::buttonGroupClicked(int id) {
-
-    scene->setType(Component::types(id));
-    scene->setMode(CircuitScene::modes(id));
+void MainWindow::buttonGroupClicked(int type) {
+    scene->setType(Component::types(type));
+    scene->setMode(CircuitScene::modes(CircuitScene::insertItem));
 }

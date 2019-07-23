@@ -13,6 +13,7 @@
 #define FLT_EPSILON 0.001
 
 Component::Component(float a,float b,float c): behavior{a,b,c}, nodes{nullptr, nullptr} {
+    setZValue(-100);
     setFlag(ItemIsSelectable,true);
     //setFlag(ItemIsMovable);
 }

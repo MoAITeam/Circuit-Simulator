@@ -15,6 +15,8 @@ QColor CircuitScene::gridColor = QColor(237,237,237,125);
 
 CircuitScene::CircuitScene(Circuit* c):circuit(c){
 
+    myMode=moveItem;
+
     setSceneRect(0, 0, sceneSize, sceneSize);
     circuit->setObserver(this);
 
@@ -33,14 +35,16 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    if(myMode==insertItem)
     mousePressPoint=Node::toGrid(event->scenePos());
+    if(myMode==moveItem)
     QGraphicsScene::mousePressEvent(event);
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
     QPointF mouseReleasePoint=Node::toGrid(event->scenePos());
-    if (event->button() == Qt::RightButton) {
+    if (myMode==insertItem && event->button()==Qt::LeftButton) {
         //Aggiungere il nodo solo se ha senso
         if(sqrt(pow(mousePressPoint.x()-mouseReleasePoint.x(),2)+pow(mousePressPoint.y()-mouseReleasePoint.y(),2))>NodeSize) {
             Component *c;
@@ -77,6 +81,9 @@ void CircuitScene::keyPressEvent(QKeyEvent *event) {
         circuit->print();
     if(event->key()==Qt::Key::Key_S)
         circuit->solve();
+    if(event->key()==Qt::Key::Key_M) {
+        myMode = moveItem;
+    }
 }
 
 void CircuitScene::setType(Component::types type) {

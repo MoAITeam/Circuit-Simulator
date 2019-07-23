@@ -17,7 +17,7 @@ public:
     CircuitScene(Circuit* c);
     void addNotify(QGraphicsItem *c) override;
 
-    enum modes{insertItem,MoveItem};
+    enum modes{insertItem,moveItem};
 
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;

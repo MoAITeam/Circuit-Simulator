@@ -11,6 +11,7 @@
 #define FLT_EPSILON 0.001
 
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
+    setZValue(100);
     setFlag(ItemIsMovable);
     setX(x);
     setY(y);
