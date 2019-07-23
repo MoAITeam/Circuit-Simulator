@@ -43,7 +43,6 @@ MainWindow::MainWindow(CircuitScene *scene) {
 void MainWindow::createToolBox() {
 
     buttonGroup = new QButtonGroup(this);
-    buttonGroup->setExclusive(true);
     connect(buttonGroup,QOverload<int>::of((&QButtonGroup::buttonClicked)),this,&MainWindow::buttonGroupClicked);
 
     auto *toolboxLayout= new QGridLayout;
@@ -66,10 +65,13 @@ void MainWindow::createToolBox() {
 
 void MainWindow::createActions() {
 
-    QIcon icon= QIcon(":/images/delete.png");
-    deleteAction=new QAction(icon,tr("&Delete"),this);
+    QIcon icon_delete= QIcon(":/images/delete.png");
+    deleteAction=new QAction(icon_delete,tr("&Delete"),this);
     connect(deleteAction, &QAction::triggered, this, &MainWindow::deleteItems);
 
+    QIcon icon_select= QIcon(":/images/pointer.png");
+    selectAction=new QAction(icon_select,tr("&Select"),this);
+    connect(selectAction, &QAction::triggered, this, &MainWindow::selectItems);
 
     exitAction = new QAction(tr("&Exit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);
@@ -85,13 +87,22 @@ void MainWindow::deleteItems() {
 
 }
 
+void MainWindow::selectItems() {
+    scene->setMode(CircuitScene::moveItem);
+    //Qt non permette alcuna altra soluzione!
+    buttonGroup->setExclusive(false);
+    buttonGroup->checkedButton()->setChecked(false);
+    buttonGroup->setExclusive(true);
+}
+
 void MainWindow::createToolbars() {
 
     editToolBar = addToolBar(tr("Edit"));
     editToolBar->addAction(deleteAction);
+    editToolBar->addAction(selectAction);
 
-    exitAction = new QAction(tr("&Exit"), this);
-    exitAction->setShortcuts(QKeySequence::Quit);
+    //exitAction = new QAction(tr("&Exit"), this);
+    //exitAction->setShortcuts(QKeySequence::Quit);
 
 }
 

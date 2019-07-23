@@ -11,6 +11,7 @@
 #define FLT_EPSILON 0.001
 
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
+    setAcceptHoverEvents(true);
     setZValue(100);
     setFlag(ItemIsMovable);
     setX(x);
@@ -18,6 +19,8 @@ Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGr
 }
 
 Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGround){
+    setAcceptHoverEvents(true);
+    setZValue(100);
     setFlag(ItemIsMovable);
     setX(point.x());
     setY(point.y());

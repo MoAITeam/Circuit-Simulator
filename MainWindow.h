@@ -25,6 +25,7 @@ private:
     void buttonGroupClicked(int type);
 
     void deleteItems();
+    void selectItems();
 
     QWidget *createCellWidget(const QString &text,const QString &image, int id);
     CircuitScene *scene;
@@ -35,6 +36,7 @@ private:
     QMenu *itemMenu;
 
     QAction *deleteAction;
+    QAction *selectAction;
     QAction *exitAction;
 
     QToolBox *toolBox;

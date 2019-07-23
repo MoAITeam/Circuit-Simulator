@@ -81,9 +81,6 @@ void CircuitScene::keyPressEvent(QKeyEvent *event) {
         circuit->print();
     if(event->key()==Qt::Key::Key_S)
         circuit->solve();
-    if(event->key()==Qt::Key::Key_M) {
-        myMode = moveItem;
-    }
 }
 
 void CircuitScene::setType(Component::types type) {
