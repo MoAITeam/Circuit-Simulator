@@ -8,6 +8,7 @@
 #include <map>
 #include <QtWidgets>
 #include <QtGui/QtGui>
+#include "Component.h"
 
 
 
@@ -18,8 +19,11 @@ public:
 
     static  QPixmap& getImage(std::string const &filename);
 
+    static std::string getName(Component::types const type);
+
 private:
     std::map<std::string,QPixmap> images;
+    std::map<Component::types ,std::string> myStrComponent;
 
     static ResourceManager *sInstance;
 

@@ -21,6 +21,13 @@ ResourceManager::ResourceManager() {
     images.insert(std::make_pair("voltageSource",*im_vol));
     images.insert(std::make_pair("wire",*im_wir));
 
+    myStrComponent.insert(std::make_pair(Component::types::resistor ,"Resistor"));
+    myStrComponent.insert(std::make_pair(Component::types::currentSource ,"Current Source"));
+    myStrComponent.insert(std::make_pair(Component::types::voltageSource ,"Voltage Source"));
+    myStrComponent.insert(std::make_pair(Component::types::wire ,"Wire"));
+
+
+
 }
 
 QPixmap& ResourceManager::getImage(std::string const &filename) {
@@ -28,4 +35,10 @@ QPixmap& ResourceManager::getImage(std::string const &filename) {
 auto myPair=sInstance->images.find(filename);
 if(myPair!=sInstance->images.end())
     return myPair->second;
+}
+
+std::string ResourceManager::getName(Component::types const type) {
+    auto myNames=sInstance->myStrComponent.find(type);
+    if(myNames!=sInstance->myStrComponent.end())
+        return myNames->second;
 }

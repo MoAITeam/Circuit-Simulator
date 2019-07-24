@@ -13,6 +13,8 @@
 #include "ResourceManager.h"
 #define FLT_EPSILON 0.001
 
+
+
 Component::Component(float a,float b,float c,types compType): behavior{a,b,c}, nodes{nullptr, nullptr} {
     setZValue(-100);
     setFlag(ItemIsSelectable,true);
@@ -31,6 +33,7 @@ Component::Component(float a,float b,float c,types compType): behavior{a,b,c}, n
             break;
         default:
             break;
+        
     }
 }
 

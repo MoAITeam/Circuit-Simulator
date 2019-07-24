@@ -8,6 +8,7 @@
 #include "Resistor.h"
 #include "Component.h"
 #include "CircuitScene.h"
+#include "ResourceManager.h"
 
 #include <QtWidgets>
 #include <iostream>
@@ -155,8 +156,12 @@ void MainWindow::createMenus() {
 void MainWindow::buttonGroupClicked(int type) {
     scene->setType(Component::types(type));
     scene->setMode(CircuitScene::modes(CircuitScene::insertItem));
-    float value=QInputDialog::getDouble(this->parentWidget(),"Insert Value","Please insert the correct value\n for you resistor");
+    if(type!=Component::types::wire){
+    std::string text="Please,insert the correct value\n for your "+ ResourceManager::getName(Component::types(type)) ;
+    QString string=QString::fromStdString(text);
+    float value=QInputDialog::getDouble(this->parentWidget(),"Insert Value",string);
     scene->setcValue(value);
+    }
 
 }
 
