@@ -155,6 +155,9 @@ void MainWindow::createMenus() {
 void MainWindow::buttonGroupClicked(int type) {
     scene->setType(Component::types(type));
     scene->setMode(CircuitScene::modes(CircuitScene::insertItem));
+    float value=QInputDialog::getDouble(this->parentWidget(),"Insert Value","Please insert the correct value\n for you resistor");
+    scene->setcValue(value);
+
 }
 
 void MainWindow::about()

@@ -25,6 +25,7 @@ public:
 
     void setType(Component::types type);
     void setMode(CircuitScene::modes mode);
+    void setcValue(float v);
 
 private:
     static QColor gridColor;
@@ -32,6 +33,7 @@ private:
     CircuitScene::modes myMode;
     Circuit* circuit;
     QPointF mousePressPoint;
+    float cValue;
 };
 
 

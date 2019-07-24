@@ -5,6 +5,7 @@
 #include "CircuitScene.h"
 #include "Node.h"
 #include <iostream>
+#include <QtWidgets/QInputDialog>
 #include "Resistor.h"
 #include "VoltageSource.h"
 #include "CurrentSource.h"
@@ -50,13 +51,13 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             Component *c;
             switch(myType){
                 case Component::resistor:
-                    c=new Resistor(10);
+                    c=new Resistor(cValue);
                     break;
                 case Component::voltageSource:
-                    c=new VoltageSource(10);
+                    c=new VoltageSource(cValue);
                     break;
                 case Component::currentSource:
-                    c=new CurrentSource(10);
+                    c=new CurrentSource(cValue);
                     break;
                 case Component::wire:
                     c= new Wire;
@@ -89,4 +90,8 @@ void CircuitScene::setType(Component::types type) {
 
 void CircuitScene::setMode(CircuitScene::modes mode) {
     myMode=mode;
+}
+
+void CircuitScene::setcValue(float v) {
+    cValue=v;
 }
