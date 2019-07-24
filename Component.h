@@ -18,10 +18,10 @@ typedef std::pair<Node*,Node*> nodePair;
 class Component: public  QGraphicsItem{
 public:
 
-    Component(float a,float b, float c);
-    ~Component();
+    enum types {resistor, currentSource, voltageSource, wire};
 
-    enum types {Resistor, CurrentSource, VoltageSource, Wire};
+    Component(float a,float b, float c,types compType);
+    ~Component();
 
     void connect(Node* p, Node* n);
 

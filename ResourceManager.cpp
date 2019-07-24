@@ -16,10 +16,10 @@ ResourceManager::ResourceManager() {
     auto im_vol= new QPixmap(":/images/voltagesource.png");
     auto im_cur=new QPixmap(":/images/currentsource.png");
     auto im_wir=new QPixmap(":/images/wire.png");
-    images.insert(std::make_pair("Resistor",*im_res));
+    images.insert(std::make_pair("resistor",*im_res));
     images.insert(std::make_pair("CurrentSource",*im_cur));
-    images.insert(std::make_pair("VoltageSource",*im_vol));
-    images.insert(std::make_pair("Wire",*im_wir));
+    images.insert(std::make_pair("voltageSource",*im_vol));
+    images.insert(std::make_pair("wire",*im_wir));
 
 }
 

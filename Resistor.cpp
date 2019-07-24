@@ -4,9 +4,9 @@
 
 #include "Resistor.h"
 
-Resistor::Resistor(float res):Component(1,-res,0){
+Resistor::Resistor(float res):Component(1,-res,0,resistor){
     resistance=res;
-    pixmap = QPixmap(":/images/resistor.png");
+
 }
 
 void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

@@ -10,7 +10,7 @@ find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Test REQUIRED)
 
-#file(GLOB Sources "components.qrc CurrentSource.cpp CurrentSource.h VoltageSource.cpp VoltageSource.h Wire.cpp Wire.h Resistor.cpp Resistor.h Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitScene.cpp CircuitScene.h CircuitObserver.h ComponentObserver.h NodeObserver.h EigenInterface.cpp SparseMatrix.cpp SparseMatrix.h ModelException.h MatrixException.h MainWindow.cpp MainWindow.h" )
+#file(GLOB Sources "components.qrc CurrentSource.cpp CurrentSource.h voltageSource.cpp voltageSource.h wire.cpp wire.h resistor.cpp resistor.h Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitScene.cpp CircuitScene.h CircuitObserver.h ComponentObserver.h NodeObserver.h EigenInterface.cpp SparseMatrix.cpp SparseMatrix.h ModelException.h MatrixException.h MainWindow.cpp MainWindow.h" )
 set(SOURCE_FILES ${dir} )
 
 add_executable(runGameTest TestCircuitWidget.cpp ${dir})

@@ -11,7 +11,6 @@ void CurrentSource::paint(QPainter *painter, const QStyleOptionGraphicsItem *qg,
 
 }
 
-CurrentSource::CurrentSource(float value):Component(0,1,value) {
+CurrentSource::CurrentSource(float value):Component(0,1,value,currentSource) {
     current=value;
-    pixmap=QPixmap(":/images/currentsource.png");
 }

@@ -49,16 +49,16 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         if(sqrt(pow(mousePressPoint.x()-mouseReleasePoint.x(),2)+pow(mousePressPoint.y()-mouseReleasePoint.y(),2))>NodeSize) {
             Component *c;
             switch(myType){
-                case Component::Resistor:
+                case Component::resistor:
                     c=new Resistor(10);
                     break;
-                case Component::VoltageSource:
+                case Component::voltageSource:
                     c=new VoltageSource(10);
                     break;
-                case Component::CurrentSource:
+                case Component::currentSource:
                     c=new CurrentSource(10);
                     break;
-                case Component::Wire:
+                case Component::wire:
                     c= new Wire;
                     break;
                 default:
