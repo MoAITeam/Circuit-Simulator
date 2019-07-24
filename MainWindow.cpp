@@ -46,10 +46,10 @@ void MainWindow::createToolBox() {
     connect(buttonGroup,QOverload<int>::of((&QButtonGroup::buttonClicked)),this,&MainWindow::buttonGroupClicked);
 
     auto *toolboxLayout= new QGridLayout;
-    toolboxLayout->addWidget(createCellWidget(tr("Resistor"),":/images/resistor.png",Component::Resistor),0,0);
-    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png",Component::VoltageSource),0,1);
-    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png",Component::CurrentSource),1,0);
-    toolboxLayout->addWidget(createCellWidget("Wire",":/images/wire.png",Component::Wire),1,1);
+    toolboxLayout->addWidget(createCellWidget(tr("resistor"),":/images/resistor.png",Component::resistor),0,0);
+    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png",Component::voltageSource),0,1);
+    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png",Component::currentSource),1,0);
+    toolboxLayout->addWidget(createCellWidget("wire",":/images/wire.png",Component::wire),1,1);
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
@@ -77,6 +77,11 @@ void MainWindow::createActions() {
     exitAction->setShortcuts(QKeySequence::Quit);
     exitAction->setStatusTip(tr("Quit example"));
     connect(exitAction, &QAction::triggered, this, &QWidget::close);
+
+
+    aboutAction = new QAction(tr("A&bout"), this);
+    aboutAction->setShortcut(tr("F1"));
+    connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
 
 }
 
@@ -133,10 +138,20 @@ void MainWindow::createMenus() {
 
     itemMenu= menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(deleteAction);
+
+    aboutMenu= menuBar()->addMenu(tr("&About"));
+    aboutMenu->addAction(aboutAction);
 }
 
 
 void MainWindow::buttonGroupClicked(int type) {
     scene->setType(Component::types(type));
     scene->setMode(CircuitScene::modes(CircuitScene::insertItem));
+}
+
+void MainWindow::about()
+{
+    QMessageBox::about(this, tr("About Circuit Simulator"),
+                       tr("Our <b>Circuit Simulator</b> can evaluate every kind "
+                          "of ideal electronic circuit"));
 }
