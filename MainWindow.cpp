@@ -95,9 +95,17 @@ void MainWindow::deleteItems() {
 void MainWindow::selectItems() {
     scene->setMode(CircuitScene::moveItem);
     //Qt non permette alcuna altra soluzione!
-    buttonGroup->setExclusive(false);
-    buttonGroup->checkedButton()->setChecked(false);
-    buttonGroup->setExclusive(true);
+    bool check=false;
+    for(const auto button:buttonGroup->buttons())
+        if(button->isChecked())
+            check=true;
+
+    if(check) {
+        buttonGroup->setExclusive(false);
+        buttonGroup->checkedButton()->setChecked(false);
+        buttonGroup->setExclusive(true);
+    }
+
 }
 
 void MainWindow::createToolbars() {
