@@ -11,6 +11,7 @@
 #include "CurrentSource.h"
 #include "Wire.h"
 #include "Voltmeter.h"
+#include "Amperometer.h"
 
 #define sceneSize 1100
 
@@ -62,6 +63,9 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                     break;
                 case Component::voltmeter:
                     c = new Voltmeter;
+                    break;
+                case Component::amperometer:
+                    c=new Amperometer;
                     break;
                 case Component::voltageSource:
                     c = new VoltageSource(cValue);
