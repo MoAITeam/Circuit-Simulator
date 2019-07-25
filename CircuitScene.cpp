@@ -40,6 +40,7 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     mousePressPoint=Node::toGrid(event->scenePos());
     if(myMode==moveItem)
     QGraphicsScene::mousePressEvent(event);
+    update();
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {

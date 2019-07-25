@@ -16,9 +16,8 @@
 
 
 Component::Component(float a,float b,float c,types compType): behavior{a,b,c}, nodes{nullptr, nullptr} {
-    setZValue(-100);
+    setZValue(100);
     setFlag(ItemIsSelectable,true);
-    setAcceptHoverEvents(true);
     switch(compType){
         case resistor:
             pixmap=ResourceManager::getImage("resistor");
@@ -93,6 +92,8 @@ QRectF Component::boundingRect() const {
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
+    QPointF center(boundingRect().center().x(), boundingRect().center().y());
+
     if (isSelected()) {
         painter->setPen(QPen(Qt::green, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
@@ -110,7 +111,6 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
 
 
     if(!pixmap.isNull()) {
-        QPointF center(boundingRect().center().x(), boundingRect().center().y());
         float useful_angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
         if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
             (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
@@ -124,9 +124,37 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
             painter->drawPixmap(-50, -50, 100, 100, pixmap);
         else
             painter->drawPixmap(-50,-line.length()/2,100,line.length(),pixmap);
-        painter->resetTransform();
     }
+    painter->resetTransform();
+    painter->translate(center);
+    if(isSelected()) {
+        if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
+            (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
 
+            painter->setPen(QPen(Qt::black, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            QPainterPath path;
+            path.addRoundedRect(QRectF(35,-67.5,150,45),10,10);
+            QPen pen(Qt::black,1);
+            painter->setPen(pen);
+            painter->fillPath(path,QColor(32,178,170));
+            painter->drawPath(path);
+            painter->drawText(40,-50, "Current:"+QString().number(current));
+            painter->drawText(40, -30, "Voltage:"+QString().number(voltage));
+
+        } else {
+            painter->setPen(QPen(Qt::black, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            QPainterPath path;
+            path.addRoundedRect(QRectF(35,12.5,150,45),10,10);
+            QPen pen(Qt::black,1);
+            painter->setPen(pen);
+            painter->fillPath(path,QColor(32,178,170));
+            painter->drawPath(path);
+            painter->drawText(40, 30, "Current:"+QString().number(current));
+            painter->drawText(40, 50, "Voltage:"+QString().number(voltage));
+
+        }
+
+    }
 
 }
 
@@ -155,13 +183,6 @@ float Component::getVoltage() {
 
 
 
-
-/*void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    //nodes.first->checkLink();
-    //nodes.second->checkLink();
-    QGraphicsItem::mouseReleaseEvent(event);
-}*/
-
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseMoveEvent(event);
     /*float diffx=event->pos().x()-mousePress.x();
@@ -186,4 +207,3 @@ QPainterPath Component::shape() const
 
     return path;
 }
-

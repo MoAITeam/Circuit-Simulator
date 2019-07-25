@@ -21,6 +21,6 @@ set(SOURCE_FILES ResourceManager.h ResourceManager.cpp MainWindow.cpp MainWindow
 
 add_executable(FirstSimulatorTest main.cpp ${SOURCE_FILES} )
 
-add_library(dir STATIC${SOURCE_FILES})
+#add_library(dir STATIC${SOURCE_FILES})
 
 target_link_libraries (FirstSimulatorTest Eigen3::Eigen Qt5::Widgets)
