@@ -69,9 +69,10 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             if(c!= nullptr) {
                 auto *p = new Node(mousePressPoint);
                 auto *n = new Node(mouseReleasePoint);
-
                 circuit->add(c, p, n);
                 c->update();
+                setMode(CircuitScene::modes(CircuitScene::moveItem));
+
             }
         }
     }

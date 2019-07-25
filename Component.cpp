@@ -18,7 +18,7 @@
 Component::Component(float a,float b,float c,types compType): behavior{a,b,c}, nodes{nullptr, nullptr} {
     setZValue(-100);
     setFlag(ItemIsSelectable,true);
-    //setFlag(ItemIsMovable);
+    setAcceptHoverEvents(true);
     switch(compType){
         case resistor:
             pixmap=ResourceManager::getImage("resistor");
@@ -152,18 +152,9 @@ float Component::getVoltage() {
     return voltage;
 }
 
-void Component::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    //mousePress=event->pos();
-    int d1=sqrt(pow(event->pos().x()-nodes.first->x(),2)+pow((event->pos().y()-nodes.first->y()),2));
-    int d2=sqrt(pow(event->pos().x()-nodes.second->x(),2)+pow((event->pos().y()-nodes.second->y()),2));
-    int length=sqrt(pow(nodes.second->x()-nodes.first->x(),2)+pow((nodes.second->y()-nodes.first->y()),2));
-    if(d1+d2<length+5) {
-        std::cout << "Current Value:" << abs(current) << std::endl;
-        std::cout << "Voltage Value:" << abs(voltage) << std::endl;
-    }
-    QGraphicsItem::mousePressEvent(event);
 
-}
+
+
 
 /*void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     //nodes.first->checkLink();
@@ -195,3 +186,4 @@ QPainterPath Component::shape() const
 
     return path;
 }
+

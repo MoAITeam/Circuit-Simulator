@@ -44,6 +44,7 @@ MainWindow::MainWindow(CircuitScene *scene) {
 void MainWindow::createToolBox() {
 
     buttonGroup = new QButtonGroup(this);
+    buttonGroup->setExclusive(false);
     connect(buttonGroup,QOverload<int>::of((&QButtonGroup::buttonClicked)),this,&MainWindow::buttonGroupClicked);
 
     auto *toolboxLayout= new QGridLayout;
@@ -161,6 +162,8 @@ void MainWindow::buttonGroupClicked(int type) {
     QString string=QString::fromStdString(text);
     float value=QInputDialog::getDouble(this->parentWidget(),"Insert Value",string);
     scene->setcValue(value);
+    buttonGroup->button(type)->setChecked(false);
+
     }
 
 }
