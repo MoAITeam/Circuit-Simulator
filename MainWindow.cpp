@@ -165,7 +165,6 @@ void MainWindow::buttonGroupClicked(int type) {
     buttonGroup->button(type)->setChecked(false);
 
     }
-
 }
 
 void MainWindow::about()
