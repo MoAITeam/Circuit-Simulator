@@ -49,28 +49,33 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QPointF mouseReleasePoint=Node::toGrid(event->scenePos());
     if (myMode==insertItem && event->button()==Qt::LeftButton) {
         //Aggiungere il nodo solo se ha senso
-        if(sqrt(pow(mousePressPoint.x()-mouseReleasePoint.x(),2)+pow(mousePressPoint.y()-mouseReleasePoint.y(),2))>NodeSize) {
+        //TODO manhattan
+        if(sqrt(pow(mousePressPoint.x()-mouseReleasePoint.x(),2)+pow(mousePressPoint.y()-mouseReleasePoint.y(),2))<NodeSize) {
+            mousePressPoint=mousePressPoint+QPoint(0,-100);
+            mouseReleasePoint=mousePressPoint+QPoint(0,100);
+            //default position
+        }
             Component *c;
-            switch(myType){
+            switch(myType) {
                 case Component::resistor:
-                    c=new Resistor(cValue);
+                    c = new Resistor(cValue);
                     break;
                 case Component::voltmeter:
-                    c=new Voltmeter;
+                    c = new Voltmeter;
                     break;
                 case Component::voltageSource:
-                    c=new VoltageSource(cValue);
+                    c = new VoltageSource(cValue);
                     break;
                 case Component::currentSource:
-                    c=new CurrentSource(cValue);
+                    c = new CurrentSource(cValue);
                     break;
                 case Component::wire:
-                    c= new Wire;
+                    c = new Wire;
                     break;
                 default:
-                    c=nullptr;
-
+                    c = nullptr;
             }
+
             if(c!= nullptr) {
                 auto *p = new Node(mousePressPoint);
                 auto *n = new Node(mouseReleasePoint);
@@ -80,7 +85,6 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
             }
         }
-    }
 }
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {

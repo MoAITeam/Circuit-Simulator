@@ -36,6 +36,7 @@ int main(int argc, char **argv) {
 }
 
 //TODO MARCO
+//muovere componenti
 //DECIDERE SCELTA NODO DI TERRA
 //CODICE PER TEST LIBRERIA
 //generatori controllati (ihih)
