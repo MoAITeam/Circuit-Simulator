@@ -162,7 +162,6 @@ void MainWindow::buttonGroupClicked(int type) {
     float value=QInputDialog::getDouble(this->parentWidget(),"Insert Value",string);
     scene->setcValue(value);
     }
-
 }
 
 void MainWindow::about()
