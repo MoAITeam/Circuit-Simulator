@@ -160,14 +160,16 @@ void MainWindow::createMenus() {
 void MainWindow::buttonGroupClicked(int type) {
     scene->setType(Component::types(type));
     scene->setMode(CircuitScene::modes(CircuitScene::insertItem));
-    if(type!=Component::types::wire&&type!=Component::types::voltmeter){
-    std::string text="Please,insert the correct value\n for your "+ ResourceManager::getName(Component::types(type)) ;
-    QString string=QString::fromStdString(text);
-    float value=QInputDialog::getDouble(this->parentWidget(),"Insert Value",string);
-    scene->setcValue(value);
+    if(type!=Component::types::wire&&type!=Component::types::voltmeter && type!=Component::types::amperometer) {
+        std::string text =
+                "Please,insert the correct value\n for your " + ResourceManager::getName(Component::types(type));
+        QString string = QString::fromStdString(text);
+        float value = QInputDialog::getDouble(this->parentWidget(), "Insert Value", string);
+        scene->setcValue(value);
+    }
     buttonGroup->button(type)->setChecked(false);
 
-    }
+
 }
 
 void MainWindow::about()
