@@ -52,9 +52,10 @@ void MainWindow::createToolBox() {
     toolboxLayout->addWidget(createCellWidget(tr("resistor"),":/images/resistor.png",Component::resistor),0,0);
     toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png",Component::voltageSource),0,1);
     toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png",Component::currentSource),1,0);
-    toolboxLayout->addWidget(createCellWidget(tr("wire"),":/images/wire.png",Component::wire),1,1);
-    toolboxLayout->addWidget(createCellWidget(tr("Voltmeter"),":/images/wire.png",Component::voltmeter),2,0); //FIXME AGGIUNGI IMMAGINI
-    toolboxLayout->addWidget(createCellWidget(tr("Amperometer"),":/images/wire.png",Component::amperometer),2,1);
+    toolboxLayout->addWidget(createCellWidget(tr("Wire"),":/images/wire.png",Component::wire),1,1);
+    toolboxLayout->addWidget(createCellWidget(tr("Voltmeter"),":/images/voltm.png",Component::voltmeter),2,0);
+    toolboxLayout->addWidget(createCellWidget(tr("Amperometer"),":/images/wire.png",Component::amperometer),2,1); //FIXME FIND IMAGE FOR AM
+
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
