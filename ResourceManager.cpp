@@ -27,7 +27,7 @@ ResourceManager::ResourceManager() {
     myStrComponent.insert(std::make_pair(Component::types::currentSource ,"Current Source"));
     myStrComponent.insert(std::make_pair(Component::types::voltageSource ,"Voltage Source"));
     myStrComponent.insert(std::make_pair(Component::types::wire ,"Wire"));
-    myStrComponent.insert(std::make_pair(Component::types::voltmeter ,"Voltmeter"));
+   // myStrComponent.insert(std::make_pair(Component::types::voltmeter ,"Voltmeter"));
 
 
 
