@@ -26,7 +26,10 @@ Component::Component(float a,float b,float c,types compType): behavior{a,b,c}, n
             pixmap=ResourceManager::getImage("voltageSource");
             break;
         case currentSource:
-            pixmap=ResourceManager::getImage("CurrentSource");
+            pixmap=ResourceManager::getImage("currentSource");
+            break;
+        case voltmeter:
+            pixmap=ResourceManager::getImage("voltmeter");
             break;
         case wire:
             break;

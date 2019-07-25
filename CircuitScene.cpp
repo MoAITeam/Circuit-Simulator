@@ -10,6 +10,8 @@
 #include "VoltageSource.h"
 #include "CurrentSource.h"
 #include "Wire.h"
+#include "Voltmeter.h"
+
 #define sceneSize 1100
 
 QColor CircuitScene::gridColor = QColor(237,237,237,125);
@@ -53,6 +55,9 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             switch(myType){
                 case Component::resistor:
                     c=new Resistor(cValue);
+                    break;
+                case Component::voltmeter:
+                    c=new Voltmeter;
                     break;
                 case Component::voltageSource:
                     c=new VoltageSource(cValue);

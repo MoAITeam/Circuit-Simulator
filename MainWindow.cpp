@@ -9,6 +9,7 @@
 #include "Component.h"
 #include "CircuitScene.h"
 #include "ResourceManager.h"
+#include "Voltmeter.h"
 
 #include <QtWidgets>
 #include <iostream>
@@ -51,7 +52,8 @@ void MainWindow::createToolBox() {
     toolboxLayout->addWidget(createCellWidget(tr("resistor"),":/images/resistor.png",Component::resistor),0,0);
     toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png",Component::voltageSource),0,1);
     toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png",Component::currentSource),1,0);
-    toolboxLayout->addWidget(createCellWidget("wire",":/images/wire.png",Component::wire),1,1);
+    toolboxLayout->addWidget(createCellWidget(tr("wire"),":/images/wire.png",Component::wire),1,1);
+    toolboxLayout->addWidget(createCellWidget(tr("voltmeter"),":/images/voltmeter.png",Component::voltmeter),2,0);
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
@@ -157,7 +159,7 @@ void MainWindow::createMenus() {
 void MainWindow::buttonGroupClicked(int type) {
     scene->setType(Component::types(type));
     scene->setMode(CircuitScene::modes(CircuitScene::insertItem));
-    if(type!=Component::types::wire){
+    if(type!=Component::types::wire&&type!=Component::types::voltmeter){
     std::string text="Please,insert the correct value\n for your "+ ResourceManager::getName(Component::types(type)) ;
     QString string=QString::fromStdString(text);
     float value=QInputDialog::getDouble(this->parentWidget(),"Insert Value",string);
