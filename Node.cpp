@@ -12,8 +12,8 @@
 
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setAcceptHoverEvents(true);
-    if(!gnd)
-    setOpacity(0.01);
+    //if(!gnd)
+    //setOpacity(0.01);
     setZValue(200);
     setFlag(ItemIsMovable);
     setX(x);
@@ -22,8 +22,8 @@ Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGr
 
 Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setAcceptHoverEvents(true);
-    if(!gnd)
-    setOpacity(0.01);
+    //if(!gnd)
+    //setOpacity(0.01);
     setZValue(200);
     setFlag(ItemIsMovable);
     setX(point.x());
@@ -122,10 +122,10 @@ QPointF Node::toGrid(QPointF n){
 
 void Node::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
 
-    setOpacity(1);
+    //setOpacity(1);
 }
 
 void Node::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
-    if(!gnd)
-    setOpacity(0.01);
+    //if(!gnd)
+    //setOpacity(0.01);
 }

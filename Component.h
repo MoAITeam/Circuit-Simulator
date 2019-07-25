@@ -28,6 +28,9 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
     void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
     void redraw();
     QPainterPath shape() const override;
 
@@ -51,5 +54,9 @@ private:
     bool hovering=false;
     QPointF mousePress;
     ComponentObserver* observer;
+
+    QPointF press;
+    QPointF pressfirst;
+    QPointF pressecond;
 };
 #endif //FIRSTSIMULATORTEST_COMPONENT_H

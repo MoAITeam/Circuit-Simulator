@@ -34,14 +34,17 @@ ResourceManager::ResourceManager() {
 }
 
 QPixmap& ResourceManager::getImage(std::string const &filename) {
-
+QPixmap result;
 auto myPair=sInstance->images.find(filename);
 if(myPair!=sInstance->images.end())
-    return myPair->second;
+    result=myPair->second;
+return result;
 }
 
 std::string ResourceManager::getName(Component::types const type) {
+    std::string result;
     auto myNames=sInstance->myStrComponent.find(type);
     if(myNames!=sInstance->myStrComponent.end())
-        return myNames->second;
+        result=myNames->second;
+    return result;
 }

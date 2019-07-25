@@ -206,3 +206,28 @@ void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
     hovering=false;
     update();
 }
+
+void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
+    nodes.first->setPos(pressfirst+event->pos()-press);
+    nodes.second->setPos(pressecond+event->pos()-press);
+    QGraphicsItem::mouseMoveEvent(event);
+    //FIXME togliere
+    scene()->update();
+}
+
+void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
+    press=event->pos();
+    pressfirst=nodes.first->pos();
+    pressecond=nodes.second->pos();
+    QGraphicsItem::mousePressEvent(event);
+    scene()->update();
+}
+
+void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
+    nodes.first->setPos(Node::toGrid(nodes.first->pos()));
+    nodes.second->setPos(Node::toGrid(nodes.second->pos()));
+    nodes.first->checkLink();
+    nodes.second->checkLink();
+    QGraphicsItem::mouseReleaseEvent(event);
+    scene()->update();
+}

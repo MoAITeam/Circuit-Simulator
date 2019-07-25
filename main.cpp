@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 }
 
 //TODO MARCO
-//muovere componenti
+//pulire update, repaint e schifi vari
 //DECIDERE SCELTA NODO DI TERRA
 //CODICE PER TEST LIBRERIA
 //generatori controllati (ihih)

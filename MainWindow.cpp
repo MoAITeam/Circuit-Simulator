@@ -99,16 +99,16 @@ void MainWindow::deleteItems() {
 void MainWindow::selectItems() {
     scene->setMode(CircuitScene::moveItem);
     //Qt non permette alcuna altra soluzione!
-    bool check=false;
-    for(const auto button:buttonGroup->buttons())
-        if(button->isChecked())
-            check=true;
+    //bool check=false;
+    //for(const auto button:buttonGroup->buttons())
+        //if(button->isChecked())
+            //check=true;
 
-    if(check) {
-        buttonGroup->setExclusive(false);
-        buttonGroup->checkedButton()->setChecked(false);
-        buttonGroup->setExclusive(true);
-    }
+    //if(check) {
+        //buttonGroup->setExclusive(false);
+        //buttonGroup->checkedButton()->setChecked(false);
+        //buttonGroup->setExclusive(true);
+    //}
 
 }
 
@@ -157,16 +157,20 @@ void MainWindow::createMenus() {
 
 
 void MainWindow::buttonGroupClicked(int type) {
+    //TODO maybe there's a mode?
+    buttonGroup->checkedButton()->setChecked(false);
+    repaint(); //FIXME bruttissimo
+
     scene->setType(Component::types(type));
     scene->setMode(CircuitScene::modes(CircuitScene::insertItem));
-    if(type!=Component::types::wire&&type!=Component::types::voltmeter){
-    std::string text="Please,insert the correct value\n for your "+ ResourceManager::getName(Component::types(type)) ;
-    QString string=QString::fromStdString(text);
-    float value=QInputDialog::getDouble(this->parentWidget(),"Insert Value",string);
-    scene->setcValue(value);
-    buttonGroup->button(type)->setChecked(false);
-
+    if(type!=Component::types::wire&&type!=Component::types::voltmeter) {
+        std::string text =
+                "Please,insert the correct value\n for your " + ResourceManager::getName(Component::types(type));
+        QString string = QString::fromStdString(text);
+        float value = QInputDialog::getDouble(this->parentWidget(), "Insert Value", string);
+        scene->setcValue(value);
     }
+
 }
 
 void MainWindow::about()
