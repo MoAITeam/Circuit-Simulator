@@ -12,7 +12,9 @@
 
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setAcceptHoverEvents(true);
-    setZValue(100);
+    if(!gnd)
+    setOpacity(0.01);
+    setZValue(200);
     setFlag(ItemIsMovable);
     setX(x);
     setY(y);
@@ -20,6 +22,8 @@ Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGr
 
 Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setAcceptHoverEvents(true);
+    if(!gnd)
+    setOpacity(0.01);
     setZValue(100);
     setFlag(ItemIsMovable);
     setX(point.x());
@@ -73,6 +77,7 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
         for (auto component : components) {
             component->redraw();
+            scene()->update();
     }
     QGraphicsItem::mouseMoveEvent(event);
 }
@@ -84,6 +89,7 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     for (auto component : components) {
         component->redraw();
     }
+    scene()->update();
 
 }
 
@@ -115,4 +121,15 @@ QPointF Node::toGrid(QPointF n){
     n.setX(((((int)n.x())+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
     n.setY(((((int)n.y())+nodeGridSize/2)/nodeGridSize)*nodeGridSize);
     return n;
+}
+
+void Node::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
+
+    setOpacity(1);
+}
+
+void Node::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
+
+    if(!gnd)
+    setOpacity(0.01);
 }

@@ -30,6 +30,9 @@ public:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
+    void hoverEnterEvent(QGraphicsSceneHoverEvent* ) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent* ) override;
+
     void setVoltage(float value);
     float getVoltage();
     static QPointF toGrid(QPointF n);
