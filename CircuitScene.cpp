@@ -38,7 +38,6 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    update();
     if(myMode==insertItem)
     mousePressPoint=Node::toGrid(event->scenePos());
     if(myMode==moveItem)
@@ -82,7 +81,6 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             }
         }
     }
-    update();
 }
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {

@@ -90,13 +90,13 @@ QRectF Component::boundingRect() const {
     length.setX(qAbs(n1.x()-n2.x()));
     length.setY(qAbs(n1.y()-n2.y()));
     //return QRectF(n1,n2).normalized();
-    return QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+50,m.y()+length.y()/2+50));
+    return QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+200,m.y()+length.y()/2+100));
 
 }
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-    QPointF center(boundingRect().center().x(), boundingRect().center().y());
+    QPointF center((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2);
 
     if (isSelected()) {
         painter->setPen(QPen(Qt::green, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));

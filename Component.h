@@ -14,7 +14,6 @@
 class Node;
 typedef std::pair<Node*,Node*> nodePair;
 
-//FIXME resource manager?
 class Component: public  QGraphicsItem{
 public:
 
