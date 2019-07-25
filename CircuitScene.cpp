@@ -82,6 +82,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             }
         }
     }
+    update();
 }
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {

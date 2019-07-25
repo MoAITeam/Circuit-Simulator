@@ -89,8 +89,6 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     for (auto component : components) {
         component->redraw();
     }
-    scene()->update();
-
 }
 
 void Node::checkLink(){

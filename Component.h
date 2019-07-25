@@ -27,6 +27,8 @@ public:
 
     QRectF boundingRect() const override;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
+    void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
     void redraw();
     QPainterPath shape() const override;
 
@@ -47,6 +49,7 @@ protected:
     QPixmap pixmap;
 
 private:
+    bool hovering=false;
     QPointF mousePress;
     ComponentObserver* observer;
 };

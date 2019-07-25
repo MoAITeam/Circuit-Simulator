@@ -17,6 +17,7 @@
 
 Component::Component(float a,float b,float c,types compType): behavior{a,b,c}, nodes{nullptr, nullptr} {
     setZValue(100);
+    setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
     switch(compType){
         case resistor:
@@ -130,7 +131,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     }
     painter->resetTransform();
     painter->translate(center);
-    if(isSelected()) {
+    if(hovering) {
         if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
             (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
 
@@ -194,4 +195,14 @@ QPainterPath Component::shape() const
     path.addPolygon(polygon);
 
     return path;
+}
+
+void Component::hoverEnterEvent(QGraphicsSceneHoverEvent*){
+    hovering=true;
+    update();
+}
+
+void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
+    hovering=false;
+    update();
 }
