@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
 //TODO MARCO
 //DECIDERE SCELTA NODO DI TERRA
 //CODICE PER TEST LIBRERIA
+//generatori controllati (ihih)
 
 //TODO ALESSIO
 //AGGIUNTE:ZOOM,CLEAR,SALVA,CARICA,UNDO,EXPORT

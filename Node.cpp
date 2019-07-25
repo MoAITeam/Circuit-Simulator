@@ -126,7 +126,6 @@ void Node::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
 }
 
 void Node::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
-
     if(!gnd)
     setOpacity(0.01);
 }

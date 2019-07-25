@@ -140,7 +140,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
             path.addRoundedRect(QRectF(35,-67.5,150,45),10,10);
             QPen pen(Qt::black,1);
             painter->setPen(pen);
-            painter->fillPath(path,QColor(32,178,170));
+            painter->fillPath(path,QColor(220, 245, 247));
             painter->drawPath(path);
             painter->drawText(40,-50, "Current:"+QString().number(current));
             painter->drawText(40, -30, "Voltage:"+QString().number(voltage));
@@ -151,7 +151,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
             path.addRoundedRect(QRectF(35,12.5,150,45),10,10);
             QPen pen(Qt::black,1);
             painter->setPen(pen);
-            painter->fillPath(path,QColor(32,178,170));
+            painter->fillPath(path,QColor(220, 245, 247));
             painter->drawPath(path);
             painter->drawText(40, 30, "Current:"+QString().number(current));
             painter->drawText(40, 50, "Voltage:"+QString().number(voltage));
