@@ -53,7 +53,7 @@ void MainWindow::createToolBox() {
     toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),":/images/voltagesource.png",Component::voltageSource),0,1);
     toolboxLayout->addWidget(createCellWidget(tr("Current Source"),":/images/currentsource.png",Component::currentSource),1,0);
     toolboxLayout->addWidget(createCellWidget(tr("wire"),":/images/wire.png",Component::wire),1,1);
-    toolboxLayout->addWidget(createCellWidget(tr("voltmeter"),":/images/voltmeter.png",Component::voltmeter),2,0);
+    toolboxLayout->addWidget(createCellWidget(tr("voltmeter"),":/images/voltm.png",Component::voltmeter),2,0);
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
