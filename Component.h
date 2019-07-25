@@ -30,8 +30,6 @@ public:
     void redraw();
     QPainterPath shape() const override;
 
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* ) override;
-
     void setObserver(ComponentObserver *o);
     nodePair getNodes();
 

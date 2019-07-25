@@ -36,11 +36,11 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    update();
     if(myMode==insertItem)
     mousePressPoint=Node::toGrid(event->scenePos());
     if(myMode==moveItem)
     QGraphicsScene::mousePressEvent(event);
-    update();
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {

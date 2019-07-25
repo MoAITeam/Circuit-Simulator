@@ -24,7 +24,7 @@ Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGrou
     setAcceptHoverEvents(true);
     if(!gnd)
     setOpacity(0.01);
-    setZValue(100);
+    setZValue(200);
     setFlag(ItemIsMovable);
     setX(point.x());
     setY(point.y());

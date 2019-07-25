@@ -180,21 +180,6 @@ float Component::getVoltage() {
     return voltage;
 }
 
-
-
-
-void Component::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsItem::mouseMoveEvent(event);
-    /*float diffx=event->pos().x()-mousePress.x();
-    float diffy=event->pos().y()-mousePress.y();
-    nodes.first->setX(nodes.first->x()+diffx);
-    nodes.first->setY(nodes.first->y()+diffy);
-    nodes.second->setX(nodes.second->x()+diffx);
-    nodes.second->setY(nodes.second->y()+diffy);*/
-
-
-}
-
 QPainterPath Component::shape() const
 {
     QPainterPath path;
