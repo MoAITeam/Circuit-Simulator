@@ -55,6 +55,7 @@ void MainWindow::createToolBox() {
     toolboxLayout->addWidget(createCellWidget(tr("wire"),":/images/wire.png",Component::wire),1,1);
     toolboxLayout->addWidget(createCellWidget(tr("amperometer"),":/images/amperometer.png",Component::amperometer),2,1);
     toolboxLayout->addWidget(createCellWidget(tr("voltmeter"),":/images/voltm.png",Component::voltmeter),2,0);
+    toolboxLayout->addWidget(createCellWidget(tr("ground"),":/images/ground.png",Component::ground),0,2);
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
@@ -179,7 +180,7 @@ void MainWindow::buttonGroupClicked(int type) {
 
     scene->setType(Component::types(type));
     scene->setMode(CircuitScene::modes(CircuitScene::insertItem));
-    if(type!=Component::types::wire&&type!=Component::types::voltmeter) {
+    if(type!=Component::types::wire&&type!=Component::types::voltmeter&&type!=Component::types::amperometer&&type!=Component::types::ground) {
         std::string text =
                 "Please,insert the correct value\n for your " + ResourceManager::getName(Component::types(type));
         QString string = QString::fromStdString(text);

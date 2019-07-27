@@ -57,6 +57,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             //default position
         }
             Component *c;
+            bool gnd=false;
             switch(myType) {
                 case Component::resistor:
                     c = new Resistor(cValue);
@@ -76,13 +77,17 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                 case Component::wire:
                     c = new Wire;
                     break;
+                case Component::ground:
+                    c = new Wire;
+                    gnd=true;
+                    break;
                 default:
                     c = nullptr;
             }
 
             if(c!= nullptr) {
                 auto *p = new Node(mousePressPoint);
-                auto *n = new Node(mouseReleasePoint);
+                auto *n = new Node(mouseReleasePoint,gnd);
                 circuit->add(c, p, n);
                 c->update();
                 setMode(CircuitScene::modes(CircuitScene::moveItem));

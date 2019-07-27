@@ -24,12 +24,6 @@ int main(int argc, char **argv) {
     mainWindow.setGeometry(100, 100, 800, 500);
     mainWindow.show();
 
-    auto *wire = new Wire();
-    auto  *wire_p = new Node(160,300,true);
-    auto  *wire_n = new Node(240,300);
-    c.add(wire,wire_p,wire_n);
-
-
     app.exec();
 
     return 0;
@@ -37,7 +31,6 @@ int main(int argc, char **argv) {
 
 //TODO MARCO
 //inserimento componente più generico
-//DECIDERE SCELTA NODO DI TERRA e immagine
 //CODICE PER TEST LIBRERIA
 //generatori controllati (ihih)
 

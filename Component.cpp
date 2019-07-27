@@ -215,6 +215,8 @@ void Component::setImage(types compType){
         case voltmeter:
             pixmap=ResourceManager::getImage("voltmeter");
             break;
+        case ground:
+            break;
         case wire:
             break;
         default:
