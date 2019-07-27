@@ -19,25 +19,7 @@ Component::Component(float a,float b,float c,types compType): behavior{a,b,c}, n
     setZValue(100);
     setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
-    switch(compType){
-        case resistor:
-            pixmap=ResourceManager::getImage("resistor");
-            break;
-        case voltageSource:
-            pixmap=ResourceManager::getImage("voltageSource");
-            break;
-        case currentSource:
-            pixmap=ResourceManager::getImage("currentSource");
-            break;
-        case voltmeter:
-            pixmap=ResourceManager::getImage("voltmeter");
-            break;
-        case wire:
-            break;
-        default:
-            break;
-        
-    }
+    setImage(compType);
 }
 
 Component::~Component() {
@@ -86,10 +68,7 @@ QRectF Component::boundingRect() const {
     QPoint n1(nodes.first->x(),nodes.first->y());
     QPoint n2(nodes.second->x(),nodes.second->y());
     QPoint m=(n1+n2)/2;
-    QPoint length;
-    length.setX(qAbs(n1.x()-n2.x()));
-    length.setY(qAbs(n1.y()-n2.y()));
-    //return QRectF(n1,n2).normalized();
+    QPoint length(qAbs(n1.x()-n2.x()),qAbs(n1.y()-n2.y()));
     return QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+200,m.y()+length.y()/2+100));
 
 }
@@ -97,67 +76,55 @@ QRectF Component::boundingRect() const {
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
     QPointF center((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2);
+    QPainterPath path;
+    QPointF text;
 
-    if (isSelected()) {
+    //draw selected
+    if (isSelected())
         painter->setPen(QPen(Qt::green, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
-    }
+    //draw line
     QPoint n1(nodes.first->x(),nodes.first->y());
     QPoint n2(nodes.second->x(),nodes.second->y());
     QLineF line(n1,n2);
-    bool notImage;
-    if(line.length()<100)
-        notImage=true;
-    else
-        notImage=false;
 
     painter->drawLine(line);
-
-
-    if(!pixmap.isNull()) {
-        float useful_angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
-        if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
-            (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
-            painter->translate(center);
-            painter->rotate(-useful_angle);
-        } else {
-            painter->translate(center);
-            painter->rotate(useful_angle);
-        }
-        if(!notImage)
-            painter->drawPixmap(-50, -50, 100, 100, pixmap);
-        else
-            painter->drawPixmap(-50,-line.length()/2,100,line.length(),pixmap);
-    }
-    painter->resetTransform();
     painter->translate(center);
-    if(hovering) {
+
+    //Context
+        float angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
         if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
             (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
-
-            painter->setPen(QPen(Qt::black, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            QPainterPath path;
-            path.addRoundedRect(QRectF(25,-67.5,150,45),10,10);
-            QPen pen(Qt::black,1);
-            painter->setPen(pen);
-            painter->fillPath(path,QColor(220, 245, 247));
-            painter->drawPath(path);
-            painter->drawText(30,-50, "Current:"+QString().number(current));
-            painter->drawText(30, -30, "Voltage:"+QString().number(voltage));
-
+            angle=-angle;
+            if(hovering) {
+                path.addRoundedRect(QRectF(25, -67.5, 150, 45), 10, 10);
+                text = QPointF(30, -50);
+            }
         } else {
-            painter->setPen(QPen(Qt::black, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            QPainterPath path;
-            path.addRoundedRect(QRectF(25,12.5,150,45),10,10);
-            QPen pen(Qt::black,1);
-            painter->setPen(pen);
-            painter->fillPath(path,QColor(220, 245, 247));
-            painter->drawPath(path);
-            painter->drawText(30, 30, "Current:"+QString().number(current));
-            painter->drawText(30, 50, "Voltage:"+QString().number(voltage));
-
+            if(hovering){
+                path.addRoundedRect(QRectF(25,12.5,150,45),10,10);
+                text=QPointF(30,30);
+            }
         }
 
+        //draw picture
+    if(!pixmap.isNull()) {
+        painter->rotate(angle);
+        if (line.length() > 100)
+            painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
+        else
+            painter->drawPixmap(-50, -line.length() / 2, 100, line.length(), pixmap); //reduced
+        painter->resetTransform(); //reset rotation
+        painter->translate(center);
+    }
+
+    //draw solution
+    if(hovering){
+        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        painter->fillPath(path,QColor(220, 245, 247));
+        painter->drawPath(path);
+        painter->drawText(text, "Current:"+QString().number(current));
+        painter->drawText(text+QPointF(0,20), "Voltage:"+QString().number(voltage));
     }
 
 }
@@ -211,8 +178,7 @@ void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
     nodes.first->setPos(pressfirst+event->pos()-press);
     nodes.second->setPos(pressecond+event->pos()-press);
     QGraphicsItem::mouseMoveEvent(event);
-    //FIXME togliere
-    scene()->update();
+    redraw();
 }
 
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
@@ -220,7 +186,7 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
     pressfirst=nodes.first->pos();
     pressecond=nodes.second->pos();
     QGraphicsItem::mousePressEvent(event);
-    scene()->update();
+    redraw();
 }
 
 void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
@@ -229,5 +195,28 @@ void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     nodes.first->checkLink();
     nodes.second->checkLink();
     QGraphicsItem::mouseReleaseEvent(event);
-    scene()->update();
+    redraw();
+}
+
+void Component::setImage(types compType){
+    //FIXME component non dovrebbe sapere nulla di se stesso
+    switch(compType){
+        case resistor:
+            pixmap=ResourceManager::getImage("resistor");
+            break;
+        case voltageSource:
+            pixmap=ResourceManager::getImage("voltageSource");
+            break;
+        case currentSource:
+            pixmap=ResourceManager::getImage("currentSource");
+            break;
+        case voltmeter:
+            pixmap=ResourceManager::getImage("voltmeter");
+            break;
+        case wire:
+            break;
+        default:
+            break;
+
+    }
 }

@@ -31,6 +31,7 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+    void setImage(types compType);
     void redraw();
     QPainterPath shape() const override;
 
