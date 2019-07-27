@@ -30,7 +30,6 @@ int main(int argc, char **argv) {
 }
 
 //TODO MARCO
-//inserimento componente più generico
 //CODICE PER TEST LIBRERIA
 //generatori controllati (ihih)
 

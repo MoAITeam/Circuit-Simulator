@@ -201,7 +201,6 @@ void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
 }
 
 void Component::setImage(types compType){
-    //FIXME component non dovrebbe sapere nulla di se stesso
     switch(compType){
         case resistor:
             pixmap=ResourceManager::getImage("resistor");
