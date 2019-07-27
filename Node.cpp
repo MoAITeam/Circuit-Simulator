@@ -67,11 +67,15 @@ QRectF Node::boundingRect() const {
 
 void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    if(gnd)
-    painter->setPen(QPen(Qt::gray, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    else
-    painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter->drawEllipse(-NodeSize/2, -NodeSize/2, NodeSize, NodeSize);
+    if(gnd) {
+        QPixmap pixmap(":/images/ground.png");
+        painter->drawPixmap(-15, 0, 30, 20, pixmap);  //image as it is
+        painter->setPen(QPen(Qt::gray, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    }
+    else {
+        painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        painter->drawEllipse(-NodeSize / 2, -NodeSize / 2, NodeSize, NodeSize);
+    }
 }
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {

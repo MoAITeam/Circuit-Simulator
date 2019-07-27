@@ -70,7 +70,6 @@ QRectF Component::boundingRect() const {
     QPoint m=(n1+n2)/2;
     QPoint length(qAbs(n1.x()-n2.x()),qAbs(n1.y()-n2.y()));
     return QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+200,m.y()+length.y()/2+100));
-
 }
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
@@ -160,7 +159,6 @@ QPainterPath Component::shape() const
     polygon << QPoint(nodes.second->x()+10, nodes.second->y()+10);
     polygon << QPoint(nodes.second->x()-10, nodes.second->y() - 10);
     path.addPolygon(polygon);
-
     return path;
 }
 
@@ -174,14 +172,8 @@ void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
     update();
 }
 
-void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
-    nodes.first->setPos(pressfirst+event->pos()-press);
-    nodes.second->setPos(pressecond+event->pos()-press);
-    QGraphicsItem::mouseMoveEvent(event);
-    redraw();
-}
-
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
+    //save initial position
     press=event->pos();
     pressfirst=nodes.first->pos();
     pressecond=nodes.second->pos();
@@ -189,9 +181,19 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
     redraw();
 }
 
+void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
+    nodes.first->setPos(pressfirst+event->pos()-press);
+    nodes.second->setPos(pressecond+event->pos()-press);
+    QGraphicsItem::mouseMoveEvent(event);
+    redraw();
+}
+
 void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
+    //gridify
     nodes.first->setPos(Node::toGrid(nodes.first->pos()));
     nodes.second->setPos(Node::toGrid(nodes.second->pos()));
+
+    //connect
     nodes.first->checkLink();
     nodes.second->checkLink();
     QGraphicsItem::mouseReleaseEvent(event);
