@@ -36,6 +36,7 @@ private:
     QGraphicsView *view;
 
     QToolBar *editToolBar;
+    QToolBar *viewToolBar;
 
     QMenu *fileMenu;
     QMenu *itemMenu;

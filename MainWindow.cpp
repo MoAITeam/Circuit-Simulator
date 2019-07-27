@@ -121,11 +121,12 @@ void MainWindow::selectItems() {
 void MainWindow::createToolbars() {
 
     editToolBar = addToolBar(tr("Edit"));
+
     editToolBar->addAction(deleteAction);
     editToolBar->addAction(selectAction);
+    editToolBar->addAction(runCircuitAction);
 
-    //exitAction = new QAction(tr("&Exit"), this);
-    //exitAction->setShortcuts(QKeySequence::Quit);
+    viewToolBar= addToolBar(tr("View"));
 
     sceneScaleCombo = new QComboBox;        //ZOOM,poco interessante
     QStringList scales;
@@ -134,10 +135,8 @@ void MainWindow::createToolbars() {
     sceneScaleCombo->setCurrentIndex(2);
     connect(sceneScaleCombo, QOverload<const QString &>::of(&QComboBox::currentIndexChanged),this, &MainWindow::sceneScaleChanged);
 
+    viewToolBar->addWidget(sceneScaleCombo);
 
-
-    editToolBar->addWidget(sceneScaleCombo);
-    editToolBar->addAction(runCircuitAction);
 
 }
 
