@@ -23,6 +23,7 @@ private:
     void createToolbars();
 
     void buttonGroupClicked(int type);
+    void sceneScaleChanged(const QString &scale);
 
     void deleteItems();
     void selectItems();
@@ -31,12 +32,15 @@ private:
 
     QWidget *createCellWidget(const QString &text,const QString &image, int id);
     CircuitScene *scene;
+    QGraphicsView *view;
 
     QToolBar *editToolBar;
 
     QMenu *fileMenu;
     QMenu *itemMenu;
     QMenu *aboutMenu;
+
+    QComboBox *sceneScaleCombo;
 
     QAction *deleteAction;
     QAction *selectAction;

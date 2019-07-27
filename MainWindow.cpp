@@ -25,7 +25,7 @@ MainWindow::MainWindow(CircuitScene *scene) {
 
     auto *layout= new QHBoxLayout;
     this->scene=scene;
-    auto view= new QGraphicsView(scene);
+    view= new QGraphicsView(scene);
     view->centerOn(0,0);
 
     layout->addWidget(toolBox,1);
@@ -123,6 +123,15 @@ void MainWindow::createToolbars() {
     //exitAction = new QAction(tr("&Exit"), this);
     //exitAction->setShortcuts(QKeySequence::Quit);
 
+    sceneScaleCombo = new QComboBox;        //ZOOM,poco interessante
+    QStringList scales;
+    scales << tr("50%") << tr("75%") << tr("100%") << tr("125%") << tr("150%");
+    sceneScaleCombo->addItems(scales);
+    sceneScaleCombo->setCurrentIndex(2);
+    connect(sceneScaleCombo, QOverload<const QString &>::of(&QComboBox::currentIndexChanged),this, &MainWindow::sceneScaleChanged);
+
+    editToolBar->addWidget(sceneScaleCombo);
+
 }
 
 
@@ -178,4 +187,13 @@ void MainWindow::about()
     QMessageBox::about(this, tr("About Circuit Simulator"),
                        tr("Our <b>Circuit Simulator</b> can evaluate every kind "
                           "of ideal electronic circuit"));
+}
+
+void MainWindow::sceneScaleChanged(const QString &scale)
+{
+    double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
+    QMatrix oldMatrix = view->matrix();                                             //metodo grafico per zoom
+    view->resetMatrix();
+    view->translate(oldMatrix.dx(), oldMatrix.dy());
+    view->scale(newScale, newScale);
 }
