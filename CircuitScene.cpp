@@ -20,7 +20,7 @@ QColor CircuitScene::gridColor = QColor(237,237,237,125);
 CircuitScene::CircuitScene(Circuit* c):circuit(c){
 
     myMode=moveItem;
-
+};
     setSceneRect(0, 0, sceneSize, sceneSize);
     circuit->setObserver(this);
 
@@ -105,4 +105,10 @@ void CircuitScene::setMode(CircuitScene::modes mode) {
 
 void CircuitScene::setcValue(float v) {
     cValue=v;
+}
+
+Circuit* CircuitScene::getCircuit() {
+
+    return circuit;
+
 }

@@ -27,6 +27,7 @@ private:
 
     void deleteItems();
     void selectItems();
+    void runCircuit();
 
     void about();
 
@@ -46,6 +47,7 @@ private:
     QAction *selectAction;
     QAction *exitAction;
     QAction *aboutAction;
+    QAction *runCircuitAction;
 
     QToolBox *toolBox;
     QButtonGroup *buttonGroup;

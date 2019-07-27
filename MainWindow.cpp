@@ -89,6 +89,10 @@ void MainWindow::createActions() {
     aboutAction->setShortcut(tr("F1"));
     connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
 
+    QIcon icon_run=QIcon(":/images/play.png");
+    runCircuitAction= new QAction(icon_run,tr("&Run"),this);
+    connect(runCircuitAction,&QAction::triggered,this,&MainWindow::runCircuit);
+
 }
 
 void MainWindow::deleteItems() {
@@ -130,7 +134,10 @@ void MainWindow::createToolbars() {
     sceneScaleCombo->setCurrentIndex(2);
     connect(sceneScaleCombo, QOverload<const QString &>::of(&QComboBox::currentIndexChanged),this, &MainWindow::sceneScaleChanged);
 
+
+
     editToolBar->addWidget(sceneScaleCombo);
+    editToolBar->addAction(runCircuitAction);
 
 }
 
@@ -197,3 +204,11 @@ void MainWindow::sceneScaleChanged(const QString &scale)
     view->translate(oldMatrix.dx(), oldMatrix.dy());
     view->scale(newScale, newScale);
 }
+
+void MainWindow::runCircuit() {
+
+    scene->getCircuit()->solve();
+
+
+}
+

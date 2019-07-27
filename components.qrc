@@ -8,6 +8,8 @@
     <file>images/linepointer.png</file>
     <file>images/wire.png</file>
     <file>images/voltm.png</file>
+    <file>images/play.png</file>
+
 
 </qresource>
 </RCC>
