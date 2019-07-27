@@ -109,3 +109,8 @@ void CircuitScene::setMode(CircuitScene::modes mode) {
 void CircuitScene::setcValue(float v) {
     cValue=v;
 }
+
+Circuit* CircuitScene::getCircuit() {
+
+    return circuit;
+}

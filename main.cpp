@@ -42,6 +42,6 @@ int main(int argc, char **argv) {
 //generatori controllati (ihih)
 
 //TODO ALESSIO
-//AGGIUNTE:ZOOM,CLEAR,SALVA,CARICA,UNDO,EXPORT
+//AGGIUNTE:CLEAR,SALVA,CARICA,UNDO,EXPORT
 //CIRCUITI DI DEFAULT
 //TASTO RUN
