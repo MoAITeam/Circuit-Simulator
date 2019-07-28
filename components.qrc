@@ -10,6 +10,7 @@
     <file>images/amperometer.png</file>
     <file>images/voltm.png</file>
     <file>images/ground.png</file>
+    <file>images/vcvs.png</file>
 </qresource>
 </RCC>
 

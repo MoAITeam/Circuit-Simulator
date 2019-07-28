@@ -12,6 +12,7 @@
 #include "Wire.h"
 #include "Voltmeter.h"
 #include "Amperometer.h"
+#include "VCVS.h"
 
 #define sceneSize 1100
 
@@ -77,6 +78,10 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                 case Component::wire:
                     c = new Wire;
                     break;
+                case Component::vcvs:
+                    //For now it just works on the previously added component
+                    c = new VCVS(cValue,prev);
+                    break;
                 case Component::ground:
                     c = new Wire;
                     gnd=true;
@@ -91,7 +96,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                 circuit->add(c, p, n);
                 c->update();
                 setMode(CircuitScene::modes(CircuitScene::moveItem));
-
+                prev=c;
             }
         }
 }

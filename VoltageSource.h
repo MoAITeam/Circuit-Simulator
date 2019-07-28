@@ -13,7 +13,6 @@ class VoltageSource : public Component {
 
 public:
     VoltageSource(float value);
-
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
 };
 

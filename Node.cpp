@@ -62,6 +62,8 @@ std::list<Component*> Node::getComponents() {
 }
 
 QRectF Node::boundingRect() const {
+    if (gnd)
+        return QRectF( -NodeSize*3, -NodeSize*3, NodeSize*6, NodeSize*6);
     return QRectF( -NodeSize/2, -NodeSize/2, NodeSize, NodeSize);
 }
 

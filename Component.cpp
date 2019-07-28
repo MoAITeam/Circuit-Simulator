@@ -15,7 +15,7 @@
 
 
 
-Component::Component(float a,float b,float c,types compType): behavior{a,b,c}, nodes{nullptr, nullptr} {
+Component::Component(float a,float b,float c,types compType,Component* d): behavior{a,b,c}, dependent(d), nodes{nullptr, nullptr} {
     setZValue(100);
     setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
@@ -217,6 +217,9 @@ void Component::setImage(types compType){
         case ground:
             break;
         case wire:
+            break;
+        case vcvs:
+            pixmap=ResourceManager::getImage("vcvs");
             break;
         default:
             break;

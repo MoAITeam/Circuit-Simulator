@@ -36,6 +36,7 @@ private:
     Circuit* circuit;
     QPointF mousePressPoint;
     float cValue;
+    Component *prev;
 };
 
 

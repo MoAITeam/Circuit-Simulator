@@ -56,6 +56,7 @@ void MainWindow::createToolBox() {
     toolboxLayout->addWidget(createCellWidget(tr("amperometer"),":/images/amperometer.png",Component::amperometer),2,1);
     toolboxLayout->addWidget(createCellWidget(tr("voltmeter"),":/images/voltm.png",Component::voltmeter),2,0);
     toolboxLayout->addWidget(createCellWidget(tr("ground"),":/images/ground.png",Component::ground),0,2);
+    toolboxLayout->addWidget(createCellWidget(tr("vcvs"),":/images/vcvs.png",Component::vcvs),1,2);
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
