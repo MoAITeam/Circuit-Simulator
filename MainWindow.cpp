@@ -180,7 +180,11 @@ void MainWindow::buttonGroupClicked(int type) {
     repaint(); //FIXME bruttissimo
 
     scene->setType(Component::types(type));
+    if(type==Component::vcvs)
+        scene->setMode(CircuitScene::modes(CircuitScene::selectDependent));
+    else
     scene->setMode(CircuitScene::modes(CircuitScene::insertItem));
+
     if(type!=Component::types::wire&&type!=Component::types::voltmeter&&type!=Component::types::amperometer&&type!=Component::types::ground) {
         std::string text =
                 "Please,insert the correct value\n for your " + ResourceManager::getName(Component::types(type));

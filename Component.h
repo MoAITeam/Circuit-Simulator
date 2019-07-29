@@ -40,6 +40,7 @@ public:
 
     void setCurrent(float value);
     void setVoltage(float value);
+    void setControlled(bool value);
 
     float getCurrent();
     float getVoltage();
@@ -54,6 +55,7 @@ protected:
 
 private:
     bool hovering=false;
+    bool controlled=false;
     QPointF mousePress;
     ComponentObserver* observer;
 

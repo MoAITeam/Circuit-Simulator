@@ -79,8 +79,12 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     QPointF text;
 
     //draw selected
-    if (isSelected())
-        painter->setPen(QPen(Qt::green, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    if (isSelected()) {
+        painter->setPen(QPen(Qt::green, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
+        painter->strokePath(shape().simplified(),painter->pen());
+    }
+    if (controlled)
+        painter->setPen(QPen(Qt::darkGreen, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
     //draw line
     QPoint n1(nodes.first->x(),nodes.first->y());
@@ -154,10 +158,10 @@ QPainterPath Component::shape() const
 {
     QPainterPath path;
     QPolygon polygon;
-    polygon << QPoint(nodes.first->x()-10,nodes.first->y()-10);
-    polygon << QPoint(nodes.first->x()+10,nodes.first->y()+10);
-    polygon << QPoint(nodes.second->x()+10, nodes.second->y()+10);
-    polygon << QPoint(nodes.second->x()-10, nodes.second->y() - 10);
+    polygon << QPoint(nodes.first->x()-20,nodes.first->y());
+    polygon << QPoint(nodes.first->x()+20,nodes.first->y());
+    polygon << QPoint(nodes.second->x()+20, nodes.second->y());
+    polygon << QPoint(nodes.second->x()-20, nodes.second->y());
     path.addPolygon(polygon);
     return path;
 }
@@ -225,4 +229,8 @@ void Component::setImage(types compType){
             break;
 
     }
+}
+
+void Component::setControlled(bool value) {
+    controlled=true;
 }

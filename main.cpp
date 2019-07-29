@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 
 //TODO MARCO
 //CODICE PER TEST LIBRERIA
-//generatori controllati (ihih)
+//generatori controllati (ihih): fare altri e togliere rtti
 
 //TODO ALESSIO
 //AGGIUNTE:CLEAR,SALVA,CARICA,UNDO,EXPORT

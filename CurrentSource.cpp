@@ -8,7 +8,6 @@ void CurrentSource::paint(QPainter *painter, const QStyleOptionGraphicsItem *qg,
 
     painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     Component::paint(painter,qg,qw);
-
 }
 
 CurrentSource::CurrentSource(float value):Component(0,1,value,currentSource) {

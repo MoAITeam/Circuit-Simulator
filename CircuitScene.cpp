@@ -96,9 +96,16 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                 circuit->add(c, p, n);
                 c->update();
                 setMode(CircuitScene::modes(CircuitScene::moveItem));
-                prev=c;
             }
         }
+    if (myMode==selectDependent && event->button()==Qt::LeftButton){
+        if(dynamic_cast<Component*>(itemAt(event->scenePos(),QTransform()))!= nullptr) {
+            prev = dynamic_cast<Component *>(itemAt(event->scenePos(), QTransform()));
+            prev->setControlled(true);
+            prev->update();
+            myMode = insertItem;
+        }
+    }
 }
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
