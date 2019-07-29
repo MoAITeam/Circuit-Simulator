@@ -55,7 +55,7 @@ void SparseMatrix::add(const float behavior[3],int a, int b) {
 
 }
 
-void SparseMatrix::add(const float behavior[3],int d,int a, int b) {
+void SparseMatrix::add(const float behavior[3],int d, int s,int a, int b) {
 
     insertRow(0);
     insertCol(0);
@@ -66,7 +66,10 @@ void SparseMatrix::add(const float behavior[3],int d,int a, int b) {
 
     int index=components+1;
     insertRow(index);
-    matrix()(index,components-d)=-1;
+    if(s==1)
+        matrix()(index,components-d)=-1;
+    if(s==2)
+        matrix()(index,2*components-d)=-1;
     insertCol(index);
     terms->insertRow(index);
 

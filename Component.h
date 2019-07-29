@@ -17,7 +17,7 @@ typedef std::pair<Node*,Node*> nodePair;
 class Component: public  QGraphicsItem{
 public:
 
-    enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs};
+    enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs, cccs, ccvs};
 
     Component(float a,float b, float c, types compType, Component* d=nullptr);
     ~Component();
@@ -47,6 +47,7 @@ public:
 
     float behavior[3];
     Component *dependent;
+    int s=0;
 protected:
     float current;
     float voltage;

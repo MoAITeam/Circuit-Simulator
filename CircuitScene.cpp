@@ -14,6 +14,8 @@
 #include "Amperometer.h"
 #include "VCVS.h"
 #include "VCCS.h"
+#include "CCVS.h"
+#include "CCCS.h"
 
 #define sceneSize 1100
 
@@ -84,6 +86,12 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                     break;
                 case Component::vccs:
                     c = new VCCS(cValue,prev);
+                    break;
+                case Component::ccvs:
+                    c = new CCVS(cValue,prev);
+                    break;
+                case Component::cccs:
+                    c = new CCCS(cValue,prev);
                     break;
                 case Component::ground:
                     c = new Wire;

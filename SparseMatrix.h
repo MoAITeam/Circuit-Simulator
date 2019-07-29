@@ -17,7 +17,7 @@ public:
     ~SparseMatrix();
     void add();
     void add(const float behavior[3],int a,int b);
-    void add(const float behavior[3],int d,int a,int b);
+    void add(const float behavior[3],int d,int s,int a,int b);
     void removeNode(int i);
     void removeComponent(int i);
     void update(int i,int a,int b);

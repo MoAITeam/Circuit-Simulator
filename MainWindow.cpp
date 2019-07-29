@@ -58,6 +58,8 @@ void MainWindow::createToolBox() {
     toolboxLayout->addWidget(createCellWidget(tr("ground"),":/images/ground.png",Component::ground),0,2);
     toolboxLayout->addWidget(createCellWidget(tr("vcvs"),":/images/vcvs.png",Component::vcvs),1,2);
     toolboxLayout->addWidget(createCellWidget(tr("vccs"),":/images/vccs.png",Component::vccs),2,2);
+    toolboxLayout->addWidget(createCellWidget(tr("ccvs"),":/images/ccvs.png",Component::ccvs),0,3);
+    toolboxLayout->addWidget(createCellWidget(tr("cccs"),":/images/cccs.png",Component::cccs),1,3);
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
@@ -181,7 +183,7 @@ void MainWindow::buttonGroupClicked(int type) {
     repaint(); //FIXME bruttissimo
 
     scene->setType(Component::types(type));
-    if(type==Component::vcvs||type==Component::vccs)
+    if(type==Component::vcvs||type==Component::vccs||type==Component::cccs||type==Component::ccvs)
         scene->setMode(CircuitScene::modes(CircuitScene::selectDependent));
     else
     scene->setMode(CircuitScene::modes(CircuitScene::insertItem));
