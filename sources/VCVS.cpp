@@ -8,7 +8,7 @@
 VCVS::VCVS(float value,Component *d):Component(1/value,0,0,d) {
     pixmap=ResourceManager::getImage(vcvs);
     s=1;
-hasValue=true;
+    hasValue=true;
 }
 
 void VCVS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

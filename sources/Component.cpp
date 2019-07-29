@@ -49,9 +49,9 @@ void Component::setObserver(ComponentObserver* o){
 void Component::connect(Node* p, Node* n){
     if(p!= nullptr && n!=nullptr) {
         if (nodes.first!= nullptr)
-        nodes.first->disconnect(this);
+            nodes.first->disconnect(this);
         if (nodes.second!= nullptr)
-        nodes.second->disconnect(this);
+            nodes.second->disconnect(this);
         nodes.first = p;
         nodes.second = n;
         p->connect(this);
@@ -99,22 +99,22 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     painter->translate(center);
 
     //Context
-        float angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
-        if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
-            (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
-            angle=-angle;
-            if(hovering) {
-                path.addRoundedRect(QRectF(25, -67.5, 150, 45), 10, 10);
-                text = QPointF(30, -50);
-            }
-        } else {
-            if(hovering){
-                path.addRoundedRect(QRectF(25,12.5,150,45),10,10);
-                text=QPointF(30,30);
-            }
+    float angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
+    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
+        (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
+        angle=-angle;
+        if(hovering) {
+            path.addRoundedRect(QRectF(25, -67.5, 150, 45), 10, 10);
+            text = QPointF(30, -50);
         }
+    } else {
+        if(hovering){
+            path.addRoundedRect(QRectF(25,12.5,150,45),10,10);
+            text=QPointF(30,30);
+        }
+    }
 
-        //draw picture
+    //draw picture
     if(!pixmap.isNull()) {
         painter->rotate(angle);
         if (line.length() > 100)

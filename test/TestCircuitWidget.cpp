@@ -20,7 +20,7 @@ class TestCircuitWidget: public QObject {
 
 Q_OBJECT
 
-ResourceManager* manager=new ResourceManager();
+    ResourceManager* manager=new ResourceManager();
 
 private:
     bool isEqual(float value1, float value2) {
@@ -107,19 +107,19 @@ private slots:
         auto *res3_n = new Node(50, 50);
 
 
-try{
-    circuit->add(vol, vol_p, vol_n);
-    circuit->add(res1, res1_p, res1_n);
-    circuit->add(res2, res2_p, res2_n);
-    circuit->add(res3, res3_p, res3_n);
-    }catch (ModelException e){
-    //For now, exceptions are only printed and may still quit the program
-    std::cout<<e.what()<<std::endl;
-    }catch (MatrixException e){
-    std::cout<<e.what()<<std::endl;
-    }
+        try{
+            circuit->add(vol, vol_p, vol_n);
+            circuit->add(res1, res1_p, res1_n);
+            circuit->add(res2, res2_p, res2_n);
+            circuit->add(res3, res3_p, res3_n);
+        }catch (ModelException e){
+            //For now, exceptions are only printed and may still quit the program
+            std::cout<<e.what()<<std::endl;
+        }catch (MatrixException e){
+            std::cout<<e.what()<<std::endl;
+        }
 
-QTest::keyPress(widget , Qt::Key::Key_S);
+        QTest::keyPress(widget , Qt::Key::Key_S);
 
         float t1 = res1_p->getVoltage();
         float t2 = res2_p->getVoltage();

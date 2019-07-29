@@ -21,7 +21,7 @@ CircuitScene::CircuitScene(Circuit* c):circuit(c){
     for(int y=0; y<=sceneSize; y+=nodeGridSize)
         addLine(0,y,sceneSize,y, QPen(gridColor));
 
-   createItemMenus();
+    createItemMenus();
 
 }
 
@@ -34,7 +34,7 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     mousePressPoint=Node::toGrid(event->scenePos());
     if(myMode==moveItem)
-    QGraphicsScene::mousePressEvent(event);
+        QGraphicsScene::mousePressEvent(event);
 }
 
 void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {

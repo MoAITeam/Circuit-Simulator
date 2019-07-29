@@ -38,9 +38,9 @@ ResourceManager::ResourceManager() {
 }
 
 QPixmap& ResourceManager::getImage(Component::types const &type) {
-QPixmap result;
-auto myPair=sInstance->images.find(type);
-if(myPair!=sInstance->images.end())
-    result=myPair->second;
-return result;
+    QPixmap result;
+    auto myPair=sInstance->images.find(type);
+    if(myPair!=sInstance->images.end())
+        result=myPair->second;
+    return result;
 }

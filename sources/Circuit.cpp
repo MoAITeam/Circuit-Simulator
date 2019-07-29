@@ -29,7 +29,7 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
 
     for (auto &component : components)
         if (c==component)
-        throw ModelException("duplicated component won't add it...");
+            throw ModelException("duplicated component won't add it...");
 
     if(*p==*n) {
         throw ModelException("Connecting component to the same node, component won't be connected...");

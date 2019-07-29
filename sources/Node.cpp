@@ -81,8 +81,8 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 }
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-        for (auto component : components) {
-            component->redraw();
+    for (auto component : components) {
+        component->redraw();
     }
     QGraphicsItem::mouseMoveEvent(event);
 }

@@ -1,4 +1,3 @@
-
 //
 // Created by cipher on 18/07/19.
 //
@@ -12,11 +11,11 @@
 
 class MainWindow: public QMainWindow{
 
-    Q_OBJECT
+Q_OBJECT
 
 public:
     MainWindow(CircuitScene *scene);
-    public slots:
+public slots:
     void showDialog();
 private:
     void createToolBox();
