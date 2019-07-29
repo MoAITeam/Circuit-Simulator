@@ -112,7 +112,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (myMode==selectDependent && event->button()==Qt::LeftButton){
         if(dynamic_cast<Component*>(itemAt(event->scenePos(),QTransform()))!= nullptr) {
             prev = dynamic_cast<Component *>(itemAt(event->scenePos(), QTransform()));
-            prev->setControlled(true);
+            prev->setControlled();
             prev->update();
             myMode = insertItem;
         }

@@ -13,3 +13,8 @@ void CurrentSource::paint(QPainter *painter, const QStyleOptionGraphicsItem *qg,
 CurrentSource::CurrentSource(float value):Component(0,1,value,currentSource) {
     current=value;
 }
+
+void CurrentSource::setCurrent(float value) {
+    current=current;
+    //FIXME should be zero when it returns the half bug
+}

@@ -36,11 +36,10 @@ Component::~Component() {
     if (nodes.second->getComponents().size()==0)
         delete nodes.second;
     update();
-    //TODO
-    //if(dependent!= nullptr) {
-    //    dependent->setControlled(false);
-    //    dependent->update();
-    //}
+    if(dependent!= nullptr) {
+        dependent->removeControlled();
+        dependent->update();
+    }
 }
 
 void Component::setObserver(ComponentObserver* o){
@@ -88,7 +87,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
         painter->setPen(QPen(Qt::green, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
         painter->strokePath(shape().simplified(),painter->pen());
     }
-    if (controlled)
+    if (controlled>0)
         painter->setPen(QPen(Qt::darkGreen, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
     //draw line
@@ -245,6 +244,10 @@ void Component::setImage(types compType){
     }
 }
 
-void Component::setControlled(bool value) {
-    controlled=true;
+void Component::setControlled() {
+    controlled++;
+}
+
+void Component::removeControlled() {
+    controlled--;
 }

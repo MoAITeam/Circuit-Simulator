@@ -12,13 +12,13 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Test REQUIRED)
 find_package(PNG REQUIRED)
 
-
 set(CMAKE_AUTOMOC ON)
-
-add_subdirectory(test)
 
 set(SOURCE_FILES ResourceManager.h ResourceManager.cpp MainWindow.cpp MainWindow.h components.qrc CurrentSource.cpp CurrentSource.h VoltageSource.cpp VoltageSource.h Wire.cpp Wire.h Resistor.cpp Resistor.h Component.cpp Component.h Circuit.cpp  Circuit.h Node.cpp Node.h CircuitScene.cpp CircuitScene.h CircuitObserver.h ComponentObserver.h NodeObserver.h EigenInterface.cpp SparseMatrix.cpp SparseMatrix.h ModelException.h MatrixException.h Voltmeter.cpp Voltmeter.h Amperometer.cpp Amperometer.h VCVS.cpp VCVS.h VCCS.cpp VCCS.h CCCS.cpp CCCS.h CCVS.cpp CCVS.h)
 
 add_executable(FirstSimulatorTest main.cpp ${SOURCE_FILES} )
 
 target_link_libraries (FirstSimulatorTest Eigen3::Eigen Qt5::Widgets)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+add_library(test-lib SHARED main.cpp)

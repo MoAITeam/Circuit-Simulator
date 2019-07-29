@@ -31,9 +31,8 @@ int main(int argc, char **argv) {
 
 //TODO MARCO
 //CODICE PER TEST LIBRERIA
-//generatori controllati (ihih): fare altri e togliere rtti
+//togliere rtti
 //right click context menu
-//bug half current if not connected, should be 0
 
 //TODO ALESSIO
 //AGGIUNTE:CLEAR,SALVA,CARICA,UNDO,EXPORT
