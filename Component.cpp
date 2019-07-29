@@ -36,6 +36,11 @@ Component::~Component() {
     if (nodes.second->getComponents().size()==0)
         delete nodes.second;
     update();
+    //TODO
+    //if(dependent!= nullptr) {
+    //    dependent->setControlled(false);
+    //    dependent->update();
+    //}
 }
 
 void Component::setObserver(ComponentObserver* o){
