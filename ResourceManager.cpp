@@ -20,6 +20,7 @@ ResourceManager::ResourceManager() {
     auto im_volm=new QPixmap(":/images/voltm.png");
     auto im_gnd=new QPixmap(":/images/ground.png");
     auto im_vcvs=new QPixmap(":/images/vcvs.png");
+    auto im_vccs=new QPixmap(":/images/vccs.png");
     images.insert(std::make_pair("resistor",*im_res));
     images.insert(std::make_pair("currentSource",*im_cur));
     images.insert(std::make_pair("voltageSource",*im_vol));
@@ -28,6 +29,7 @@ ResourceManager::ResourceManager() {
     images.insert(std::make_pair("voltmeter",*im_volm));
     images.insert(std::make_pair("ground",*im_gnd));
     images.insert(std::make_pair("vcvs",*im_vcvs));
+    images.insert(std::make_pair("vccs",*im_vccs));
 
     myStrComponent.insert(std::make_pair(Component::types::resistor ,"Resistor"));
     myStrComponent.insert(std::make_pair(Component::types::currentSource ,"Current Source"));
@@ -36,6 +38,7 @@ ResourceManager::ResourceManager() {
     myStrComponent.insert(std::make_pair(Component::types::amperometer ,"Amperometer"));
     myStrComponent.insert(std::make_pair(Component::types::vcvs ,"Vcvs"));
     myStrComponent.insert(std::make_pair(Component::types::ground ,"Ground"));
+    myStrComponent.insert(std::make_pair(Component::types::vccs ,"Vccs"));
     // myStrComponent.insert(std::make_pair(Component::types::voltmeter ,"Voltmeter"));
 
 
