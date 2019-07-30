@@ -24,7 +24,6 @@ int main(int argc, char **argv) {
 }
 
 //TODO MARCO
-//CODICE PER TEST LIBRERIA
 //right click context menu (cambiare valore)
 
 //TODO ALESSIO
