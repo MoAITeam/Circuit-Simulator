@@ -164,6 +164,10 @@ std::vector<Node*> Circuit::nonGround(){
 void Circuit::removeNotify(Component *c) {
     matrix.removeComponent(getIndex(c,components));
 
+    for(auto &component : components)
+        if(component->dependent==c)
+            component->dependent=nullptr;
+
     //Implementation of the erase-remove idiom
 
     auto removeTail=std::remove(components.begin(),components.end(),c); //moves to the end
