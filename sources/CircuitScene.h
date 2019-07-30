@@ -6,10 +6,24 @@
 #define FIRSTSIMULATORTEST_CIRCUITSCENE_H
 
 #pragma once
+
 #include <QGraphicsScene>
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 #include "Circuit.h"
+#include "Node.h"
+#include <iostream>
+#include <QtWidgets/QInputDialog>
+#include "Resistor.h"
+#include "VoltageSource.h"
+#include "CurrentSource.h"
+#include "Wire.h"
+#include "Voltmeter.h"
+#include "Amperometer.h"
+#include "VCVS.h"
+#include "VCCS.h"
+#include "CCVS.h"
+#include "CCCS.h"
 
 class CircuitScene: public QGraphicsScene, public CircuitObserver{
 Q_OBJECT

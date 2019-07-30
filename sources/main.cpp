@@ -1,14 +1,8 @@
 #include <iostream>
-#include "Circuit.h"
-#include "CircuitScene.h"
 #include <QApplication>
 #include <QMainWindow>
-#include "CurrentSource.h"
-#include "VoltageSource.h"
-#include "Wire.h"
 #include "MainWindow.h"
 #include "ResourceManager.h"
-
 
 int main(int argc, char **argv) {
 
@@ -31,8 +25,7 @@ int main(int argc, char **argv) {
 
 //TODO MARCO
 //CODICE PER TEST LIBRERIA
-//togliere rtti
-//right click context menu
+//right click context menu (cambiare valore)
 
 //TODO ALESSIO
 //AGGIUNTE:CLEAR,SALVA,CARICA,UNDO,EXPORT

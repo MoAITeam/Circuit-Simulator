@@ -10,8 +10,6 @@
 #include <QtGui/QtGui>
 #include "Component.h"
 
-
-
 class ResourceManager {
 
 public:
