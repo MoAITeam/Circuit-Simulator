@@ -208,6 +208,12 @@ void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     redraw();
 }
 
+void Component::contextMenuEvent(QGraphicsSceneContextMenuEvent *) {
+    scene()->clearSelection();
+    setSelected(true);
+    //myContextMenu->exec(event->screenPos());
+}
+
 void Component::setImage(types compType){
     switch(compType){
         case resistor:
