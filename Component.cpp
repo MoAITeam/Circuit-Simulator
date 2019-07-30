@@ -230,6 +230,15 @@ void Component::setImage(types compType){
         case vcvs:
             pixmap=ResourceManager::getImage("vcvs");
             break;
+        case vccs:
+            pixmap=ResourceManager::getImage("vccs");
+            break;
+        case ccvs:
+            pixmap=ResourceManager::getImage("ccvs");
+            break;
+        case cccs:
+            pixmap=ResourceManager::getImage("cccs");
+            break;
         default:
             break;
 

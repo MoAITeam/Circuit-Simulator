@@ -5,7 +5,7 @@
 #include "VCVS.h"
 
 VCVS::VCVS(float value,Component *d):Component(1/value,0,0,vcvs,d) {
-
+s=1;
 }
 
 void VCVS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

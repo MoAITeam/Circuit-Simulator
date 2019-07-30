@@ -93,9 +93,9 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
 
     c->connect(p, n);
     if(c->dependent==nullptr)
-    matrix.add(c->behavior,a,b); //here indexes of nodes are necessary
+        matrix.add(c->behavior,a,b); //here indexes of nodes are necessary
     else
-        matrix.add(c->behavior,getIndex(c->dependent,components),a,b);
+        matrix.add(c->behavior,getIndex(c->dependent,components),c->s,a,b);
 
 }
 
