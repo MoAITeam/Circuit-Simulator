@@ -38,9 +38,10 @@ public:
     void setObserver(ComponentObserver *o);
     nodePair getNodes();
 
-    void setCurrent(float value);
+    virtual void setCurrent(float value);
     void setVoltage(float value);
-    void setControlled(bool value);
+    void setControlled();
+    void removeControlled();
 
     float getCurrent();
     float getVoltage();
@@ -56,7 +57,7 @@ protected:
 
 private:
     bool hovering=false;
-    bool controlled=false;
+    int controlled=0;
     QPointF mousePress;
     ComponentObserver* observer;
 

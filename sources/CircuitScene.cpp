@@ -3,19 +3,6 @@
 //
 
 #include "CircuitScene.h"
-#include "Node.h"
-#include <iostream>
-#include <QtWidgets/QInputDialog>
-#include "Resistor.h"
-#include "VoltageSource.h"
-#include "CurrentSource.h"
-#include "Wire.h"
-#include "Voltmeter.h"
-#include "Amperometer.h"
-#include "VCVS.h"
-#include "VCCS.h"
-#include "CCVS.h"
-#include "CCCS.h"
 
 #define sceneSize 1100
 
@@ -112,7 +99,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (myMode==selectDependent && event->button()==Qt::LeftButton){
         if(dynamic_cast<Component*>(itemAt(event->scenePos(),QTransform()))!= nullptr) {
             prev = dynamic_cast<Component *>(itemAt(event->scenePos(), QTransform()));
-            prev->setControlled(true);
+            prev->setControlled();
             prev->update();
             myMode = insertItem;
         }
