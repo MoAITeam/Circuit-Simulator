@@ -10,6 +10,7 @@ class Component;
 class ComponentObserver{
 public:
     virtual void removeNotify(Component *c)=0;
+    virtual void update(Component *c)=0;
 };
 
 #endif //FIRSTSIMULATORTEST_COMPONENTOBSERVER_H

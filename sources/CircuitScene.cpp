@@ -28,7 +28,6 @@ CircuitScene::CircuitScene(Circuit* c):circuit(c){
     connect(deleteAction, &QAction::triggered, this, &CircuitScene::deleteItems);
     richItemMenu->addAction(deleteAction);
     itemMenu->addAction(deleteAction);
-    //FIXME duplicated action!
 
     //QIcon icon_change= QIcon(":/images/delete.png");
     QAction* changeAction=new QAction(/*icon_delete,*/tr("&Change"),this);
@@ -173,7 +172,6 @@ void CircuitScene::changeValue() {
             //TODO non mettere "change" nei menu dei componenti non cambiabili!
             emit insertValue();
             saved->setValue(cValue);
-            circuit->update(saved);
         }
     }
 }

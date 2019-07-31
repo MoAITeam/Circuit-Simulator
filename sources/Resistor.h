@@ -16,6 +16,7 @@ public:
     void setValue(float value) override{
         behavior[1]=-value;
         resistance=value;
+        observer->update(this);
     }
 
 private:

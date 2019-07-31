@@ -58,12 +58,12 @@ protected:
     float voltage;
     nodePair nodes;
     QPixmap pixmap;
+    ComponentObserver* observer;
 
 private:
     bool hovering=false;
     int controlled=0;
     QPointF mousePress;
-    ComponentObserver* observer;
     QMenu* contextMenu;
 
     QPointF press;
