@@ -27,7 +27,6 @@ private:
     void buttonGroupClicked(int type);
     void sceneScaleChanged(const QString &scale);
 
-    void deleteItems();
     void selectItems();
     void runCircuit();
 

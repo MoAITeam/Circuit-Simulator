@@ -19,7 +19,6 @@ public:
     enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs, cccs, ccvs};
 
     Component(float a,float b, float c, types compType,Component* d=nullptr);
-    void copy(Component *c);
     virtual ~Component() override;
 
     void connect(Node* p, Node* n);

@@ -23,23 +23,6 @@ Component::Component(float a,float b,float c,types compType, Component* d): beha
     contextMenu=new QMenu();
 }
 
-void Component::copy(Component *c) {
-    /*//non copio i nodi
-    for (int i=0; i<3; i++)
-    behavior[i]=c->behavior[i];
-    //dependent=c->dependent;
-    if(dependent!= nullptr)
-        dependent->setControlled();
-    current=c->current;
-    voltage=c->voltage;
-    //QPixmap pic=c->pixmap;
-    //pixmap=pic;
-    //observer=c->observer;
-    //TODO menu su costruttore?
-    //controlled=c->controlled;
-    s=c->s;*/
-}
-
 Component::~Component() {
     disconnect();
     if(dependent!= nullptr) {

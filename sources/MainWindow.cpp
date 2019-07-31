@@ -17,6 +17,8 @@
 
 MainWindow::MainWindow(CircuitScene *scene) {
 
+    this->scene=scene;
+
     createToolBox();
     createActions();
     menuBar()->setNativeMenuBar(false);
@@ -24,7 +26,6 @@ MainWindow::MainWindow(CircuitScene *scene) {
     createToolbars();
 
     auto *layout= new QHBoxLayout;
-    this->scene=scene;
     view= new QGraphicsView(scene);
     view->centerOn(0,0);
 
@@ -86,7 +87,7 @@ void MainWindow::createActions() {
 
     QIcon icon_delete= QIcon(":/images/delete.png");
     deleteAction=new QAction(icon_delete,tr("&Delete"),this);
-    connect(deleteAction, &QAction::triggered, this, &MainWindow::deleteItems);
+    connect(deleteAction, &QAction::triggered, scene, &CircuitScene::deleteItems);
 
     QIcon icon_select= QIcon(":/images/pointer.png");
     selectAction=new QAction(icon_select,tr("&Select"),this);
@@ -105,13 +106,6 @@ void MainWindow::createActions() {
     QIcon icon_run=QIcon(":/images/play.png");
     runCircuitAction= new QAction(icon_run,tr("&Run"),this);
     connect(runCircuitAction,&QAction::triggered,this,&MainWindow::runCircuit);
-
-}
-
-void MainWindow::deleteItems() { //TODO remove
-    QList<QGraphicsItem *> selectedItems = scene->selectedItems();
-    for (auto it : selectedItems)
-        delete it;
 
 }
 

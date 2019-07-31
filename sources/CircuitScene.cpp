@@ -51,85 +51,24 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
-    QPointF mouseReleasePoint=Node::toGrid(event->scenePos());
-    if (myMode==insertItem && event->button()==Qt::LeftButton) {
-        //Aggiungere il nodo solo se ha senso
-        //TODO manhattan
-        if(sqrt(pow(mousePressPoint.x()-mouseReleasePoint.x(),2)+pow(mousePressPoint.y()-mouseReleasePoint.y(),2))<NodeSize) {
-            mousePressPoint=mousePressPoint+QPoint(0,-100);
-            mouseReleasePoint=mousePressPoint+QPoint(0,100);
-            //default position
-        }
-            Component *c;
-
-            //TODO forse da fare direttamente nei component?
-            //le action si creano una volta sola!
-
-            bool gnd=false;
-            switch(myType) {
-                case Component::resistor:
-                    c = new Resistor(cValue);
-                    c->setMenu(richItemMenu);
-                    break;
-                case Component::voltmeter:
-                    c = new Voltmeter;
-                    c->setMenu(itemMenu);
-                    break;
-                case Component::amperometer:
-                    c=new Amperometer;
-                    c->setMenu(itemMenu);
-                    break;
-                case Component::voltageSource:
-                    c = new VoltageSource(cValue);
-                    c->setMenu(richItemMenu);
-                    break;
-                case Component::currentSource:
-                    c = new CurrentSource(cValue);
-                    c->setMenu(richItemMenu);
-                    break;
-                case Component::wire:
-                    c = new Wire;
-                    c->setMenu(itemMenu);
-                    break;
-                case Component::vcvs:
-                    c = new VCVS(cValue,prev);
-                    c->setMenu(richItemMenu);
-                    break;
-                case Component::vccs:
-                    c = new VCCS(cValue,prev);
-                    c->setMenu(richItemMenu);
-                    break;
-                case Component::ccvs:
-                    c = new CCVS(cValue,prev);
-                    c->setMenu(richItemMenu);
-                    break;
-                case Component::cccs:
-                    c = new CCCS(cValue,prev);
-                    c->setMenu(richItemMenu);
-                    break;
-                case Component::ground:
-                    c = new Wire;
-                    c->setMenu(itemMenu);
-                    gnd=true;
-                    break;
-                default:
-                    c = nullptr;
+    mouseReleasePoint=Node::toGrid(event->scenePos());
+    if(event->button()==Qt::LeftButton) {
+        if (myMode == insertItem) {
+            if ((mousePressPoint - mouseReleasePoint).manhattanLength() < NodeSize) {
+                mousePressPoint = mousePressPoint + QPoint(0, -100);
+                mouseReleasePoint = mousePressPoint + QPoint(0, 100);
+                //default position
             }
-
-            if(c!= nullptr) {
-                auto *p = new Node(mousePressPoint);
-                auto *n = new Node(mouseReleasePoint,gnd);
-                circuit->add(c, p, n);
-                c->update();
-                setMode(CircuitScene::modes(CircuitScene::moveItem));
-            }
+            createComponent();
         }
-    if (myMode==selectDependent && event->button()==Qt::LeftButton){
-        if(dynamic_cast<Component*>(itemAt(event->scenePos(),QTransform()))!= nullptr) {
-            prev = dynamic_cast<Component *>(itemAt(event->scenePos(), QTransform()));
-            prev->setControlled();
-            prev->update();
-            myMode = insertItem;
+        if (myMode == selectDependent) {
+            Component *clicked = componentFromGraphicItem(itemAt(event->scenePos(), QTransform()));
+            if (clicked != nullptr) {
+                prev = clicked;
+                prev->setControlled();
+                prev->update();
+                myMode = insertItem;
+            }
         }
     }
 }
@@ -137,8 +76,6 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
     if(event->key()==Qt::Key::Key_C)
         circuit->print();
-    if(event->key()==Qt::Key::Key_S)
-        circuit->solve();
 }
 
 void CircuitScene::setType(Component::types type) {
@@ -166,12 +103,77 @@ void CircuitScene::deleteItems() {
 
 void CircuitScene::changeValue() {
     if (selectedItems().size()==1) {
-        //FIXME fare metodo per rtti
-        Component *saved=dynamic_cast<Component *>(selectedItems().first());
+        Component *saved=componentFromGraphicItem(selectedItems().first());
         if (saved != nullptr) {
-            //TODO non mettere "change" nei menu dei componenti non cambiabili!
             emit insertValue();
             saved->setValue(cValue);
         }
+    }
+}
+
+Component* CircuitScene::componentFromGraphicItem(QGraphicsItem *item){
+    return dynamic_cast<Component *>(item);
+}
+
+void CircuitScene::createComponent() {
+    Component *c;
+
+    bool gnd=false;
+    switch(myType) {
+        case Component::resistor:
+            c = new Resistor(cValue);
+            c->setMenu(richItemMenu);
+            break;
+        case Component::voltmeter:
+            c = new Voltmeter;
+            c->setMenu(itemMenu);
+            break;
+        case Component::amperometer:
+            c=new Amperometer;
+            c->setMenu(itemMenu);
+            break;
+        case Component::voltageSource:
+            c = new VoltageSource(cValue);
+            c->setMenu(richItemMenu);
+            break;
+        case Component::currentSource:
+            c = new CurrentSource(cValue);
+            c->setMenu(richItemMenu);
+            break;
+        case Component::wire:
+            c = new Wire;
+            c->setMenu(itemMenu);
+            break;
+        case Component::vcvs:
+            c = new VCVS(cValue,prev);
+            c->setMenu(richItemMenu);
+            break;
+        case Component::vccs:
+            c = new VCCS(cValue,prev);
+            c->setMenu(richItemMenu);
+            break;
+        case Component::ccvs:
+            c = new CCVS(cValue,prev);
+            c->setMenu(richItemMenu);
+            break;
+        case Component::cccs:
+            c = new CCCS(cValue,prev);
+            c->setMenu(richItemMenu);
+            break;
+        case Component::ground:
+            c = new Wire;
+            c->setMenu(itemMenu);
+            gnd=true;
+            break;
+        default:
+            c = nullptr;
+    }
+
+    if(c!= nullptr) {
+        auto *p = new Node(mousePressPoint);
+        auto *n = new Node(mouseReleasePoint,gnd);
+        circuit->add(c, p, n);
+        c->update();
+        setMode(CircuitScene::modes(CircuitScene::moveItem));
     }
 }
