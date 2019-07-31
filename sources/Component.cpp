@@ -15,31 +15,49 @@
 
 
 
-Component::Component(float a,float b,float c,types compType,Component* d): behavior{a,b,c}, dependent(d), nodes{nullptr, nullptr} {
+Component::Component(float a,float b,float c,types compType, Component* d): behavior{a,b,c}, dependent(d), nodes{nullptr, nullptr} {
     setZValue(100);
     setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
     setImage(compType);
+    contextMenu=new QMenu();
+}
+
+void Component::copy(Component *c) {
+    /*//non copio i nodi
+    for (int i=0; i<3; i++)
+    behavior[i]=c->behavior[i];
+    //dependent=c->dependent;
+    if(dependent!= nullptr)
+        dependent->setControlled();
+    current=c->current;
+    voltage=c->voltage;
+    //QPixmap pic=c->pixmap;
+    //pixmap=pic;
+    //observer=c->observer;
+    //TODO menu su costruttore?
+    //controlled=c->controlled;
+    s=c->s;*/
 }
 
 Component::~Component() {
+    disconnect();
+    if(dependent!= nullptr) {
+        dependent->removeControlled();
+        dependent->update();
+    }
+}
+
+void Component::disconnect() {
     if (observer!= nullptr)
-    observer->removeNotify(this);
+        observer->removeNotify(this);
     nodes.first->disconnect(this);
     nodes.second->disconnect(this);
-    QPointF length;
-    length.setX(qAbs(nodes.first->x()-nodes.second->x()));
-    length.setY(qAbs(nodes.first->y()-nodes.second->y()));
-    QPointF m=(nodes.first->pos()+nodes.second->pos())/2;
     if (nodes.first->getComponents().size()==0)
         delete nodes.first;
     if (nodes.second->getComponents().size()==0)
         delete nodes.second;
     update();
-    if(dependent!= nullptr) {
-        dependent->removeControlled();
-        dependent->update();
-    }
 }
 
 void Component::setObserver(ComponentObserver* o){
@@ -208,10 +226,10 @@ void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     redraw();
 }
 
-void Component::contextMenuEvent(QGraphicsSceneContextMenuEvent *) {
+void Component::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
     scene()->clearSelection();
     setSelected(true);
-    //myContextMenu->exec(event->screenPos());
+    contextMenu->exec(event->screenPos());
 }
 
 void Component::setImage(types compType){
@@ -256,4 +274,8 @@ void Component::setControlled() {
 
 void Component::removeControlled() {
     controlled--;
+}
+
+void Component::setMenu(QMenu *m) {
+    contextMenu=m;
 }

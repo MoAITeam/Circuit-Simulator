@@ -6,7 +6,6 @@
 
 Resistor::Resistor(float res):Component(1,-res,0,resistor){
     resistance=res;
-
 }
 
 void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

@@ -16,6 +16,8 @@ class MainWindow: public QMainWindow{
 
 public:
     MainWindow(CircuitScene *scene);
+    public slots:
+    void showDialog();
 private:
     void createToolBox();
     void createActions();

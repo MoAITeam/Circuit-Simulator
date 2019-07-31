@@ -112,6 +112,12 @@ void SparseMatrix::update(int i,int a,int b){
     }
 }
 
+void SparseMatrix::update(int i,const float behavior[3]){
+    matrix()(components+i,i)=behavior[0];
+    matrix()(components+i,components+i)=behavior[1];
+    (*terms)(components+i)=behavior[2];
+}
+
 void SparseMatrix::removeNode(int i){
 
     int index=2*components+i;

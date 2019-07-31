@@ -8,6 +8,9 @@
 #pragma once
 
 #include <QGraphicsScene>
+#include <QAction>
+#include <QIcon>
+#include <QMenu>
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 #include "Circuit.h"
@@ -30,6 +33,7 @@ Q_OBJECT
 public:
     CircuitScene(Circuit* c);
     void addNotify(QGraphicsItem *c) override;
+    void deleteItems();
 
     enum modes{insertItem,moveItem,selectDependent};
 
@@ -40,8 +44,12 @@ public:
     void setType(Component::types type);
     void setMode(CircuitScene::modes mode);
     void setcValue(float v);
+    void changeValue();
 
     Circuit* getCircuit();
+
+    signals:
+    void insertValue();
 
 private:
     static QColor gridColor;
@@ -50,6 +58,8 @@ private:
     Circuit* circuit;
     QPointF mousePressPoint;
     float cValue;
+    QMenu* richItemMenu;
+    QMenu* itemMenu;
     Component *prev;
 };
 

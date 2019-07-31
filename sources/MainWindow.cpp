@@ -39,8 +39,17 @@ MainWindow::MainWindow(CircuitScene *scene) {
     setWindowTitle(tr("Circuit Simulator"));
     setUnifiedTitleAndToolBarOnMac(true);
 
+    connect(scene,SIGNAL(insertValue()),this,SLOT(showDialog()));
+
 }
 
+void MainWindow::showDialog(){
+    std::string text =
+            "Please,insert the correct value";
+    QString string = QString::fromStdString(text);
+    float value = QInputDialog::getDouble(this->parentWidget(), "Insert Value", string);
+    scene->setcValue(value);
+}
 
 void MainWindow::createToolBox() {
 
@@ -99,7 +108,7 @@ void MainWindow::createActions() {
 
 }
 
-void MainWindow::deleteItems() {
+void MainWindow::deleteItems() { //TODO remove
     QList<QGraphicsItem *> selectedItems = scene->selectedItems();
     for (auto it : selectedItems)
         delete it;

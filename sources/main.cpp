@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 }
 
 //TODO MARCO
-//right click context menu (cambiare valore)
+//Perchè non posso mettere su stess?
 
 //TODO ALESSIO
 //AGGIUNTE:CLEAR,SALVA,CARICA,UNDO,EXPORT

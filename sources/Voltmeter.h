@@ -14,7 +14,6 @@ public:
     Voltmeter();
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override  final;
-
 };
 
 

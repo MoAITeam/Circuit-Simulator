@@ -15,6 +15,10 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override  final;
     void setCurrent(float v) override final;
+    void setValue(float value) override{
+        behavior[2]=-value;
+        current=value;
+    }
 };
 
 

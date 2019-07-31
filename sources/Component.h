@@ -16,13 +16,14 @@ typedef std::pair<Node*,Node*> nodePair;
 
 class Component: public  QGraphicsItem{
 public:
-
     enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs, cccs, ccvs};
 
-    Component(float a,float b, float c, types compType, Component* d=nullptr);
-    ~Component();
+    Component(float a,float b, float c, types compType,Component* d=nullptr);
+    void copy(Component *c);
+    virtual ~Component() override;
 
     void connect(Node* p, Node* n);
+    void disconnect();
 
     QRectF boundingRect() const override;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
@@ -33,11 +34,13 @@ public:
     void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
     void setImage(types compType);
+    virtual void setValue(float value){};
     void redraw();
     QPainterPath shape() const override;
 
     void setObserver(ComponentObserver *o);
     nodePair getNodes();
+    void setMenu(QMenu* m);
 
     virtual void setCurrent(float value);
     void setVoltage(float value);
@@ -61,6 +64,7 @@ private:
     int controlled=0;
     QPointF mousePress;
     ComponentObserver* observer;
+    QMenu* contextMenu;
 
     QPointF press;
     QPointF pressfirst;

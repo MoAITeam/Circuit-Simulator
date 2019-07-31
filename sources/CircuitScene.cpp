@@ -21,6 +21,20 @@ CircuitScene::CircuitScene(Circuit* c):circuit(c){
     for(int y=0; y<=sceneSize; y+=nodeGridSize)
         addLine(0,y,sceneSize,y, QPen(gridColor));
 
+    richItemMenu=new QMenu();
+    itemMenu=new QMenu();
+    //QIcon icon_delete= QIcon(":/images/delete.png");
+    QAction* deleteAction=new QAction(/*icon_delete,*/tr("&Delete"),this);
+    connect(deleteAction, &QAction::triggered, this, &CircuitScene::deleteItems);
+    richItemMenu->addAction(deleteAction);
+    itemMenu->addAction(deleteAction);
+    //FIXME duplicated action!
+
+    //QIcon icon_change= QIcon(":/images/delete.png");
+    QAction* changeAction=new QAction(/*icon_delete,*/tr("&Change"),this);
+    connect(changeAction, &QAction::triggered, this, &CircuitScene::changeValue);
+    richItemMenu->addAction(changeAction);
+
 }
 
 void CircuitScene::addNotify(QGraphicsItem *item) {
@@ -48,40 +62,55 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             //default position
         }
             Component *c;
+
+            //TODO forse da fare direttamente nei component?
+            //le action si creano una volta sola!
+
             bool gnd=false;
             switch(myType) {
                 case Component::resistor:
                     c = new Resistor(cValue);
+                    c->setMenu(richItemMenu);
                     break;
                 case Component::voltmeter:
                     c = new Voltmeter;
+                    c->setMenu(itemMenu);
                     break;
                 case Component::amperometer:
                     c=new Amperometer;
+                    c->setMenu(itemMenu);
                     break;
                 case Component::voltageSource:
                     c = new VoltageSource(cValue);
+                    c->setMenu(richItemMenu);
                     break;
                 case Component::currentSource:
                     c = new CurrentSource(cValue);
+                    c->setMenu(richItemMenu);
                     break;
                 case Component::wire:
                     c = new Wire;
+                    c->setMenu(itemMenu);
                     break;
                 case Component::vcvs:
                     c = new VCVS(cValue,prev);
+                    c->setMenu(richItemMenu);
                     break;
                 case Component::vccs:
                     c = new VCCS(cValue,prev);
+                    c->setMenu(richItemMenu);
                     break;
                 case Component::ccvs:
                     c = new CCVS(cValue,prev);
+                    c->setMenu(richItemMenu);
                     break;
                 case Component::cccs:
                     c = new CCCS(cValue,prev);
+                    c->setMenu(richItemMenu);
                     break;
                 case Component::ground:
                     c = new Wire;
+                    c->setMenu(itemMenu);
                     gnd=true;
                     break;
                 default:
@@ -128,4 +157,23 @@ void CircuitScene::setcValue(float v) {
 Circuit* CircuitScene::getCircuit() {
 
     return circuit;
+}
+
+void CircuitScene::deleteItems() {
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
+    for (auto it : selectedItems)
+        delete it;
+}
+
+void CircuitScene::changeValue() {
+    if (selectedItems().size()==1) {
+        //FIXME fare metodo per rtti
+        Component *saved=dynamic_cast<Component *>(selectedItems().first());
+        if (saved != nullptr) {
+            //TODO non mettere "change" nei menu dei componenti non cambiabili!
+            emit insertValue();
+            saved->setValue(cValue);
+            circuit->update(saved);
+        }
+    }
 }
