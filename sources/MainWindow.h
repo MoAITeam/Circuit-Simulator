@@ -29,7 +29,7 @@ private:
     void selectItems();
     void deleteItems();
     void runCircuit();
-   // void loadImages();
+    void loadImages();
 
     void about();
 

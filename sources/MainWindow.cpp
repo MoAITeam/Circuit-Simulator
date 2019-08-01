@@ -58,7 +58,7 @@ void MainWindow::createToolBox() {
     connect(buttonGroup,QOverload<int>::of((&QButtonGroup::buttonClicked)),this,&MainWindow::buttonGroupClicked);
 
     toolboxLayout= new QGridLayout;
-//    loadImages();
+    loadImages();
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
@@ -198,28 +198,17 @@ void MainWindow::selectItems() {
     scene->setMode(CircuitScene::moveItem);
 }
 
-/*void MainWindow::loadImages(){
-    QPixmap resistor=ResourceManager::getImage(Component::types::resistor);
-    QPixmap vs=ResourceManager::getImage(Component::types::voltageSource);
-    QPixmap cs=ResourceManager::getImage(Component::types::currentSource);
-    QPixmap wire=ResourceManager::getImage(Component::types::wire);
-    QPixmap amp=ResourceManager::getImage(Component::types::amperometer);
-    QPixmap voltm=ResourceManager::getImage(Component::types::voltmeter);
-    QPixmap g=ResourceManager::getImage(Component::types::ground);
-    QPixmap vcvs=ResourceManager::getImage(Component::types::vcvs);
-    QPixmap vccs=ResourceManager::getImage(Component::types::vccs);
-    QPixmap ccvs=ResourceManager::getImage(Component::types::ccvs);
-    QPixmap cccs=ResourceManager::getImage(Component::types::cccs);
-    toolboxLayout->addWidget(createCellWidget(tr("resistor"),resistor,Component::resistor),0,0);
-    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),vs,Component::voltageSource),0,1);
-    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),cs,Component::currentSource),1,0);
-    toolboxLayout->addWidget(createCellWidget(tr("wire"),wire,Component::wire),1,1);
-    toolboxLayout->addWidget(createCellWidget(tr("amperometer"),amp,Component::amperometer),2,1);
-    toolboxLayout->addWidget(createCellWidget(tr("voltmeter"),voltm,Component::voltmeter),2,0);
-    toolboxLayout->addWidget(createCellWidget(tr("ground"),g,Component::ground),0,2);
-    toolboxLayout->addWidget(createCellWidget(tr("vcvs"),vcvs,Component::vcvs),1,2);
-    toolboxLayout->addWidget(createCellWidget(tr("vccs"),vccs,Component::vccs),2,2);
-    toolboxLayout->addWidget(createCellWidget(tr("ccvs"),ccvs,Component::ccvs),0,3);
-    toolboxLayout->addWidget(createCellWidget(tr("cccs"),cccs,Component::cccs),1,3);
+void MainWindow::loadImages(){
+
+    toolboxLayout->addWidget(createCellWidget(tr("resistor"),ResourceManager::getImage(Component::types::resistor),Component::resistor),0,0);
+    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),ResourceManager::getImage(Component::types::voltageSource),Component::voltageSource),0,1);
+    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),ResourceManager::getImage(Component::types::currentSource),Component::currentSource),1,0);
+    toolboxLayout->addWidget(createCellWidget(tr("wire"),ResourceManager::getImage(Component::types::wire),Component::wire),1,1);
+    toolboxLayout->addWidget(createCellWidget(tr("amperometer"),ResourceManager::getImage(Component::types::amperometer),Component::amperometer),2,1);
+    toolboxLayout->addWidget(createCellWidget(tr("voltmeter"),ResourceManager::getImage(Component::types::voltmeter),Component::voltmeter),2,0);
+    toolboxLayout->addWidget(createCellWidget(tr("ground"),ResourceManager::getImage(Component::types::ground),Component::ground),0,2);
+    toolboxLayout->addWidget(createCellWidget(tr("vcvs"),ResourceManager::getImage(Component::types::vcvs),Component::vcvs),1,2);
+    toolboxLayout->addWidget(createCellWidget(tr("vccs"),ResourceManager::getImage(Component::types::vccs),Component::vccs),2,2);
+    toolboxLayout->addWidget(createCellWidget(tr("ccvs"),ResourceManager::getImage(Component::types::ccvs),Component::ccvs),0,3);
+    toolboxLayout->addWidget(createCellWidget(tr("cccs"),ResourceManager::getImage(Component::types::cccs),Component::cccs),1,3);
 }
- */
