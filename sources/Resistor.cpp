@@ -6,7 +6,7 @@
 #include "ResourceManager.h"
 
 Resistor::Resistor(float res):Component(1,-res,0){
-    pixmap=ResourceManager::getImage(resistor);
+    pixmap=QPixmap(":/images/resistor.png");
     resistance=res;
     hasValue=true;
 }

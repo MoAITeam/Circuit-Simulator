@@ -6,7 +6,7 @@
 #include "ResourceManager.h"
 
 CCCS::CCCS(float value,Component *d):Component(0,1/value,0,d) {
-    pixmap=ResourceManager::getImage(cccs);
+    pixmap=QPixmap(":/images/cccs.png");
     s=2;
     hasValue=true;
 }

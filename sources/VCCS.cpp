@@ -7,7 +7,7 @@
 #include "ResourceManager.h"
 
 VCCS::VCCS(float value,Component *d):Component(0,1/value,0,d) {
-    pixmap=ResourceManager::getImage(vccs);
+    pixmap=QPixmap(":/images/vccs.png");
     s=1;
     hasValue=true;
 }
