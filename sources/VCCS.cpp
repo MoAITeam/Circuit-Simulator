@@ -8,8 +8,7 @@
 
 VCCS::VCCS(float value,Component *d):Component(0,1/value,0,d) {
     pixmap=ResourceManager::getImage(Component::types::vccs);
-    s=1;
-    hasValue=true;
+    sourceType=1;
 }
 
 void VCCS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

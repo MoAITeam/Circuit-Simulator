@@ -63,11 +63,6 @@ nodePair Component::getNodes() {
     return nodes;
 }
 
-void Component::redraw(){
-    prepareGeometryChange();
-    update();
-}
-
 QRectF Component::boundingRect() const {
     QPoint n1(nodes.first->x(),nodes.first->y());
     QPoint n2(nodes.second->x(),nodes.second->y());
@@ -78,7 +73,7 @@ QRectF Component::boundingRect() const {
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-    //Draw box over everything
+    //Draw box on top
     if(hovering)
         setZValue(300);
     else
@@ -148,14 +143,16 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
     pressfirst=nodes.first->pos();
     pressecond=nodes.second->pos();
     QGraphicsItem::mousePressEvent(event);
-    redraw();
+    prepareGeometryChange();
+    update();
 }
 
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
     nodes.first->setPos(pressfirst+event->pos()-press);
     nodes.second->setPos(pressecond+event->pos()-press);
     QGraphicsItem::mouseMoveEvent(event);
-    redraw();
+    prepareGeometryChange();
+    update();
 }
 
 void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
@@ -167,11 +164,16 @@ void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     nodes.first->checkLink();
     nodes.second->checkLink();
     QGraphicsItem::mouseReleaseEvent(event);
-    redraw();
+    prepareGeometryChange();
+    update();
 }
 
 void Component::setControlled() {
     controlled++;
+}
+
+int Component::getSourceType() {
+    return sourceType;
 }
 
 void Component::removeControlled() {

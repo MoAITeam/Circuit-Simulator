@@ -7,8 +7,7 @@
 
 CCCS::CCCS(float value,Component *d):Component(0,1/value,0,d) {
     pixmap=ResourceManager::getImage(Component::types::cccs);
-    s=2;
-    hasValue=true;
+    sourceType=2;
 }
 
 void CCCS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

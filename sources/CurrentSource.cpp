@@ -14,7 +14,6 @@ void CurrentSource::paint(QPainter *painter, const QStyleOptionGraphicsItem *qg,
 CurrentSource::CurrentSource(float value):Component(0,1,value) {
     pixmap=ResourceManager::getImage(Component::types::currentSource);
     current=value;
-    hasValue=true;
 }
 
 void CurrentSource::setCurrent(float value) {

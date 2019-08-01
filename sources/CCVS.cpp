@@ -7,8 +7,7 @@
 
 CCVS::CCVS(float value,Component *d):Component(1/value,0,0,d) {
     pixmap=ResourceManager::getImage(Component::types::ccvs);
-    s=2;
-    hasValue=true;
+    sourceType=2;
 }
 
 void CCVS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

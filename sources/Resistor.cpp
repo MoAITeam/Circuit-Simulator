@@ -8,7 +8,6 @@
 Resistor::Resistor(float res):Component(1,-res,0){
     pixmap=ResourceManager::getImage((Component::types::resistor));
     resistance=res;
-    hasValue=true;
 }
 
 void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

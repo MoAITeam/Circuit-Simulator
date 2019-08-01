@@ -25,40 +25,42 @@ public:
     void connect(Node* p, Node* n);
     void disconnect();
 
+    //QGraphicsItem
     QRectF boundingRect() const override;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
+    QPainterPath shape() const override;
+    void drawComponent(QPainter *painter);
+    void drawSolution(QPainter *painter);
+    void setOrientation();
     void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
-    void setImage(types compType);
-    virtual void setValue(float value){};
-    void redraw();
-    void drawComponent(QPainter *painter);
-    void drawSolution(QPainter *painter);
-    void setOrientation();
-    QPainterPath shape() const override;
 
-    void setObserver(ComponentObserver *o);
-    nodePair getNodes();
-    void setMenu(QMenu* m);
-
+    //setters
     virtual void setCurrent(float value);
     void setVoltage(float value);
+    virtual void setValue(float value){}; //FIXME
+
+    void setObserver(ComponentObserver *o);
+    void setMenu(QMenu* m);
+
     void setControlled();
     void removeControlled();
 
+    //getters
     float getCurrent();
     float getVoltage();
+    int getSourceType();
+    nodePair getNodes();
 
     float behavior[3];
     Component *dependent;
-    int s=0;
     QMenu* contextMenu;
-    bool hasValue=false;
 
 protected:
+    int sourceType=0;
     float current;
     float voltage;
     nodePair nodes;

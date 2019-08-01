@@ -82,7 +82,8 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     for (auto component : components) {
-        component->redraw();
+        prepareGeometryChange();
+        component->update();
     }
     QGraphicsItem::mouseMoveEvent(event);
 }
@@ -92,7 +93,8 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     this->setPos(Node::toGrid(this->pos()));
     checkLink();
     for (auto component : components) {
-        component->redraw();
+        prepareGeometryChange();
+        component->update();
     }
 }
 
