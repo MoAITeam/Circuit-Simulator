@@ -2,22 +2,17 @@
 // Created by Sierra on 2019-07-29.
 //
 
-#ifndef FIRSTSIMULATORTEST_CCCS_H
-#define FIRSTSIMULATORTEST_CCCS_H
+#include "CCVS.h"
+#include "ResourceManager.h"
 
+CCVS::CCVS(float value,Component *d):Component(1/value,0,0,d) {
+    pixmap=ResourceManager::getImage(ccvs);
+    s=2;
+    hasValue=true;
+}
 
-#include "Component.h"
+void CCVS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {
 
-class CCCS : public Component{
-public:
-    CCCS(float value,Component *d);
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
-    void setValue(float value) override{
-        behavior[1]=1/value;
-        observer->update(this);
-    }
-};
-
-
-
-#endif //FIRSTSIMULATORTEST_CCCS_H
+    painter->setPen(QPen(Qt::red, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    Component::paint(painter,qg,qw);
+}

@@ -58,7 +58,7 @@ void MainWindow::createToolBox() {
     connect(buttonGroup,QOverload<int>::of((&QButtonGroup::buttonClicked)),this,&MainWindow::buttonGroupClicked);
 
     toolboxLayout= new QGridLayout;
-    loadImages();
+//    loadImages();
     toolboxLayout->setRowStretch(3,10);
     toolboxLayout->setColumnStretch(3,10);
 
@@ -198,7 +198,7 @@ void MainWindow::selectItems() {
     scene->setMode(CircuitScene::moveItem);
 }
 
-void MainWindow::loadImages(){
+/*void MainWindow::loadImages(){
     QPixmap resistor=ResourceManager::getImage(Component::types::resistor);
     QPixmap vs=ResourceManager::getImage(Component::types::voltageSource);
     QPixmap cs=ResourceManager::getImage(Component::types::currentSource);
@@ -222,3 +222,4 @@ void MainWindow::loadImages(){
     toolboxLayout->addWidget(createCellWidget(tr("ccvs"),ccvs,Component::ccvs),0,3);
     toolboxLayout->addWidget(createCellWidget(tr("cccs"),cccs,Component::cccs),1,3);
 }
+ */
