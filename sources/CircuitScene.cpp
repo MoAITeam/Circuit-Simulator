@@ -21,18 +21,7 @@ CircuitScene::CircuitScene(Circuit* c):circuit(c){
     for(int y=0; y<=sceneSize; y+=nodeGridSize)
         addLine(0,y,sceneSize,y, QPen(gridColor));
 
-    richItemMenu=new QMenu();
-    itemMenu=new QMenu();
-    //QIcon icon_delete= QIcon(":/images/delete.png");
-    QAction* deleteAction=new QAction(/*icon_delete,*/tr("&Delete"),this);
-    connect(deleteAction, &QAction::triggered, this, &CircuitScene::deleteItems);
-    richItemMenu->addAction(deleteAction);
-    itemMenu->addAction(deleteAction);
-
-    //QIcon icon_change= QIcon(":/images/delete.png");
-    QAction* changeAction=new QAction(/*icon_delete,*/tr("&Change"),this);
-    connect(changeAction, &QAction::triggered, this, &CircuitScene::changeValue);
-    richItemMenu->addAction(changeAction);
+   createItemMenus();
 
 }
 
@@ -43,10 +32,17 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    if(myMode==insertItem)
     mousePressPoint=Node::toGrid(event->scenePos());
+    //if(myMode==insertItem)
     if(myMode==moveItem)
     QGraphicsScene::mousePressEvent(event);
+}
+
+void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
+    mousePressPoint=Node::toGrid(event->scenePos());
+    exSel=toComponent(itemAt(mousePressPoint,QTransform()));
+    if (exSel!= nullptr)
+        exSel->contextMenu->exec(event->screenPos());
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
@@ -55,14 +51,14 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if(event->button()==Qt::LeftButton) {
         if (myMode == insertItem) {
             if ((mousePressPoint - mouseReleasePoint).manhattanLength() < NodeSize) {
-                mousePressPoint = mousePressPoint + QPoint(0, -100);
-                mouseReleasePoint = mousePressPoint + QPoint(0, 100);
-                //default position
+                QPoint defaultPos=QPoint(0,100);
+                mousePressPoint = mousePressPoint - defaultPos;
+                mouseReleasePoint = mousePressPoint + defaultPos;
             }
             createComponent();
         }
         if (myMode == selectDependent) {
-            Component *clicked = componentFromGraphicItem(itemAt(event->scenePos(), QTransform()));
+            Component *clicked=toComponent(itemAt(event->scenePos(),QTransform()));
             if (clicked != nullptr) {
                 prev = clicked;
                 prev->setControlled();
@@ -91,27 +87,23 @@ void CircuitScene::setcValue(float v) {
 }
 
 Circuit* CircuitScene::getCircuit() {
-
     return circuit;
 }
 
-void CircuitScene::deleteItems() {
-    QList<QGraphicsItem *> selectedItems = this->selectedItems();
-    for (auto it : selectedItems)
-        delete it;
+void CircuitScene::deleteItem() {
+    if(exSel!=nullptr)
+        delete exSel;
 }
 
 void CircuitScene::changeValue() {
-    if (selectedItems().size()==1) {
-        Component *saved=componentFromGraphicItem(selectedItems().first());
-        if (saved != nullptr) {
+        if (exSel != nullptr) {
             emit insertValue();
-            saved->setValue(cValue);
+            exSel->setValue(cValue);
         }
-    }
 }
 
-Component* CircuitScene::componentFromGraphicItem(QGraphicsItem *item){
+Component* CircuitScene::toComponent(QGraphicsItem* item){
+    //TODO QGraphicsItem has already type()
     return dynamic_cast<Component *>(item);
 }
 
@@ -176,4 +168,19 @@ void CircuitScene::createComponent() {
         c->update();
         setMode(CircuitScene::modes(CircuitScene::moveItem));
     }
+}
+
+void CircuitScene::createItemMenus(){
+    richItemMenu=new QMenu();
+    itemMenu=new QMenu();
+    //QIcon icon_delete= QIcon(":/images/delete.png");
+    QAction* deleteAction=new QAction(/*icon_delete,*/tr("&Delete"),this);
+    connect(deleteAction, &QAction::triggered, this, &CircuitScene::deleteItem);
+    richItemMenu->addAction(deleteAction);
+    itemMenu->addAction(deleteAction);
+
+    //QIcon icon_change= QIcon(":/images/delete.png");
+    QAction* changeAction=new QAction(/*icon_delete,*/tr("&Change"),this);
+    connect(changeAction, &QAction::triggered, this, &CircuitScene::changeValue);
+    richItemMenu->addAction(changeAction);
 }

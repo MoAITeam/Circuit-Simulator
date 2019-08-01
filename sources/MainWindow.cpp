@@ -87,7 +87,7 @@ void MainWindow::createActions() {
 
     QIcon icon_delete= QIcon(":/images/delete.png");
     deleteAction=new QAction(icon_delete,tr("&Delete"),this);
-    connect(deleteAction, &QAction::triggered, scene, &CircuitScene::deleteItems);
+    connect(deleteAction, &QAction::triggered, this, &MainWindow::deleteItems);
 
     QIcon icon_select= QIcon(":/images/pointer.png");
     selectAction=new QAction(icon_select,tr("&Select"),this);
@@ -193,7 +193,7 @@ void MainWindow::buttonGroupClicked(int type) {
 
     if(type!=Component::types::wire&&type!=Component::types::voltmeter&&type!=Component::types::amperometer&&type!=Component::types::ground) {
         std::string text =
-                "Please,insert the correct value\n for your " + ResourceManager::getName(Component::types(type));
+                "Please,insert value:";
         QString string = QString::fromStdString(text);
         float value = QInputDialog::getDouble(this->parentWidget(), "Insert Value", string);
         scene->setcValue(value);
@@ -218,9 +218,11 @@ void MainWindow::sceneScaleChanged(const QString &scale)
 }
 
 void MainWindow::runCircuit() {
-
     scene->getCircuit()->solve();
-
-
 }
 
+void MainWindow::deleteItems() {
+    for(auto &item : scene->items())
+        if(item->isSelected())
+            delete item;
+}

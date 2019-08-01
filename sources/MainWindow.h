@@ -28,6 +28,7 @@ private:
     void sceneScaleChanged(const QString &scale);
 
     void selectItems();
+    void deleteItems();
     void runCircuit();
 
     void about();

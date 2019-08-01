@@ -15,6 +15,7 @@ class Node;
 typedef std::pair<Node*,Node*> nodePair;
 
 class Component: public  QGraphicsItem{
+
 public:
     enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs, cccs, ccvs};
 
@@ -31,7 +32,6 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
     void setImage(types compType);
     virtual void setValue(float value){};
     void redraw();
@@ -52,6 +52,8 @@ public:
     float behavior[3];
     Component *dependent;
     int s=0;
+    QMenu* contextMenu;
+
 protected:
     float current;
     float voltage;
@@ -63,7 +65,6 @@ private:
     bool hovering=false;
     int controlled=0;
     QPointF mousePress;
-    QMenu* contextMenu;
 
     QPointF press;
     QPointF pressfirst;

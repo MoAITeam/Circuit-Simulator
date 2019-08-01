@@ -34,12 +34,14 @@ public:
     CircuitScene(Circuit* c);
     void addNotify(QGraphicsItem *c) override;
     void createComponent();
+    void createItemMenus();
 
     enum modes{insertItem,moveItem,selectDependent};
 
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     void keyPressEvent(QKeyEvent *event) override ;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
 
     void setType(Component::types type);
     void setMode(CircuitScene::modes mode);
@@ -47,10 +49,10 @@ public:
 
     //actions
     void changeValue();
-    void deleteItems();
+    void deleteItem();
 
     Circuit* getCircuit();
-    Component* componentFromGraphicItem(QGraphicsItem*);
+    Component* toComponent(QGraphicsItem*);
 
 signals:
     void insertValue();
@@ -66,6 +68,7 @@ private:
     QMenu* richItemMenu;
     QMenu* itemMenu;
     Component *prev;
+    Component *exSel;
 };
 
 

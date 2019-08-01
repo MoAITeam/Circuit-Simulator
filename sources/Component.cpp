@@ -19,7 +19,7 @@ Component::Component(float a,float b,float c,types compType, Component* d): beha
     setZValue(100);
     setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
-    setImage(compType);
+    pixmap=ResourceManager::getImage(compType);
     contextMenu=new QMenu();
 }
 
@@ -207,48 +207,6 @@ void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     nodes.second->checkLink();
     QGraphicsItem::mouseReleaseEvent(event);
     redraw();
-}
-
-void Component::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
-    scene()->clearSelection();
-    setSelected(true);
-    contextMenu->exec(event->screenPos());
-}
-
-void Component::setImage(types compType){
-    switch(compType){
-        case resistor:
-            pixmap=ResourceManager::getImage("resistor");
-            break;
-        case voltageSource:
-            pixmap=ResourceManager::getImage("voltageSource");
-            break;
-        case currentSource:
-            pixmap=ResourceManager::getImage("currentSource");
-            break;
-        case voltmeter:
-            pixmap=ResourceManager::getImage("voltmeter");
-            break;
-        case ground:
-            break;
-        case wire:
-            break;
-        case vcvs:
-            pixmap=ResourceManager::getImage("vcvs");
-            break;
-        case vccs:
-            pixmap=ResourceManager::getImage("vccs");
-            break;
-        case ccvs:
-            pixmap=ResourceManager::getImage("ccvs");
-            break;
-        case cccs:
-            pixmap=ResourceManager::getImage("cccs");
-            break;
-        default:
-            break;
-
-    }
 }
 
 void Component::setControlled() {
