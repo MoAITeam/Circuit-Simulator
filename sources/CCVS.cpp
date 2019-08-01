@@ -3,9 +3,12 @@
 //
 
 #include "CCVS.h"
+#include "ResourceManager.h"
 
-CCVS::CCVS(float value,Component *d):Component(1/value,0,0,ccvs,d) {
+CCVS::CCVS(float value,Component *d):Component(1/value,0,0,d) {
+    pixmap=ResourceManager::getImage(ccvs);
     s=2;
+    hasValue=true;
 }
 
 void CCVS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

@@ -33,7 +33,6 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     mousePressPoint=Node::toGrid(event->scenePos());
-    //if(myMode==insertItem)
     if(myMode==moveItem)
     QGraphicsScene::mousePressEvent(event);
 }
@@ -60,9 +59,9 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         if (myMode == selectDependent) {
             Component *clicked=toComponent(itemAt(event->scenePos(),QTransform()));
             if (clicked != nullptr) {
-                prev = clicked;
-                prev->setControlled();
-                prev->update();
+                selectedDependent = clicked;
+                selectedDependent->setControlled();
+                selectedDependent->update();
                 myMode = insertItem;
             }
         }
@@ -96,14 +95,13 @@ void CircuitScene::deleteItem() {
 }
 
 void CircuitScene::changeValue() {
-        if (exSel != nullptr) {
-            emit insertValue();
-            exSel->setValue(cValue);
-        }
+    if (exSel != nullptr) {
+        emit insertValue();
+        exSel->setValue(cValue);
+    }
 }
 
 Component* CircuitScene::toComponent(QGraphicsItem* item){
-    //TODO QGraphicsItem has already type()
     return dynamic_cast<Component *>(item);
 }
 
@@ -137,19 +135,19 @@ void CircuitScene::createComponent() {
             c->setMenu(itemMenu);
             break;
         case Component::vcvs:
-            c = new VCVS(cValue,prev);
+            c = new VCVS(cValue,selectedDependent);
             c->setMenu(richItemMenu);
             break;
         case Component::vccs:
-            c = new VCCS(cValue,prev);
+            c = new VCCS(cValue,selectedDependent);
             c->setMenu(richItemMenu);
             break;
         case Component::ccvs:
-            c = new CCVS(cValue,prev);
+            c = new CCVS(cValue,selectedDependent);
             c->setMenu(richItemMenu);
             break;
         case Component::cccs:
-            c = new CCCS(cValue,prev);
+            c = new CCCS(cValue,selectedDependent);
             c->setMenu(richItemMenu);
             break;
         case Component::ground:
@@ -173,14 +171,12 @@ void CircuitScene::createComponent() {
 void CircuitScene::createItemMenus(){
     richItemMenu=new QMenu();
     itemMenu=new QMenu();
-    //QIcon icon_delete= QIcon(":/images/delete.png");
-    QAction* deleteAction=new QAction(/*icon_delete,*/tr("&Delete"),this);
+    QAction* deleteAction=new QAction(tr("&Delete"),this);
     connect(deleteAction, &QAction::triggered, this, &CircuitScene::deleteItem);
     richItemMenu->addAction(deleteAction);
     itemMenu->addAction(deleteAction);
 
-    //QIcon icon_change= QIcon(":/images/delete.png");
-    QAction* changeAction=new QAction(/*icon_delete,*/tr("&Change"),this);
+    QAction* changeAction=new QAction(tr("&Change"),this);
     connect(changeAction, &QAction::triggered, this, &CircuitScene::changeValue);
     richItemMenu->addAction(changeAction);
 }

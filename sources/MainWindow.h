@@ -30,10 +30,11 @@ private:
     void selectItems();
     void deleteItems();
     void runCircuit();
+    void loadImages();
 
     void about();
 
-    QWidget *createCellWidget(const QString &text,const QString &image, int id);
+    QWidget *createCellWidget(const QString &text,const QPixmap &image, int id);
     CircuitScene *scene;
     QGraphicsView *view;
 
@@ -54,5 +55,5 @@ private:
 
     QToolBox *toolBox;
     QButtonGroup *buttonGroup;
-
+    QGridLayout *toolboxLayout;
 };

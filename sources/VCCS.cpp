@@ -4,9 +4,12 @@
 
 
 #include "VCCS.h"
+#include "ResourceManager.h"
 
-VCCS::VCCS(float value,Component *d):Component(0,1/value,0,vccs,d) {
-s=1;
+VCCS::VCCS(float value,Component *d):Component(0,1/value,0,d) {
+    pixmap=ResourceManager::getImage(vccs);
+    s=1;
+hasValue=true;
 }
 
 void VCCS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

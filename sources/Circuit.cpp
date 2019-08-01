@@ -35,7 +35,6 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
         throw ModelException("Connecting component to the same node, component won't be connected...");
     }
 
-
     bool found=false;
     for (auto &node : nodes)
         if (*p==*node) {

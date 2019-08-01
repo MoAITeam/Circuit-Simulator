@@ -15,11 +15,10 @@
 
 
 
-Component::Component(float a,float b,float c,types compType, Component* d): behavior{a,b,c}, dependent(d), nodes{nullptr, nullptr} {
+Component::Component(float a,float b,float c, Component* d): behavior{a,b,c}, dependent(d), nodes{nullptr, nullptr} {
     setZValue(100);
     setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
-    pixmap=ResourceManager::getImage(compType);
     contextMenu=new QMenu();
 }
 

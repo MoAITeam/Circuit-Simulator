@@ -19,7 +19,7 @@ class Component: public  QGraphicsItem{
 public:
     enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs, cccs, ccvs};
 
-    Component(float a,float b, float c, types compType,Component* d=nullptr);
+    Component(float a,float b, float c,Component* d=nullptr);
     virtual ~Component() override;
 
     void connect(Node* p, Node* n);
@@ -53,6 +53,7 @@ public:
     Component *dependent;
     int s=0;
     QMenu* contextMenu;
+    bool hasValue=false;
 
 protected:
     float current;

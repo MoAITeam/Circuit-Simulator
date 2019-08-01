@@ -11,10 +11,8 @@
 class Amperometer: public Component{
 
 public:
-    Amperometer():Component(1,0,0,amperometer){};
+    Amperometer():Component(1,0,0){};
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
-
-
 };
 
 

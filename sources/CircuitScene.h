@@ -67,7 +67,7 @@ private:
     float cValue;
     QMenu* richItemMenu;
     QMenu* itemMenu;
-    Component *prev;
+    Component *selectedDependent;
     Component *exSel;
 };
 
