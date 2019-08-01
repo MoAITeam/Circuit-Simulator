@@ -35,6 +35,9 @@ public:
     void setImage(types compType);
     virtual void setValue(float value){};
     void redraw();
+    void drawComponent(QPainter *painter);
+    void drawSolution(QPainter *painter);
+    void setOrientation();
     QPainterPath shape() const override;
 
     void setObserver(ComponentObserver *o);
@@ -66,6 +69,8 @@ private:
     bool hovering=false;
     int controlled=0;
     QPointF mousePress;
+    QPointF rectLocation;
+    float angle;
 
     QPointF press;
     QPointF pressfirst;

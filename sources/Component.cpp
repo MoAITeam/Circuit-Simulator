@@ -78,9 +78,11 @@ QRectF Component::boundingRect() const {
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-    QPointF center((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2);
-    QPainterPath path;
-    QPointF text;
+    //Draw box over everything
+    if(hovering)
+        setZValue(300);
+    else
+        setZValue(100);
 
     //draw selected
     if (isSelected()) {
@@ -90,49 +92,9 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     if (controlled>0)
         painter->setPen(QPen(Qt::darkGreen, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
-    //draw line
-    QPoint n1(nodes.first->x(),nodes.first->y());
-    QPoint n2(nodes.second->x(),nodes.second->y());
-    QLineF line(n1,n2);
-
-    painter->drawLine(line);
-    painter->translate(center);
-
-    //Context
-    float angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
-    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
-        (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
-        angle=-angle;
-        if(hovering) {
-            path.addRoundedRect(QRectF(25, -67.5, 150, 45), 10, 10);
-            text = QPointF(30, -50);
-        }
-    } else {
-        if(hovering){
-            path.addRoundedRect(QRectF(25,12.5,150,45),10,10);
-            text=QPointF(30,30);
-        }
-    }
-
-    //draw picture
-    if(!pixmap.isNull()) {
-        painter->rotate(angle);
-        if (line.length() > 100)
-            painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
-        else
-            painter->drawPixmap(-50, -line.length() / 2, 100, line.length(), pixmap); //reduced
-        painter->resetTransform(); //reset rotation
-        painter->translate(center);
-    }
-
-    //draw solution
-    if(hovering){
-        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        painter->fillPath(path,QColor(220, 245, 247));
-        painter->drawPath(path);
-        painter->drawText(text, "Current:"+QString().number(current));
-        painter->drawText(text+QPointF(0,20), "Voltage:"+QString().number(voltage));
-    }
+    setOrientation();
+    drawComponent(painter);
+    drawSolution(painter);
 
 }
 
@@ -218,4 +180,48 @@ void Component::removeControlled() {
 
 void Component::setMenu(QMenu *m) {
     contextMenu=m;
+}
+
+void Component::drawComponent(QPainter* painter){
+    //FIXME saltino
+    QPointF center((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2);
+    QPoint n1(nodes.first->x(),nodes.first->y());
+    QPoint n2(nodes.second->x(),nodes.second->y());
+    QLineF line(n1,n2);
+
+    painter->drawLine(line);
+    painter->translate(center);
+
+    if(!pixmap.isNull()) {
+        painter->rotate(angle);
+        if (line.length() > 100)
+            painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
+        else
+            painter->drawPixmap(-50, -line.length() / 2, 100, line.length(), pixmap); //reduced
+        painter->resetTransform(); //reset rotation
+        painter->translate(center);
+    }
+}
+
+void Component::drawSolution(QPainter* painter) {
+    if(hovering){
+        QPainterPath path;
+        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        path.addRoundedRect(QRectF(rectLocation.x()-5,rectLocation.y()-17.5,150,45),10,10);
+        painter->fillPath(path,QColor(220, 245, 247));
+        painter->drawPath(path);
+        painter->drawText(rectLocation, "Current:"+QString().number(current));
+        painter->drawText(rectLocation+QPointF(0,20), "Voltage:"+QString().number(voltage));
+    }
+}
+
+void Component::setOrientation() {
+    angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
+    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
+        (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
+        angle=-angle;
+        rectLocation=QPointF(30, -50);
+    } else {
+        rectLocation=QPointF(30,30);
+    }
 }
