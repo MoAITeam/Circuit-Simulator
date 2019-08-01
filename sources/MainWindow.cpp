@@ -199,17 +199,17 @@ void MainWindow::selectItems() {
 }
 
 void MainWindow::loadImages(){
-    QPixmap resistor=ResourceManager::getImage(Component::types::resistor);
-    QPixmap vs=ResourceManager::getImage(Component::types::voltageSource);
-    QPixmap cs=ResourceManager::getImage(Component::types::currentSource);
-    QPixmap wire=ResourceManager::getImage(Component::types::wire);
-    QPixmap amp=ResourceManager::getImage(Component::types::amperometer);
-    QPixmap voltm=ResourceManager::getImage(Component::types::voltmeter);
-    QPixmap g=ResourceManager::getImage(Component::types::ground);
-    QPixmap vcvs=ResourceManager::getImage(Component::types::vcvs);
-    QPixmap vccs=ResourceManager::getImage(Component::types::vccs);
-    QPixmap ccvs=ResourceManager::getImage(Component::types::ccvs);
-    QPixmap cccs=ResourceManager::getImage(Component::types::cccs);
+    QPixmap resistor=QPixmap(":/images/resistor.png");
+    QPixmap vs=QPixmap(":/images/voltagesource.png");
+    QPixmap cs=QPixmap(":/images/currentsource.png");
+    QPixmap wire=QPixmap(":/images/wire.png");
+    QPixmap amp=QPixmap(":/images/amperometer.png");
+    QPixmap voltm=QPixmap(":/images/voltm.png");
+    QPixmap g=QPixmap(":/images/ground.png");
+    QPixmap vcvs=QPixmap(":/images/vcvs.png");
+    QPixmap vccs=QPixmap(":/images/vccs.png");
+    QPixmap ccvs=QPixmap(":/images/ccvs.png");
+    QPixmap cccs=QPixmap(":/images/cccs.png");
     toolboxLayout->addWidget(createCellWidget(tr("resistor"),resistor,Component::resistor),0,0);
     toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),vs,Component::voltageSource),0,1);
     toolboxLayout->addWidget(createCellWidget(tr("Current Source"),cs,Component::currentSource),1,0);
