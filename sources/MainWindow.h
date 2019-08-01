@@ -54,5 +54,6 @@ private:
 
     QToolBox *toolBox;
     QButtonGroup *buttonGroup;
+    QButtonGroup *circuitButtonGroup;
     QGridLayout *toolboxLayout;
 };

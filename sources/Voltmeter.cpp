@@ -13,6 +13,6 @@ void Voltmeter::paint(QPainter *painter, const QStyleOptionGraphicsItem *qg, QWi
 }
 
 Voltmeter::Voltmeter():Component(0,1,0) {
-    pixmap=QPixmap(":/images/voltmeter.png");
+    pixmap=ResourceManager::getImage(Component::types::voltmeter);
     current=0;
 }

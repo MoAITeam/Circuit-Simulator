@@ -6,7 +6,7 @@
 #include "ResourceManager.h"
 
 VCVS::VCVS(float value,Component *d):Component(1/value,0,0,d) {
-    pixmap=QPixmap(":/images/vcvs.png");
+    pixmap=ResourceManager::getImage(Component::types::vcvs);
     s=1;
     hasValue=true;
 }

@@ -15,10 +15,10 @@ class ResourceManager {
 public:
     ResourceManager();
 
-    static  QPixmap& getImage(Component::types const &type);
+    static  QPixmap getImage(Component::types const &type);
 
 private:
-    std::map<Component::types,QPixmap> images;
+    std::map<Component::types,QPixmap*> images;
 
     static ResourceManager *sInstance;
 

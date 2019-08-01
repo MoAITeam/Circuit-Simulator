@@ -12,7 +12,7 @@ void CurrentSource::paint(QPainter *painter, const QStyleOptionGraphicsItem *qg,
 }
 
 CurrentSource::CurrentSource(float value):Component(0,1,value) {
-    pixmap=QPixmap(":/images/currentsource.png");
+    pixmap=ResourceManager::getImage(Component::types::currentSource);
     current=value;
     hasValue=true;
 }

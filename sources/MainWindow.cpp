@@ -65,6 +65,9 @@ void MainWindow::createToolBox() {
     auto itemWidget= new QWidget;
     itemWidget->setLayout(toolboxLayout);
 
+  /*  circuitButtonGroup= new QButtonGroup(this);
+    connect(circuitButtonGroup,QOverload<QAbstractButton *>::of((&QButtonGroup::buttonClicked)),this,&MainWindow::b)*/
+
     toolBox=new QToolBox;
     toolBox->setMinimumWidth(100);
     toolBox->addItem(itemWidget,tr("Electric Components"));
