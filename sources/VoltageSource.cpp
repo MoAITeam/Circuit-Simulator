@@ -13,7 +13,7 @@ void VoltageSource::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg,
 }
 
 VoltageSource::VoltageSource(float value):Component(1,0,value) {
-    pixmap=ResourceManager::getImage(voltageSource);
+    pixmap=QPixmap(":/images/voltagesource.png");
     voltage=value;
     hasValue=true;
 }
