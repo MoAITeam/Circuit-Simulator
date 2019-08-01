@@ -3,10 +3,12 @@
 //
 
 #include "Resistor.h"
+#include "ResourceManager.h"
 
-Resistor::Resistor(float res):Component(1,-res,0,resistor){
+Resistor::Resistor(float res):Component(1,-res,0){
+    pixmap=ResourceManager::getImage(resistor);
     resistance=res;
-
+    hasValue=true;
 }
 
 void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

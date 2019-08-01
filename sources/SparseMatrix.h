@@ -21,6 +21,7 @@ public:
     void removeNode(int i);
     void removeComponent(int i);
     void update(int i,int a,int b);
+    void update(int i, const float behavior[3]);
     void print();
     std::vector<float> solve();
 

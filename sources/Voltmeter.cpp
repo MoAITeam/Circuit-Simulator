@@ -3,6 +3,7 @@
 //
 
 #include "Voltmeter.h"
+#include "ResourceManager.h"
 
 void Voltmeter::paint(QPainter *painter, const QStyleOptionGraphicsItem *qg, QWidget *qw) {
 
@@ -11,6 +12,7 @@ void Voltmeter::paint(QPainter *painter, const QStyleOptionGraphicsItem *qg, QWi
 
 }
 
-Voltmeter::Voltmeter():Component(0,1,0,voltmeter) {
+Voltmeter::Voltmeter():Component(0,1,0) {
+    pixmap=ResourceManager::getImage(voltmeter);
     current=0;
 }

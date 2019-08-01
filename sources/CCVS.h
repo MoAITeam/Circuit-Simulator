@@ -12,6 +12,10 @@ class CCVS : public Component{
 public:
     CCVS(float value,Component *d);
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
+    void setValue(float value) override{
+        behavior[0]=1/value;
+        observer->update(this);
+    }
 };
 
 

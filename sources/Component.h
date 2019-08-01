@@ -15,14 +15,15 @@ class Node;
 typedef std::pair<Node*,Node*> nodePair;
 
 class Component: public  QGraphicsItem{
-public:
 
+public:
     enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs, cccs, ccvs};
 
-    Component(float a,float b, float c, types compType, Component* d=nullptr);
-    ~Component();
+    Component(float a,float b, float c,Component* d=nullptr);
+    virtual ~Component() override;
 
     void connect(Node* p, Node* n);
+    void disconnect();
 
     QRectF boundingRect() const override;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
@@ -32,11 +33,13 @@ public:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
     void setImage(types compType);
+    virtual void setValue(float value){};
     void redraw();
     QPainterPath shape() const override;
 
     void setObserver(ComponentObserver *o);
     nodePair getNodes();
+    void setMenu(QMenu* m);
 
     virtual void setCurrent(float value);
     void setVoltage(float value);
@@ -49,17 +52,20 @@ public:
     float behavior[3];
     Component *dependent;
     int s=0;
+    QMenu* contextMenu;
+    bool hasValue=false;
+
 protected:
     float current;
     float voltage;
     nodePair nodes;
     QPixmap pixmap;
+    ComponentObserver* observer;
 
 private:
     bool hovering=false;
     int controlled=0;
     QPointF mousePress;
-    ComponentObserver* observer;
 
     QPointF press;
     QPointF pressfirst;

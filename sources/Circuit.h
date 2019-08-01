@@ -21,6 +21,7 @@ public:
     void removeNotify(Component *c) override;
     void removeNotify(Node *n) override;
     void checkLink(Node &n);
+    void update(Component* component) override;
     template <typename T> int getIndex(T*x,std::vector<T*> v);
 
     void setObserver(CircuitObserver* graphics);

@@ -16,6 +16,8 @@ class MainWindow: public QMainWindow{
 
 public:
     MainWindow(CircuitScene *scene);
+    public slots:
+    void showDialog();
 private:
     void createToolBox();
     void createActions();
@@ -25,13 +27,14 @@ private:
     void buttonGroupClicked(int type);
     void sceneScaleChanged(const QString &scale);
 
-    void deleteItems();
     void selectItems();
+    void deleteItems();
     void runCircuit();
+    void loadImages();
 
     void about();
 
-    QWidget *createCellWidget(const QString &text,const QString &image, int id);
+    QWidget *createCellWidget(const QString &text,const QPixmap &image, int id);
     CircuitScene *scene;
     QGraphicsView *view;
 
@@ -52,5 +55,5 @@ private:
 
     QToolBox *toolBox;
     QButtonGroup *buttonGroup;
-
+    QGridLayout *toolboxLayout;
 };

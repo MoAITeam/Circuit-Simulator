@@ -15,31 +15,31 @@
 
 
 
-Component::Component(float a,float b,float c,types compType,Component* d): behavior{a,b,c}, dependent(d), nodes{nullptr, nullptr} {
+Component::Component(float a,float b,float c, Component* d): behavior{a,b,c}, dependent(d), nodes{nullptr, nullptr} {
     setZValue(100);
     setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
-    setImage(compType);
+    contextMenu=new QMenu();
 }
 
 Component::~Component() {
+    disconnect();
+    if(dependent!= nullptr) {
+        dependent->removeControlled();
+        dependent->update();
+    }
+}
+
+void Component::disconnect() {
     if (observer!= nullptr)
-    observer->removeNotify(this);
+        observer->removeNotify(this);
     nodes.first->disconnect(this);
     nodes.second->disconnect(this);
-    QPointF length;
-    length.setX(qAbs(nodes.first->x()-nodes.second->x()));
-    length.setY(qAbs(nodes.first->y()-nodes.second->y()));
-    QPointF m=(nodes.first->pos()+nodes.second->pos())/2;
     if (nodes.first->getComponents().size()==0)
         delete nodes.first;
     if (nodes.second->getComponents().size()==0)
         delete nodes.second;
     update();
-    if(dependent!= nullptr) {
-        dependent->removeControlled();
-        dependent->update();
-    }
 }
 
 void Component::setObserver(ComponentObserver* o){
@@ -208,46 +208,14 @@ void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     redraw();
 }
 
-void Component::setImage(types compType){
-    switch(compType){
-        case resistor:
-            pixmap=ResourceManager::getImage("resistor");
-            break;
-        case voltageSource:
-            pixmap=ResourceManager::getImage("voltageSource");
-            break;
-        case currentSource:
-            pixmap=ResourceManager::getImage("currentSource");
-            break;
-        case voltmeter:
-            pixmap=ResourceManager::getImage("voltmeter");
-            break;
-        case ground:
-            break;
-        case wire:
-            break;
-        case vcvs:
-            pixmap=ResourceManager::getImage("vcvs");
-            break;
-        case vccs:
-            pixmap=ResourceManager::getImage("vccs");
-            break;
-        case ccvs:
-            pixmap=ResourceManager::getImage("ccvs");
-            break;
-        case cccs:
-            pixmap=ResourceManager::getImage("cccs");
-            break;
-        default:
-            break;
-
-    }
-}
-
 void Component::setControlled() {
     controlled++;
 }
 
 void Component::removeControlled() {
     controlled--;
+}
+
+void Component::setMenu(QMenu *m) {
+    contextMenu=m;
 }

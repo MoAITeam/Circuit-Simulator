@@ -24,7 +24,10 @@ int main(int argc, char **argv) {
 }
 
 //TODO MARCO
-//right click context menu (cambiare valore)
+//Perchè non posso mettere su stess?
+//Riguardare Component.cpp
+//Riguardare Circuit.cpp
+//Riguardare SparseMatrix.cpp
 
 //TODO ALESSIO
 //AGGIUNTE:CLEAR,SALVA,CARICA,UNDO,EXPORT

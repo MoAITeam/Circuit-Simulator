@@ -13,8 +13,11 @@ class Resistor: public Component{
 public:
     Resistor(float res);
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
-
-
+    void setValue(float value) override{
+        behavior[1]=-value;
+        resistance=value;
+        observer->update(this);
+    }
 
 private:
     float resistance;

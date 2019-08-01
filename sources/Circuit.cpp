@@ -35,7 +35,6 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
         throw ModelException("Connecting component to the same node, component won't be connected...");
     }
 
-
     bool found=false;
     for (auto &node : nodes)
         if (*p==*node) {
@@ -164,6 +163,10 @@ std::vector<Node*> Circuit::nonGround(){
 void Circuit::removeNotify(Component *c) {
     matrix.removeComponent(getIndex(c,components));
 
+    for(auto &component : components)
+        if(component->dependent==c)
+            component->dependent=nullptr;
+
     //Implementation of the erase-remove idiom
 
     auto removeTail=std::remove(components.begin(),components.end(),c); //moves to the end
@@ -211,4 +214,8 @@ void Circuit::solve(){
         (*node)->setVoltage(solution[2*components.size()+(node-nonGrounds.begin())]);
         node++;
     }
+}
+
+void Circuit::update(Component *component) {
+    matrix.update(getIndex(component,components),component->behavior);
 }
