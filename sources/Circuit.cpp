@@ -2,6 +2,7 @@
 // Created by Sierra on 2019-06-13.
 //
 
+#include <QtWidgets/QMessageBox>
 #include "Circuit.h"
 #include "ModelException.h"
 
@@ -198,8 +199,12 @@ void Circuit::solve(){
             atLeastOneGround = true;
     }
 
-    if(!atLeastOneGround)
-        throw ModelException("No ground selected!");
+    if(!atLeastOneGround){
+        QMessageBox noGnd;
+        noGnd.setText("No ground inserted");
+        noGnd.exec();
+        return;
+    }
 
     std::vector<float> solution=matrix.solve();
     auto comp=components.begin();
