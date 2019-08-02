@@ -73,7 +73,7 @@ void MainWindow::createToolBox() {
 
     backgroundLayout->addWidget(createBackgroundCellWidget("Parallel Circuit",":/images/parallelcircuit.png"),0,0);
     backgroundLayout->addWidget(createBackgroundCellWidget("Voltage Divider",":/images/wire.png"),0,1);
-    backgroundLayout->addWidget(createBackgroundCellWidget("Current Divider",":/images/wire.png"),1,1);
+    backgroundLayout->addWidget(createBackgroundCellWidget("Current Divider",":/images/currentdivider.png"),1,1);
     backgroundLayout->addWidget(createBackgroundCellWidget("Strange One",":/images/wire.png"),1,0);
     backgroundLayout->addWidget(createBackgroundCellWidget("Controlled One",":/images/wire.png"),2,0);
 
