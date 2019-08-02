@@ -60,4 +60,5 @@ private:
     QButtonGroup *buttonGroup;
     QButtonGroup *circuitButtonGroup;
     QGridLayout *toolboxLayout;
+    QGridLayout *samplesLayout;
 };
