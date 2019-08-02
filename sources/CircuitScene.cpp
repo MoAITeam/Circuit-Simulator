@@ -109,7 +109,6 @@ void CircuitScene::createComponent() {
     switch(myType) {
         case Component::resistor:
             c = new Resistor(cValue);
-            c->setMenu(richItemMenu);
             break;
         case Component::voltmeter:
             c = new Voltmeter;
