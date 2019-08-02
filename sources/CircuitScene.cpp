@@ -40,7 +40,7 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
     mousePressPoint=Node::toGrid(event->scenePos());
     exSel= itemAt(mousePressPoint,QTransform());
-    if (exSel->type()>=Component::component)
+    if (exSel->type()>=Component::itemType::component)
         ((Component*)exSel)->contextMenu->exec(event->screenPos());
 }
 
@@ -109,6 +109,7 @@ void CircuitScene::createComponent() {
     switch(myType) {
         case Component::resistor:
             c = new Resistor(cValue);
+            c->setMenu(richItemMenu);
             break;
         case Component::voltmeter:
             c = new Voltmeter;
@@ -146,12 +147,12 @@ void CircuitScene::createComponent() {
     }
 
     if(c!= nullptr) {
-        if(c->type()==Component::component)
-            c->setMenu(itemMenu);
-        if(c->type()==Component::activeComponent)
-            c->setMenu(richItemMenu);
         auto *p = new Node(mousePressPoint);
         auto *n = new Node(mouseReleasePoint,gnd);
+        if (c->type()==Component::component)
+            c->setMenu(itemMenu);
+        if (c->type()==Component::activeComponent)
+            c->setMenu(richItemMenu);
         circuit->add(c, p, n);
         c->update();
         setMode(CircuitScene::modes(CircuitScene::moveItem));
@@ -161,15 +162,12 @@ void CircuitScene::createComponent() {
 void CircuitScene::createItemMenus(){
     richItemMenu=new QMenu();
     itemMenu=new QMenu();
-
     QAction* deleteAction=new QAction(tr("&Delete"),this);
     connect(deleteAction, &QAction::triggered, this, &CircuitScene::deleteItem);
+    richItemMenu->addAction(deleteAction);
+    itemMenu->addAction(deleteAction);
 
     QAction* changeAction=new QAction(tr("&Change"),this);
     connect(changeAction, &QAction::triggered, this, &CircuitScene::changeValue);
-
-    itemMenu->addAction(deleteAction);
-
-    richItemMenu->addAction(deleteAction);
     richItemMenu->addAction(changeAction);
 }
