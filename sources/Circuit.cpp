@@ -32,9 +32,16 @@ void Circuit::setObserver(CircuitObserver *o) {
 
 void Circuit::add(Component *c, Node*& p, Node*& n) {
 
-    for (auto &component : components)
-        if (c==component)
+    for (auto &component : components) {
+        if (c == component)
             throw ModelException("duplicated component won't add it...");
+        if ((*(p) == *(component->getNodes().first) && *(n)==*(component->getNodes().second))
+            ||(*(n) == *(component->getNodes().first) && *(p)==*(component->getNodes().second))) {
+            //FIXME flag
+            p->setX(p->x() + 30);
+            n->setX(n->x() + 30);
+        }
+    }
 
     if(*p==*n) {
         throw ModelException("Connecting component to the same node, component won't be connected...");

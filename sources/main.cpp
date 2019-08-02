@@ -24,8 +24,8 @@ int main(int argc, char **argv) {
 }
 
 //TODO MARCO
-//Perchè non posso mettere su stess? Comportamento molto buggeto
+//soluzione nodi
+//Soluzioni giuste anche prima di Run
 
 //TODO ALESSIO
 //AGGIUNTE:CLEAR,SALVA,CARICA,UNDO,EXPORT
-//TASTO RUN
