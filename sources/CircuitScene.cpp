@@ -40,8 +40,7 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
     mousePressPoint=Node::toGrid(event->scenePos());
     exSel= itemAt(mousePressPoint,QTransform());
-    int type=exSel->type();
-    if (exSel->type()==Component::itemType::component||exSel->type()==Component::itemType::activeComponent)
+    if (exSel->type()>=Component::component)
         ((Component*)exSel)->contextMenu->exec(event->screenPos());
 }
 
@@ -59,7 +58,8 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         }
         if (myMode == selectDependent) {
             QGraphicsItem *clicked=itemAt(event->scenePos(),QTransform());
-            if (clicked->type()==Component::component) {
+            if(clicked!= nullptr)
+            if (clicked->type()>=Component::component) {
                 selectedDependent = (Component*)clicked;
                 selectedDependent->setControlled();
                 selectedDependent->update();
@@ -96,10 +96,9 @@ void CircuitScene::deleteItem() {
 }
 
 void CircuitScene::changeValue() {
-    //FIXME dovrebbe farlo il circuito
     if (exSel->type()==Component::activeComponent) {
         emit insertValue();
-        ((ActiveComponent*)exSel)->setValue(cValue);
+        circuit->update((ActiveComponent*)exSel,cValue);
     }
 }
 
@@ -110,47 +109,36 @@ void CircuitScene::createComponent() {
     switch(myType) {
         case Component::resistor:
             c = new Resistor(cValue);
-            c->setMenu(richItemMenu);
             break;
         case Component::voltmeter:
             c = new Voltmeter;
-            c->setMenu(itemMenu);
             break;
         case Component::amperometer:
             c=new Amperometer;
-            c->setMenu(itemMenu);
             break;
         case Component::voltageSource:
             c = new VoltageSource(cValue);
-            c->setMenu(richItemMenu);
             break;
         case Component::currentSource:
             c = new CurrentSource(cValue);
-            c->setMenu(richItemMenu);
             break;
         case Component::wire:
             c = new Wire;
-            c->setMenu(itemMenu);
             break;
         case Component::vcvs:
             c = new VCVS(cValue,selectedDependent);
-            c->setMenu(richItemMenu);
             break;
         case Component::vccs:
             c = new VCCS(cValue,selectedDependent);
-            c->setMenu(richItemMenu);
             break;
         case Component::ccvs:
             c = new CCVS(cValue,selectedDependent);
-            c->setMenu(richItemMenu);
             break;
         case Component::cccs:
             c = new CCCS(cValue,selectedDependent);
-            c->setMenu(richItemMenu);
             break;
         case Component::ground:
             c = new Wire;
-            c->setMenu(itemMenu);
             gnd=true;
             break;
         default:
@@ -158,6 +146,10 @@ void CircuitScene::createComponent() {
     }
 
     if(c!= nullptr) {
+        if(c->type()==Component::component)
+            c->setMenu(itemMenu);
+        if(c->type()==Component::activeComponent)
+            c->setMenu(richItemMenu);
         auto *p = new Node(mousePressPoint);
         auto *n = new Node(mouseReleasePoint,gnd);
         circuit->add(c, p, n);
@@ -169,12 +161,15 @@ void CircuitScene::createComponent() {
 void CircuitScene::createItemMenus(){
     richItemMenu=new QMenu();
     itemMenu=new QMenu();
+
     QAction* deleteAction=new QAction(tr("&Delete"),this);
     connect(deleteAction, &QAction::triggered, this, &CircuitScene::deleteItem);
-    richItemMenu->addAction(deleteAction);
-    itemMenu->addAction(deleteAction);
 
     QAction* changeAction=new QAction(tr("&Change"),this);
     connect(changeAction, &QAction::triggered, this, &CircuitScene::changeValue);
+
+    itemMenu->addAction(deleteAction);
+
+    richItemMenu->addAction(deleteAction);
     richItemMenu->addAction(changeAction);
 }

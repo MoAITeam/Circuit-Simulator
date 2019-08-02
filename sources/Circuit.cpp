@@ -216,6 +216,7 @@ void Circuit::solve(){
     }
 }
 
-void Circuit::update(Component *component) {
-    matrix.update(getIndex(component,components),component->behavior);
+void Circuit::update(ActiveComponent *component,float value) {
+    component->setValue(value);
+    matrix.update(getIndex((Component*)component,components),component->behavior);
 }

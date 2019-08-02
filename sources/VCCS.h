@@ -13,7 +13,6 @@ public:
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
     void setValue(float value) override{
         behavior[1]=1/value;
-        observer->update(this);
     }
 };
 

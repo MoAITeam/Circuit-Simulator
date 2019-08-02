@@ -18,7 +18,6 @@ public:
     void setValue(float value) override{
         behavior[2]=value;
         current=value;
-        observer->update(this);
     }
 };
 

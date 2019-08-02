@@ -236,7 +236,6 @@ void Component::setOrientation() {
         }
     if ((nodes.second->x() < nodes.first->x() && nodes.second->y() > nodes.first->y())) {
         //primo
-        angle=angle;
         rectLocation=QPointF(30, 30);
     }
     if ((nodes.second->x() > nodes.first->x() && nodes.second->y() < nodes.first->y())) {

@@ -8,7 +8,7 @@
 
 VCCS::VCCS(float value,Component *d):ActiveComponent(0,1/value,0,d) {
     pixmap=ResourceManager::getImage(Component::types::vccs);
-    sourceType=1;
+    sourceType=volts;
 }
 
 void VCCS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {
