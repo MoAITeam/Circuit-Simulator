@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 }
 
 //TODO MARCO
-//Soluzioni giuste anche prima di Run
+//Soluzioni giuste
 
 //TODO ALESSIO
 //AGGIUNTE:CLEAR,SALVA,CARICA,UNDO,EXPORT

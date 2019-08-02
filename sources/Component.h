@@ -63,8 +63,8 @@ public:
 
 protected:
     int sourceType=0;
-    float current;
-    float voltage;
+    float current=0;
+    float voltage=0;
     nodePair nodes;
     QPixmap pixmap;
     ComponentObserver* observer;
