@@ -6,10 +6,10 @@
 #define FIRSTSIMULATORTEST_VOLTAGESOURCE_H
 
 
-#include "Component.h"
+#include "ActiveComponent.h"
 #include <QPixmap>
 
-class VoltageSource : public Component {
+class VoltageSource : public ActiveComponent {
 
 public:
     VoltageSource(float value);

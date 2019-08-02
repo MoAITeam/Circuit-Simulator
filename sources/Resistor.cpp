@@ -5,7 +5,7 @@
 #include "Resistor.h"
 #include "ResourceManager.h"
 
-Resistor::Resistor(float res):Component(1,-res,0){
+Resistor::Resistor(float res):ActiveComponent(1,-res,0){
     pixmap=ResourceManager::getImage((Component::types::resistor));
     resistance=res;
 }

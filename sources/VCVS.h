@@ -5,9 +5,9 @@
 #ifndef FIRSTSIMULATORTEST_VCVS_H
 #define FIRSTSIMULATORTEST_VCVS_H
 
-#include "Component.h"
+#include "ActiveComponent.h"
 
-class VCVS : public Component{
+class VCVS : public ActiveComponent{
 public:
     VCVS(float value,Component *d);
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;

@@ -6,9 +6,9 @@
 #define FIRSTSIMULATORTEST_CURRENTSOURCE_H
 
 
-#include "Component.h"
+#include "ActiveComponent.h"
 
-class CurrentSource : public Component{
+class CurrentSource : public ActiveComponent{
 
 public:
     CurrentSource(float value);

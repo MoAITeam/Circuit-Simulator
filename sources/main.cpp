@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 
 //TODO MARCO
 //Perchè non posso mettere su stess?
-//Riguardare Component.cpp
+//Troppi dynamic_cast :/
 //Riguardare Circuit.cpp
 //Riguardare SparseMatrix.cpp
 

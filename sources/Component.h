@@ -41,7 +41,6 @@ public:
     //setters
     virtual void setCurrent(float value);
     void setVoltage(float value);
-    virtual void setValue(float value){}; //FIXME
 
     void setObserver(ComponentObserver *o);
     void setMenu(QMenu* m);

@@ -5,7 +5,7 @@
 #include "CCVS.h"
 #include "ResourceManager.h"
 
-CCVS::CCVS(float value,Component *d):Component(1/value,0,0,d) {
+CCVS::CCVS(float value,Component *d):ActiveComponent(1/value,0,0,d) {
     pixmap=ResourceManager::getImage(Component::types::ccvs);
     sourceType=2;
 }

@@ -5,7 +5,7 @@
 #include "CCCS.h"
 #include "ResourceManager.h"
 
-CCCS::CCCS(float value,Component *d):Component(0,1/value,0,d) {
+CCCS::CCCS(float value,Component *d):ActiveComponent(0,1/value,0,d) {
     pixmap=ResourceManager::getImage(Component::types::cccs);
     sourceType=2;
 }

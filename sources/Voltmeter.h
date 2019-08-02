@@ -12,7 +12,6 @@ class Voltmeter : public Component{
 
 public:
     Voltmeter();
-
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override  final;
 };
 

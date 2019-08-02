@@ -6,9 +6,9 @@
 #define FIRSTSIMULATORTEST_CCVS_H
 
 
-#include "Component.h"
+#include "ActiveComponent.h"
 
-class CCVS : public Component{
+class CCVS : public ActiveComponent{
 public:
     CCVS(float value,Component *d);
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;

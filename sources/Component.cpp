@@ -150,6 +150,10 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
     nodes.first->setPos(pressfirst+event->pos()-press);
     nodes.second->setPos(pressecond+event->pos()-press);
+    for (auto c : nodes.first->getComponents())
+        c->update();
+    for (auto c : nodes.second->getComponents())
+        c->update();
     QGraphicsItem::mouseMoveEvent(event);
     prepareGeometryChange();
     update();
@@ -219,11 +223,23 @@ void Component::drawSolution(QPainter* painter) {
 
 void Component::setOrientation() {
     angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
-    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y()) ||
-        (nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())) {
+    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y())) {
         angle=-angle;
         rectLocation=QPointF(30, -50);
-    } else {
-        rectLocation=QPointF(30,30);
+    }
+        if((nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())){
+            //secondo
+            angle=180-angle;
+            rectLocation=QPointF(30, -50);
+        }
+    if ((nodes.second->x() < nodes.first->x() && nodes.second->y() > nodes.first->y())) {
+        //primo
+        angle=angle;
+        rectLocation=QPointF(30, 30);
+    }
+    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() < nodes.first->y())) {
+        //terzo
+        angle=180+angle;
+        rectLocation=QPointF(30, 30);
     }
 }

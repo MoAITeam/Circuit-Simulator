@@ -53,7 +53,6 @@ public:
     void deleteItem();
 
     Circuit* getCircuit();
-    Component* toComponent(QGraphicsItem*);
 
 signals:
     void insertValue();

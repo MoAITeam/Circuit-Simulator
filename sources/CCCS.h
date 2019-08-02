@@ -6,9 +6,9 @@
 #define FIRSTSIMULATORTEST_CCCS_H
 
 
-#include "Component.h"
+#include "ActiveComponent.h"
 
-class CCCS : public Component{
+class CCCS : public ActiveComponent{
 public:
     CCCS(float value,Component *d);
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;

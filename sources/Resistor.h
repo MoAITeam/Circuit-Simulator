@@ -6,9 +6,9 @@
 #define FIRSTSIMULATORTEST_RESISTOR_H
 
 
-#include "Component.h"
+#include "ActiveComponent.h"
 
-class Resistor: public Component{
+class Resistor: public ActiveComponent{
 
 public:
     Resistor(float res);
