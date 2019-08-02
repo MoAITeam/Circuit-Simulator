@@ -24,7 +24,6 @@ int main(int argc, char **argv) {
 }
 
 //TODO MARCO
-//soluzione nodi
 //Soluzioni giuste anche prima di Run
 
 //TODO ALESSIO

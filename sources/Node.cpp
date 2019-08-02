@@ -64,8 +64,19 @@ std::list<Component*> Node::getComponents() {
 
 QRectF Node::boundingRect() const {
     if (gnd)
-        return QRectF( -NodeSize*3, -NodeSize*3, NodeSize*6, NodeSize*6);
-    return QRectF( -NodeSize/2, -NodeSize/2, NodeSize, NodeSize);
+        return QRectF( -NodeSize*3-10, -NodeSize*3-10, NodeSize*6+200, NodeSize*6+50); //200 50 for rect
+    return QRectF( -NodeSize/2-10, -NodeSize/2-10, NodeSize+200, NodeSize+50);
+}
+
+QPainterPath Node::shape() const {
+        QPainterPath path;
+        QPolygon polygon;
+        polygon << QPoint(-20,-20);
+        polygon << QPoint(+20,-20);
+        polygon << QPoint(+20,+20);
+        polygon << QPoint(-20,+20);
+        path.addPolygon(polygon);
+        return path;
 }
 
 void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -78,6 +89,15 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     else {
         painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
         painter->drawEllipse(-NodeSize / 2, -NodeSize / 2, NodeSize, NodeSize);
+    }
+    if(hovering){
+        //painter->translate(QPointF(this->x(),this->y()));
+        QPainterPath path;
+        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        path.addRoundedRect(QRectF(10,10-17.5,150,45),10,10);
+        painter->fillPath(path,QColor(255, 189, 189));
+        painter->drawPath(path);
+        painter->drawText(QPointF(20,10), "Voltage:"+QString().number(voltage));
     }
 }
 
@@ -130,11 +150,14 @@ QPointF Node::toGrid(QPointF n){
 }
 
 void Node::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
-
+    hovering=true;
+    update();
     //setOpacity(1);
 }
 
 void Node::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
+    hovering=false;
+    update();
     //if(!gnd)
     //setOpacity(0.01);
 }

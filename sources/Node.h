@@ -25,6 +25,7 @@ public:
     void disconnect(Component *c);
 
     QRectF boundingRect() const override;
+    QPainterPath shape() const override;
     void paint(QPainter* painter,const QStyleOptionGraphicsItem*,QWidget* ) override;
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
@@ -51,6 +52,7 @@ private:
     std::list<Component*> components;
     NodeObserver* observer;
     bool gnd;
+    bool hovering=false;
 };
 
 
