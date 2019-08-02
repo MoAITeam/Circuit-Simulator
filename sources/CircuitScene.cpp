@@ -39,9 +39,10 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
     mousePressPoint=Node::toGrid(event->scenePos());
-    exSel= dynamic_cast<Component *>(itemAt(mousePressPoint,QTransform()));
-    if (exSel!= nullptr)
-        exSel->contextMenu->exec(event->screenPos());
+    exSel= itemAt(mousePressPoint,QTransform());
+    int type=exSel->type();
+    if (exSel->type()==Component::itemType::component||exSel->type()==Component::itemType::activeComponent)
+        ((Component*)exSel)->contextMenu->exec(event->screenPos());
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
@@ -57,9 +58,9 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             createComponent();
         }
         if (myMode == selectDependent) {
-            Component *clicked=dynamic_cast<Component *>(itemAt(event->scenePos(),QTransform()));
-            if (clicked != nullptr) {
-                selectedDependent = clicked;
+            QGraphicsItem *clicked=itemAt(event->scenePos(),QTransform());
+            if (clicked->type()==Component::component) {
+                selectedDependent = (Component*)clicked;
                 selectedDependent->setControlled();
                 selectedDependent->update();
                 myMode = insertItem;
@@ -95,10 +96,10 @@ void CircuitScene::deleteItem() {
 }
 
 void CircuitScene::changeValue() {
-    ActiveComponent* sel=dynamic_cast<ActiveComponent *>(exSel);
-    if (sel != nullptr) {
+    //FIXME dovrebbe farlo il circuito
+    if (exSel->type()==Component::activeComponent) {
         emit insertValue();
-        sel->setValue(cValue);
+        ((ActiveComponent*)exSel)->setValue(cValue);
     }
 }
 

@@ -12,11 +12,13 @@
 #include <QLabel>
 #include "ResourceManager.h"
 #define FLT_EPSILON 0.001
+#define solutionOnTop 300
+#define underNode 100
 
 
 
 Component::Component(float a,float b,float c, Component* d): behavior{a,b,c}, dependent(d), nodes{nullptr, nullptr} {
-    setZValue(100);
+    setZValue(underNode);
     setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
     contextMenu=new QMenu();
@@ -75,9 +77,9 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
 
     //Draw box on top
     if(hovering)
-        setZValue(300);
+        setZValue(solutionOnTop);
     else
-        setZValue(100);
+        setZValue(underNode);
 
     //draw selected
     if (isSelected()) {
@@ -189,7 +191,6 @@ void Component::setMenu(QMenu *m) {
 }
 
 void Component::drawComponent(QPainter* painter){
-    //FIXME saltino
     QPointF center((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2);
     QPoint n1(nodes.first->x(),nodes.first->y());
     QPoint n2(nodes.second->x(),nodes.second->y());
@@ -224,6 +225,7 @@ void Component::drawSolution(QPainter* painter) {
 void Component::setOrientation() {
     angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
     if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y())) {
+        //quarto
         angle=-angle;
         rectLocation=QPointF(30, -50);
     }

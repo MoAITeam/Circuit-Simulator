@@ -18,6 +18,7 @@ class Component: public  QGraphicsItem{
 
 public:
     enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs, cccs, ccvs};
+    enum itemType {component = QGraphicsItem::UserType+1, activeComponent = QGraphicsItem::UserType+2};
 
     Component(float a,float b, float c,Component* d=nullptr);
     virtual ~Component() override;
@@ -26,6 +27,7 @@ public:
     void disconnect();
 
     //QGraphicsItem
+    int type() const override {return component;};
     QRectF boundingRect() const override;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
     QPainterPath shape() const override;

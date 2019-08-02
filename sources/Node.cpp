@@ -9,12 +9,13 @@
 #include <iostream>
 #include <cmath>
 #define FLT_EPSILON 0.001
+#define nodeOnTop 200
 
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setAcceptHoverEvents(true);
     //if(!gnd)
     //setOpacity(0.01);
-    setZValue(200);
+    setZValue(nodeOnTop);
     setFlag(ItemIsMovable);
     setX(x);
     setY(y);
@@ -24,7 +25,7 @@ Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGrou
     setAcceptHoverEvents(true);
     //if(!gnd)
     //setOpacity(0.01);
-    setZValue(200);
+    setZValue(nodeOnTop);
     setFlag(ItemIsMovable);
     setX(point.x());
     setY(point.y());

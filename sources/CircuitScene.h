@@ -68,7 +68,7 @@ private:
     QMenu* richItemMenu;
     QMenu* itemMenu;
     Component *selectedDependent;
-    Component *exSel;
+    QGraphicsItem *exSel;
 };
 
 

@@ -11,6 +11,9 @@ class ActiveComponent: public Component {
 public:
     virtual void setValue(float value)=0;
     ActiveComponent(float a,float b, float c,Component* d=nullptr):Component(a,b,c,d){};
+    int type() const override{
+        return itemType::activeComponent;
+    };
 };
 
 
