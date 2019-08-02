@@ -32,6 +32,7 @@ private:
     void deleteItems();
     void runCircuit();
     void loadImages();
+    void drawCircuits(QString text);
 
     void about();
 

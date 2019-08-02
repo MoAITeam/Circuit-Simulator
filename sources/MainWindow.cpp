@@ -221,6 +221,57 @@ void MainWindow::backgroundButtonGroupClicked(QAbstractButton *button) {
     }
 
 QString text=button->text();
+    drawCircuits(text);
+
+}
+
+void MainWindow::about()
+{
+    QMessageBox::about(this, tr("About Circuit Simulator"),
+                       tr("Our <b>Circuit Simulator</b> can evaluate every kind "
+                          "of ideal electronic circuit"));
+}
+
+void MainWindow::sceneScaleChanged(const QString &scale)
+{
+    double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
+    QMatrix oldMatrix = view->matrix();
+    view->resetMatrix();
+    view->translate(oldMatrix.dx(), oldMatrix.dy());
+    view->scale(newScale, newScale);
+}
+
+void MainWindow::runCircuit() {
+    scene->getCircuit()->solve();
+}
+
+void MainWindow::deleteItems() {
+    for(auto &item : scene->items())
+        if(item->isSelected())
+            delete item;
+}
+
+void MainWindow::selectItems() {
+    scene->setMode(CircuitScene::moveItem);
+}
+
+void MainWindow::loadImages(){
+
+    toolboxLayout->addWidget(createCellWidget(tr("resistor"),ResourceManager::getImage(Component::types::resistor),Component::resistor),0,0);
+    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),ResourceManager::getImage(Component::types::voltageSource),Component::voltageSource),0,1);
+    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),ResourceManager::getImage(Component::types::currentSource),Component::currentSource),1,0);
+    toolboxLayout->addWidget(createCellWidget(tr("wire"),ResourceManager::getImage(Component::types::wire),Component::wire),1,1);
+    toolboxLayout->addWidget(createCellWidget(tr("amperometer"),ResourceManager::getImage(Component::types::amperometer),Component::amperometer),2,1);
+    toolboxLayout->addWidget(createCellWidget(tr("voltmeter"),ResourceManager::getImage(Component::types::voltmeter),Component::voltmeter),2,0);
+    toolboxLayout->addWidget(createCellWidget(tr("ground"),ResourceManager::getImage(Component::types::ground),Component::ground),0,2);
+    toolboxLayout->addWidget(createCellWidget(tr("vcvs"),ResourceManager::getImage(Component::types::vcvs),Component::vcvs),1,2);
+    toolboxLayout->addWidget(createCellWidget(tr("vccs"),ResourceManager::getImage(Component::types::vccs),Component::vccs),2,2);
+    toolboxLayout->addWidget(createCellWidget(tr("ccvs"),ResourceManager::getImage(Component::types::ccvs),Component::ccvs),0,3);
+    toolboxLayout->addWidget(createCellWidget(tr("cccs"),ResourceManager::getImage(Component::types::cccs),Component::cccs),1,3);
+}
+
+void MainWindow::drawCircuits(QString text) {
+
     if(text=="Parallel Circuit"){
 
         scene->getCircuit()->clear();
@@ -378,49 +429,4 @@ QString text=button->text();
         scene->getCircuit()->add(curr,n4,n5);
 
     }
-}
-
-void MainWindow::about()
-{
-    QMessageBox::about(this, tr("About Circuit Simulator"),
-                       tr("Our <b>Circuit Simulator</b> can evaluate every kind "
-                          "of ideal electronic circuit"));
-}
-
-void MainWindow::sceneScaleChanged(const QString &scale)
-{
-    double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
-    QMatrix oldMatrix = view->matrix();
-    view->resetMatrix();
-    view->translate(oldMatrix.dx(), oldMatrix.dy());
-    view->scale(newScale, newScale);
-}
-
-void MainWindow::runCircuit() {
-    scene->getCircuit()->solve();
-}
-
-void MainWindow::deleteItems() {
-    for(auto &item : scene->items())
-        if(item->isSelected())
-            delete item;
-}
-
-void MainWindow::selectItems() {
-    scene->setMode(CircuitScene::moveItem);
-}
-
-void MainWindow::loadImages(){
-
-    toolboxLayout->addWidget(createCellWidget(tr("resistor"),ResourceManager::getImage(Component::types::resistor),Component::resistor),0,0);
-    toolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),ResourceManager::getImage(Component::types::voltageSource),Component::voltageSource),0,1);
-    toolboxLayout->addWidget(createCellWidget(tr("Current Source"),ResourceManager::getImage(Component::types::currentSource),Component::currentSource),1,0);
-    toolboxLayout->addWidget(createCellWidget(tr("wire"),ResourceManager::getImage(Component::types::wire),Component::wire),1,1);
-    toolboxLayout->addWidget(createCellWidget(tr("amperometer"),ResourceManager::getImage(Component::types::amperometer),Component::amperometer),2,1);
-    toolboxLayout->addWidget(createCellWidget(tr("voltmeter"),ResourceManager::getImage(Component::types::voltmeter),Component::voltmeter),2,0);
-    toolboxLayout->addWidget(createCellWidget(tr("ground"),ResourceManager::getImage(Component::types::ground),Component::ground),0,2);
-    toolboxLayout->addWidget(createCellWidget(tr("vcvs"),ResourceManager::getImage(Component::types::vcvs),Component::vcvs),1,2);
-    toolboxLayout->addWidget(createCellWidget(tr("vccs"),ResourceManager::getImage(Component::types::vccs),Component::vccs),2,2);
-    toolboxLayout->addWidget(createCellWidget(tr("ccvs"),ResourceManager::getImage(Component::types::ccvs),Component::ccvs),0,3);
-    toolboxLayout->addWidget(createCellWidget(tr("cccs"),ResourceManager::getImage(Component::types::cccs),Component::cccs),1,3);
 }
