@@ -23,6 +23,7 @@ ResourceManager::ResourceManager() {
     auto im_vccs=new QPixmap(":/images/vccs.png");
     auto im_cccs=new QPixmap(":/images/cccs.png");
     auto im_ccvs=new QPixmap(":/images/ccvs.png");
+
     images.insert(std::make_pair(Component::types::resistor,im_res));
     images.insert(std::make_pair(Component::types::currentSource ,im_cur));
     images.insert(std::make_pair(Component::types::voltageSource ,im_vol));

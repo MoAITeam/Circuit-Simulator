@@ -44,6 +44,8 @@ public:
 
     bool operator==(Node& a);
 
+    void setGnd(bool value);
+
 private:
     float voltage;
     std::list<Component*> components;

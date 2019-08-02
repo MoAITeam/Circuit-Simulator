@@ -15,5 +15,6 @@
         <file>images/vccs.png</file>
         <file>images/cccs.png</file>
         <file>images/ccvs.png</file>
+        <file>images/parallelcircuit.png</file>
     </qresource>
 </RCC>

@@ -138,3 +138,7 @@ void Node::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
     //if(!gnd)
     //setOpacity(0.01);
 }
+
+void Node::setGnd(bool value) {
+    gnd=value;
+}

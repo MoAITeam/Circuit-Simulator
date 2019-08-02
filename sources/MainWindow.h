@@ -24,6 +24,8 @@ private:
     void createToolbars();
 
     void buttonGroupClicked(int type);
+    void backgroundButtonGroupClicked(QAbstractButton *button);
+
     void sceneScaleChanged(const QString &scale);
 
     void selectItems();
@@ -34,6 +36,8 @@ private:
     void about();
 
     QWidget *createCellWidget(const QString &text,const QPixmap &image, int id);
+    QWidget *createBackgroundCellWidget(const QString &text,const QString &image);
+
     CircuitScene *scene;
     QGraphicsView *view;
 
