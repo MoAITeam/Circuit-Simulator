@@ -16,6 +16,7 @@ class Circuit: public ComponentObserver, public NodeObserver{
 public:
     Circuit(CircuitObserver* o=nullptr);
     ~Circuit();
+    void clear();
 
     void add(Component *c, Node*& p, Node*& n);
     void removeNotify(Component *c) override;

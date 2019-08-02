@@ -17,6 +17,7 @@
         <file>images/ccvs.png</file>
         <file>images/parallelcircuit.png</file>
         <file>images/currentdivider.png</file>
+        <file>images/voltagedivider.png</file>
 
     </qresource>
 </RCC>

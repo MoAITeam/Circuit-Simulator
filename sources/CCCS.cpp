@@ -8,6 +8,7 @@
 CCCS::CCCS(float value,Component *d):ActiveComponent(0,1/value,0,d) {
     pixmap=ResourceManager::getImage(Component::types::cccs);
     sourceType=ampere;
+    dependent->setControlled();
 }
 
 void CCCS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

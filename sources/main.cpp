@@ -24,11 +24,8 @@ int main(int argc, char **argv) {
 }
 
 //TODO MARCO
-//Perchè non posso mettere su stess?
-//Riguardare Circuit.cpp
-//Riguardare SparseMatrix.cpp
+//Perchè non posso mettere su stess? Comportamento molto buggeto
 
 //TODO ALESSIO
 //AGGIUNTE:CLEAR,SALVA,CARICA,UNDO,EXPORT
-//CIRCUITI DI DEFAULT
 //TASTO RUN

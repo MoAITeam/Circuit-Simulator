@@ -61,7 +61,6 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             if(clicked!= nullptr)
             if (clicked->type()>=Component::component) {
                 selectedDependent = (Component*)clicked;
-                selectedDependent->setControlled();
                 selectedDependent->update();
                 myMode = insertItem;
             }

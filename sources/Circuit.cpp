@@ -11,6 +11,10 @@ Circuit::Circuit(CircuitObserver *o):observer(o) {
 }
 
 Circuit::~Circuit() {
+    clear();
+}
+
+void Circuit::clear(){
     std::vector<Component*> toDestroy=components;
     for (auto &c : toDestroy) {
         delete c;
@@ -37,12 +41,15 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
     }
 
     bool found=false;
-    for (auto &node : nodes)
-        if (*p==*node) {
+    for (auto &node : nodes) {
+        if (*p == *node && p != node) {
             delete p;
             p = node;
-            found=true;
+            found = true;
         }
+        if(p==node)
+            found=true;
+    }
     if (!found){
         if(!p->isGround()) {
             matrix.add();
@@ -57,12 +64,15 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
     }
 
     found= false;
-    for (auto &node : nodes)
-        if (*n==*node) {
+    for (auto &node : nodes) {
+        if (*n == *node && n != node) {
             delete n;
             n = node;
-            found=true;
+            found = true;
         }
+        if(n==node)
+            found=true;
+    }
     if (!found){
         if(!n->isGround()) {
             matrix.add();
