@@ -224,6 +224,7 @@ void Component::drawSolution(QPainter* painter) {
 
 void Component::setOrientation() {
     angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
+    rectLocation=QPointF(30, 30);//sennò primo stampa sopra componente
     if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y())) {
         //quarto
         angle=-angle;

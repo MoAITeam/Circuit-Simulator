@@ -94,7 +94,7 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
         //painter->translate(QPointF(this->x(),this->y()));
         QPainterPath path;
         painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        path.addRoundedRect(QRectF(10,10-17.5,150,45),10,10);
+        path.addRoundedRect(QRectF(10,10-17.5,100,30),10,10);
         painter->fillPath(path,QColor(255, 189, 189));
         painter->drawPath(path);
         painter->drawText(QPointF(20,10), "Voltage:"+QString().number(voltage));
