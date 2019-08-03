@@ -10,11 +10,14 @@
 
 class CCVS : public ActiveComponent{
 public:
-    CCVS(float value,Component *d);
+    CCVS(float value,Component *d= nullptr);
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
     void setValue(float value) override{
         behavior[0]=1/value;
     }
+    void setSource(Component* c){
+        dependent=c;
+    };
 };
 
 

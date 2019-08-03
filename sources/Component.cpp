@@ -78,7 +78,8 @@ QRectF Component::boundingRect() const {
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
     //Draw box on top
-    if(hovering) {
+    //FIXME fa casino (anti-aliasing?)
+    /*if(hovering) {
         setZValue(solutionOnTop);
         nodes.first->setZValue(selectedNodesOnTop);
         nodes.second->setZValue(selectedNodesOnTop);
@@ -87,7 +88,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
         setZValue(underNode);
         nodes.first->setZValue(nodeOnTop);
         nodes.second->setZValue(nodeOnTop);
-    }
+    }*/
 
     //draw selected
     if (isSelected()) {
@@ -160,10 +161,10 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
     nodes.first->setPos(pressfirst+event->pos()-press);
     nodes.second->setPos(pressecond+event->pos()-press);
-    /*for (auto c : nodes.first->getComponents())
-        c->update();*/
-    /*for (auto c : nodes.second->getComponents())
-        c->update();*/
+    for (auto c : nodes.first->getComponents())
+        c->update();
+    for (auto c : nodes.second->getComponents())
+        c->update();
     QGraphicsItem::mouseMoveEvent(event);
     prepareGeometryChange();
     update();

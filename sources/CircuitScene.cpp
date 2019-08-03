@@ -82,10 +82,10 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                 }
         }
         if (myMode == moveItem) {
-            QPainterPath path;
+            /*QPainterPath path;
             path.addRect(QRectF(mousePressPoint,mouseReleasePoint));
             setSelectionArea(path);
-            update();
+            update();*/
         }
     }
 }

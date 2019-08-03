@@ -10,11 +10,14 @@
 
 class CCCS : public ActiveComponent{
 public:
-    CCCS(float value,Component *d);
+    CCCS(float value,Component *d= nullptr);
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
     void setValue(float value) override{
         behavior[1]=1/value;
     }
+    void setSource(Component* c){
+        dependent=c;
+    };
 };
 
 
