@@ -160,10 +160,10 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
     nodes.first->setPos(pressfirst+event->pos()-press);
     nodes.second->setPos(pressecond+event->pos()-press);
-    for (auto c : nodes.first->getComponents())
-        c->update();
-    for (auto c : nodes.second->getComponents())
-        c->update();
+    /*for (auto c : nodes.first->getComponents())
+        c->update();*/
+    /*for (auto c : nodes.second->getComponents())
+        c->update();*/
     QGraphicsItem::mouseMoveEvent(event);
     prepareGeometryChange();
     update();

@@ -34,8 +34,11 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     mousePressPoint=Node::toGrid(event->scenePos());
-    if(myMode==moveItem)
+
+    //selecting=true;
+    if(myMode==moveItem) {
         QGraphicsScene::mousePressEvent(event);
+    }
 }
 
 void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
@@ -47,30 +50,53 @@ void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
         sceneMenu->exec(event->screenPos());
 }
 
+/*void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
+    /*if (selecting) {
+        painter->setPen(QPen(Qt::black, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
+        painter->drawRect(QRectF(mousePressPoint, mouseReleasePoint));
+    }
+    QGraphicsScene::drawForeground(painter,rect);
+}*/
+
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
-    mouseReleasePoint=Node::toGrid(event->scenePos());
-    if(event->button()==Qt::LeftButton) {
+    mouseReleasePoint = Node::toGrid(event->scenePos());
+    selecting=false;
+    if (event->button() == Qt::LeftButton) {
         if (myMode == insertItem) {
             if ((mousePressPoint - mouseReleasePoint).manhattanLength() < NodeSize) {
-                QPoint defaultPos=QPoint(0,100);
+                QPoint defaultPos = QPoint(0, 100);
                 mousePressPoint = mousePressPoint - defaultPos;
                 mouseReleasePoint = mousePressPoint + defaultPos;
             }
             createComponent();
         }
         if (myMode == selectDependent) {
-            QGraphicsItem *clicked=itemAt(event->scenePos(),QTransform());
-            if(clicked!= nullptr)
-            if (clicked->type()>=Component::component) {
-                selectedDependent = (Component*)clicked;
-                selectedDependent->update();
-                selectedDependent->setControlled();
-                myMode = insertItem;
-            }
+            QGraphicsItem *clicked = itemAt(event->scenePos(), QTransform());
+            if (clicked != nullptr)
+                if (clicked->type() >= Component::component) {
+                    selectedDependent = (Component *) clicked;
+                    selectedDependent->update();
+                    selectedDependent->setControlled();
+                    myMode = insertItem;
+                }
+        }
+        if (myMode == moveItem) {
+            QPainterPath path;
+            path.addRect(QRectF(mousePressPoint,mouseReleasePoint));
+            setSelectionArea(path);
+            update();
         }
     }
 }
+
+/*void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    /*if(myMode==moveItem) {
+        mouseReleasePoint = Node::toGrid(event->scenePos());
+        update();//FIXME togliere
+    }
+    QGraphicsScene::mouseMoveEvent(event);
+}*/
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
     if(event->key()==Qt::Key::Key_C)

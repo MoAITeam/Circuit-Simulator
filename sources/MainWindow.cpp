@@ -461,6 +461,8 @@ void MainWindow::drawCircuits(QString text) {
 
     else if(text=="Trasformatore"){
 
+        scene->getCircuit()->clear();
+
         auto vol=new VoltageSource(10);
         auto n1=new Node(500,200);
         auto n2=new Node(500,100);
@@ -479,6 +481,7 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->add(w2,n4,n6);
 
         auto vcvs= new VCVS(10,res1);
+        res1->setControlled();
         auto n5=new Node(300,200);
         scene->getCircuit()->add(vcvs,n6,n5);
 
@@ -494,6 +497,7 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->add(res2,n7,n8);
 
         auto ccvs=new CCCS(10,res2);
+        res2->setControlled();
         scene->getCircuit()->add(ccvs,n3,n4);
 
         auto w5=new Wire;
