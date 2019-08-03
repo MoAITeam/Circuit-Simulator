@@ -77,19 +77,6 @@ QRectF Component::boundingRect() const {
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-    //Draw box on top
-    //FIXME fa casino (anti-aliasing?)
-    /*if(hovering) {
-        setZValue(solutionOnTop);
-        nodes.first->setZValue(selectedNodesOnTop);
-        nodes.second->setZValue(selectedNodesOnTop);
-    }
-    else {
-        setZValue(underNode);
-        nodes.first->setZValue(nodeOnTop);
-        nodes.second->setZValue(nodeOnTop);
-    }*/
-
     //draw selected
     if (isSelected()) {
         painter->setPen(QPen(Qt::green, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
@@ -140,11 +127,17 @@ QPainterPath Component::shape() const
 
 void Component::hoverEnterEvent(QGraphicsSceneHoverEvent*){
     hovering=true;
+    setZValue(solutionOnTop);
+    nodes.first->setZValue(selectedNodesOnTop);
+    nodes.second->setZValue(selectedNodesOnTop);
     update();
 }
 
 void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
     hovering=false;
+    setZValue(underNode);
+    nodes.first->setZValue(nodeOnTop);
+    nodes.second->setZValue(nodeOnTop);
     update();
 }
 

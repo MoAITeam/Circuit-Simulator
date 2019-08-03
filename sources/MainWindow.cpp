@@ -301,6 +301,7 @@ void MainWindow::loadImages(){
 
 void MainWindow::drawCircuits(QString text) {
 
+    //TODO gli eventi non hanno menu
     if(text=="Parallel Circuit"){
 
         scene->getCircuit()->clear();
@@ -484,7 +485,6 @@ void MainWindow::drawCircuits(QString text) {
         auto n8=new Node(200,100);
         auto n7=new Node(200,200);
 
-
         auto n5=new Node(300,200);
         auto w3=new Wire;
         scene->getCircuit()->add(w3,n5,n7);
@@ -510,7 +510,6 @@ void MainWindow::drawCircuits(QString text) {
 
         auto curr=new CurrentSource(10);
         scene->getCircuit()->add(curr,n9,n10);
-
 
     }
 
