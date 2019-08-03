@@ -76,6 +76,7 @@ void MainWindow::createToolBox() {
     samplesLayout->addWidget(createBackgroundCellWidget("Current Divider",":/images/currentdivider.png"),1,1);
     samplesLayout->addWidget(createBackgroundCellWidget("Strange One",":/images/strangeone.png"),1,0);
     samplesLayout->addWidget(createBackgroundCellWidget("Controlled One",":/images/controlled.png"),2,0);
+    samplesLayout->addWidget(createBackgroundCellWidget("Trasformatore",":/images/trasformatore.png"),2,1);
 
 
     samplesLayout->setRowStretch(2,10);
@@ -457,4 +458,56 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->add(curr,n4,n5);
 
     }
+
+    else if(text=="Trasformatore"){
+
+        auto vol=new VoltageSource(10);
+        auto n1=new Node(500,200);
+        auto n2=new Node(500,100);
+        scene->getCircuit()->add(vol,n1,n2);
+
+        auto res1=new Resistor(10);
+        auto n3=new Node(400,200);
+        scene->getCircuit()->add(res1,n1,n3);
+
+        auto w1=new Wire;
+        auto n4=new Node(400,100);
+        scene->getCircuit()->add(w1,n2,n4);
+
+        auto w2=new Wire;
+        auto n6= new Node(300,100);
+        scene->getCircuit()->add(w2,n4,n6);
+
+        auto vcvs= new VCVS(10,res1);
+        auto n5=new Node(300,200);
+        scene->getCircuit()->add(vcvs,n6,n5);
+
+        auto w3=new Wire;
+        auto n7=new Node(200,200);
+        scene->getCircuit()->add(w3,n5,n7);
+
+        auto w4=new Wire;
+        auto n8=new Node(200,100);
+        scene->getCircuit()->add(w4,n6,n8);
+
+        auto res2=new Resistor(10);
+        scene->getCircuit()->add(res2,n7,n8);
+
+        auto ccvs=new CCCS(10,res2);
+        scene->getCircuit()->add(ccvs,n3,n4);
+
+        auto w5=new Wire;
+        auto n9=new Node(100,200);
+        scene->getCircuit()->add(w5,n9,n7);
+
+        auto w6=new Wire;
+        auto n10=new Node(100,100);
+        scene->getCircuit()->add(w6,n10,n8);
+
+        auto curr=new CurrentSource(10);
+        scene->getCircuit()->add(curr,n9,n10);
+
+
+    }
+
 }
