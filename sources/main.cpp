@@ -25,6 +25,7 @@ int main(int argc, char **argv) {
 
 //TODO MARCO
 //Soluzioni giuste
+//Selected Area
 
 //TODO ALESSIO
 //AGGIUNTE:CLEAR,SALVA,CARICA,UNDO,EXPORT
