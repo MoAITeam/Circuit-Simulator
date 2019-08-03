@@ -51,6 +51,7 @@ public:
     //actions
     void changeValue();
     void deleteItem();
+    void selectAll();
 
     Circuit* getCircuit();
 
@@ -67,6 +68,7 @@ private:
     float cValue;
     QMenu* richItemMenu;
     QMenu* itemMenu;
+    QMenu* sceneMenu;
     Component *selectedDependent;
     QGraphicsItem *exSel;
 };

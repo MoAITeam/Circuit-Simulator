@@ -21,6 +21,7 @@ CircuitScene::CircuitScene(Circuit* c):circuit(c){
     for(int y=0; y<=sceneSize; y+=nodeGridSize)
         addLine(0,y,sceneSize,y, QPen(gridColor));
 
+    sceneMenu=new QMenu();
     createItemMenus();
 
 }
@@ -42,6 +43,8 @@ void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
     exSel= itemAt(mousePressPoint,QTransform());
     if (exSel->type()>=Component::itemType::component)
         ((Component*)exSel)->contextMenu->exec(event->screenPos());
+    else
+        sceneMenu->exec(event->screenPos());
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
@@ -100,6 +103,13 @@ void CircuitScene::changeValue() {
         circuit->update((ActiveComponent*)exSel,cValue);
     }
 }
+
+void CircuitScene::selectAll() {
+    for(auto &item : items())
+        if (item->type()>=Component::component)
+            item->setSelected(true);
+}
+
 
 void CircuitScene::createComponent() {
     Component *c;
@@ -168,4 +178,8 @@ void CircuitScene::createItemMenus(){
     QAction* changeAction=new QAction(tr("&Change"),this);
     connect(changeAction, &QAction::triggered, this, &CircuitScene::changeValue);
     richItemMenu->addAction(changeAction);
+
+    QAction* selectAllAction=new QAction(tr("&Select All"),this);
+    connect(selectAllAction, &QAction::triggered, this, &CircuitScene::selectAll);
+    sceneMenu->addAction(selectAllAction);
 }
