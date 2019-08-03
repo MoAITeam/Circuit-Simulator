@@ -115,6 +115,14 @@ void MainWindow::createActions() {
     runCircuitAction= new QAction(icon_run,tr("&Run"),this);
     connect(runCircuitAction,&QAction::triggered,this,&MainWindow::runCircuit);
 
+    QIcon icon_clear=QIcon(":/images/clear.png");
+    clearAction= new QAction(icon_clear,tr("&Clear"),this);
+    connect(clearAction,&QAction::triggered,this,&MainWindow::clearAll);
+
+    QIcon icon_selAll=QIcon(":/images/selectall");
+    selectAllAction= new QAction(icon_selAll,tr("&Select All"),this);
+    connect(selectAllAction,&QAction::triggered,this,&MainWindow::selectAll);
+
 }
 
 
@@ -125,6 +133,8 @@ void MainWindow::createToolbars() {
     editToolBar->addAction(deleteAction);
     editToolBar->addAction(selectAction);
     editToolBar->addAction(runCircuitAction);
+    editToolBar->addAction(clearAction);
+    editToolBar->addAction(selectAllAction);
 
     viewToolBar= addToolBar(tr("View"));
 
@@ -188,6 +198,8 @@ void MainWindow::createMenus() {
 
     itemMenu= menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(deleteAction);
+    itemMenu->addAction(clearAction);
+    itemMenu->addAction(selectAllAction);
 
     aboutMenu= menuBar()->addMenu(tr("&About"));
     aboutMenu->addAction(aboutAction);
@@ -242,13 +254,26 @@ void MainWindow::sceneScaleChanged(const QString &scale)
 }
 
 void MainWindow::runCircuit() {
+
     scene->getCircuit()->solve();
-    QMessageBox matrix;
-    matrix.setWindowTitle("MATRIX");
-//    matrix.setText(scene->getCircuit()->matrix.print())
+
+}
+
+void MainWindow::clearAll() {
+
+    scene->getCircuit()->clear();
+
+}
+
+void MainWindow::selectAll() {
+
+    for(auto &item : scene->items())
+        if (item->type()>=Component::component)
+            item->setSelected(true);
 }
 
 void MainWindow::deleteItems() {
+
     for(auto &item : scene->items())
         if(item->isSelected())
             delete item;

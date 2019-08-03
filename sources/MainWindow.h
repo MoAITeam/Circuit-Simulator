@@ -33,6 +33,8 @@ private:
     void runCircuit();
     void loadImages();
     void drawCircuits(QString text);
+    void clearAll();
+    void selectAll();
 
     void about();
 
@@ -56,6 +58,8 @@ private:
     QAction *exitAction;
     QAction *aboutAction;
     QAction *runCircuitAction;
+    QAction *clearAction;
+    QAction *selectAllAction;
 
     QToolBox *toolBox;
     QButtonGroup *buttonGroup;
