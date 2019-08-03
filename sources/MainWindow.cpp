@@ -461,6 +461,8 @@ void MainWindow::drawCircuits(QString text) {
 
     else if(text=="Trasformatore"){
 
+        scene->getCircuit()->clear();
+
         auto vol=new VoltageSource(10);
         auto n1=new Node(500,200);
         auto n2=new Node(500,100);
