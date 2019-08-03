@@ -60,7 +60,6 @@ void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    //TODO switch case
     QGraphicsScene::mouseReleaseEvent(event);
     mouseReleasePoint = Node::toGrid(event->scenePos());
     selecting=false;
@@ -83,7 +82,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                     myMode = insertItem;
                 }
         }
-        if (myMode == moveItem && selecting) {
+        if (myMode == moveItem) {
             QPainterPath path;
             path.addRect(QRectF(mousePressPoint,mouseReleasePoint));
             setSelectionArea(path);
