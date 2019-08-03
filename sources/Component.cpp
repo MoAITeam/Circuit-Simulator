@@ -13,7 +13,9 @@
 #include "ResourceManager.h"
 #define FLT_EPSILON 0.001
 #define solutionOnTop 300
+#define selectedNodesOnTop 400
 #define underNode 100
+#define nodeOnTop 200
 
 
 
@@ -76,10 +78,16 @@ QRectF Component::boundingRect() const {
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
     //Draw box on top
-    if(hovering)
+    if(hovering) {
         setZValue(solutionOnTop);
-    else
+        nodes.first->setZValue(selectedNodesOnTop);
+        nodes.second->setZValue(selectedNodesOnTop);
+    }
+    else {
         setZValue(underNode);
+        nodes.first->setZValue(nodeOnTop);
+        nodes.second->setZValue(nodeOnTop);
+    }
 
     //draw selected
     if (isSelected()) {
