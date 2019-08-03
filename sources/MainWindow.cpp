@@ -74,8 +74,8 @@ void MainWindow::createToolBox() {
     samplesLayout->addWidget(createBackgroundCellWidget("Parallel Circuit",":/images/parallelcircuit.png"),0,0);
     samplesLayout->addWidget(createBackgroundCellWidget("Voltage Divider",":/images/voltagedivider.png"),0,1);
     samplesLayout->addWidget(createBackgroundCellWidget("Current Divider",":/images/currentdivider.png"),1,1);
-    samplesLayout->addWidget(createBackgroundCellWidget("Strange One",":/images/wire.png"),1,0);
-    samplesLayout->addWidget(createBackgroundCellWidget("Controlled One",":/images/wire.png"),2,0);
+    samplesLayout->addWidget(createBackgroundCellWidget("Strange One",":/images/strangeone.png"),1,0);
+    samplesLayout->addWidget(createBackgroundCellWidget("Controlled One",":/images/controlled.png"),2,0);
 
 
     samplesLayout->setRowStretch(2,10);
@@ -376,16 +376,16 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->clear();
 
         auto vol1=new VoltageSource(10);
-        auto n1=new Node(400,160);
-        auto n2=new Node(400,60);
+        auto n1=new Node(400,200);
+        auto n2=new Node(400,50);
         scene->getCircuit()->add(vol1,n1,n2);
 
         auto res1= new Resistor(10);
-        auto n3=new Node(300,60);
+        auto n3=new Node(250,50);
         scene->getCircuit()->add(res1,n2,n3);
 
         auto res2= new Resistor(10);
-        auto n4=new Node(300,160);
+        auto n4=new Node(250,200);
         scene->getCircuit()->add(res2,n1,n4);
 
         auto vol2=new VoltageSource(10);

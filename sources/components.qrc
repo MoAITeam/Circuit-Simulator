@@ -18,6 +18,10 @@
         <file>images/parallelcircuit.png</file>
         <file>images/currentdivider.png</file>
         <file>images/voltagedivider.png</file>
+        <file>images/controlled.png</file>
+        <file>images/strangeone.png</file>
+
+
 
     </qresource>
 </RCC>
