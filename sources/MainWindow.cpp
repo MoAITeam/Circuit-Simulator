@@ -243,6 +243,9 @@ void MainWindow::sceneScaleChanged(const QString &scale)
 
 void MainWindow::runCircuit() {
     scene->getCircuit()->solve();
+    QMessageBox matrix;
+    matrix.setWindowTitle("MATRIX");
+//    matrix.setText(scene->getCircuit()->matrix.print())
 }
 
 void MainWindow::deleteItems() {
