@@ -119,7 +119,7 @@ private slots:
             std::cout<<e.what()<<std::endl;
         }
 
-        QTest::keyPress(widget , Qt::Key::Key_S);
+        circuit->solve();
 
         float t1 = res1_p->getVoltage();
         float t2 = res2_p->getVoltage();
