@@ -31,6 +31,10 @@ Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGrou
     setY(point.y());
 }
 
+int Node::type() const {
+    return Component::node;
+}
+
 Node::~Node(){
     if(observer!= nullptr)
         observer->removeNotify(this);

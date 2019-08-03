@@ -34,8 +34,9 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     mousePressPoint=Node::toGrid(event->scenePos());
-
-    //selecting=true;
+    QGraphicsItem *clicked=itemAt(mousePressPoint,QTransform());
+    if(clicked->type()<Component::itemType::node) //FIXME togliere
+    selecting=true;
     if(myMode==moveItem) {
         QGraphicsScene::mousePressEvent(event);
     }
@@ -50,15 +51,16 @@ void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
         sceneMenu->exec(event->screenPos());
 }
 
-/*void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
-    /*if (selecting) {
+void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
+    if (selecting) {
         painter->setPen(QPen(Qt::black, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
         painter->drawRect(QRectF(mousePressPoint, mouseReleasePoint));
     }
     QGraphicsScene::drawForeground(painter,rect);
-}*/
+}
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    //TODO switch case
     QGraphicsScene::mouseReleaseEvent(event);
     mouseReleasePoint = Node::toGrid(event->scenePos());
     selecting=false;
@@ -81,22 +83,22 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                     myMode = insertItem;
                 }
         }
-        if (myMode == moveItem) {
-            /*QPainterPath path;
+        if (myMode == moveItem && selecting) {
+            QPainterPath path;
             path.addRect(QRectF(mousePressPoint,mouseReleasePoint));
             setSelectionArea(path);
-            update();*/
+            update();
         }
     }
 }
 
-/*void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    /*if(myMode==moveItem) {
+void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    if(myMode==moveItem) {
         mouseReleasePoint = Node::toGrid(event->scenePos());
         update();//FIXME togliere
     }
     QGraphicsScene::mouseMoveEvent(event);
-}*/
+}
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
     if(event->key()==Qt::Key::Key_C)

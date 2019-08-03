@@ -33,6 +33,7 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
     void hoverEnterEvent(QGraphicsSceneHoverEvent* ) override;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent* ) override;
+    int type() const override; //FIXME schifo
 
     void setVoltage(float value);
     float getVoltage();

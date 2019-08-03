@@ -40,8 +40,8 @@ public:
     enum modes{insertItem,moveItem,selectDependent};
 
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-    //void drawForeground(QPainter* painter, const QRectF &rect) override;
-    //void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+    void drawForeground(QPainter* painter, const QRectF &rect) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     void keyPressEvent(QKeyEvent *event) override ;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;

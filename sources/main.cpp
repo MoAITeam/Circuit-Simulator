@@ -25,7 +25,6 @@ int main(int argc, char **argv) {
 
 //TODO MARCO
 //Soluzioni giuste
-//bug grafico "lag"
 
 //TODO ALESSIO
-//AGGIUNTE:CLEAR,SALVA,CARICA,UNDO,EXPORT
+//AGGIUNTE:SALVA,CARICA,UNDO,EXPORT
