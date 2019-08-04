@@ -23,6 +23,7 @@ Component::Component(float a,float b,float c, Component* d): behavior{a,b,c}, de
     setZValue(underNode);
     setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
+    setFlag(ItemIsMovable,true);
     contextMenu=new QMenu();
 }
 
@@ -68,8 +69,8 @@ nodePair Component::getNodes() {
 }
 
 QRectF Component::boundingRect() const {
-    QPoint n1(nodes.first->x(),nodes.first->y());
-    QPoint n2(nodes.second->x(),nodes.second->y());
+    QPoint n1(nodes.first->x()-x(),nodes.first->y()-y());
+    QPoint n2(nodes.second->x()-x(),nodes.second->y()-y());
     QPoint m=(n1+n2)/2;
     QPoint length(qAbs(n1.x()-n2.x()),qAbs(n1.y()-n2.y()));
     return QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+200,m.y()+length.y()/2+100));
@@ -117,10 +118,10 @@ QPainterPath Component::shape() const
 {
     QPainterPath path;
     QPolygon polygon;
-    polygon << QPoint(nodes.first->x()-20,nodes.first->y());
-    polygon << QPoint(nodes.first->x()+20,nodes.first->y());
-    polygon << QPoint(nodes.second->x()+20, nodes.second->y());
-    polygon << QPoint(nodes.second->x()-20, nodes.second->y());
+    polygon << QPoint(nodes.first->x()-20-x(),nodes.first->y()-y());
+    polygon << QPoint(nodes.first->x()+20-x(),nodes.first->y()-y());
+    polygon << QPoint(nodes.second->x()+20-x(), nodes.second->y()-y());
+    polygon << QPoint(nodes.second->x()-20-x(), nodes.second->y()-y());
     path.addPolygon(polygon);
     return path;
 }
@@ -142,22 +143,26 @@ void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
 }
 
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    //save initial position
+    /*//save initial position
     press=event->pos();
     pressfirst=nodes.first->pos();
-    pressecond=nodes.second->pos();
+    pressecond=nodes.second->pos();*/
+
     QGraphicsItem::mousePressEvent(event);
     prepareGeometryChange();
     update();
 }
 
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
-    nodes.first->setPos(pressfirst+event->pos()-press);
+    /*nodes.first->setPos(pressfirst+event->pos()-press);
     nodes.second->setPos(pressecond+event->pos()-press);
     for (auto c : nodes.first->getComponents())
         c->update();
     for (auto c : nodes.second->getComponents())
-        c->update();
+        c->update();*/
+    //to make single selection work
+    nodes.first->setSelected(true);
+    nodes.second->setSelected(true);
     QGraphicsItem::mouseMoveEvent(event);
     prepareGeometryChange();
     update();
@@ -165,12 +170,12 @@ void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
 
 void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     //gridify
-    nodes.first->setPos(Node::toGrid(nodes.first->pos()));
-    nodes.second->setPos(Node::toGrid(nodes.second->pos()));
+    //nodes.first->setPos(Node::toGrid(nodes.first->pos()));
+    //nodes.second->setPos(Node::toGrid(nodes.second->pos()));
 
     //connect
-    nodes.first->checkLink();
-    nodes.second->checkLink();
+    //nodes.first->checkLink();
+    //nodes.second->checkLink();
     QGraphicsItem::mouseReleaseEvent(event);
     prepareGeometryChange();
     update();
@@ -194,12 +199,12 @@ void Component::setMenu(QMenu *m) {
 
 void Component::drawComponent(QPainter* painter){
     QPointF center((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2);
-    QPoint n1(nodes.first->x(),nodes.first->y());
-    QPoint n2(nodes.second->x(),nodes.second->y());
+    QPoint n1(nodes.first->x()-x(),nodes.first->y()-y());
+    QPoint n2(nodes.second->x()-x(),nodes.second->y()-y());
     QLineF line(n1,n2);
 
     painter->drawLine(line);
-    painter->translate(center);
+    painter->translate(center-pos());
 
     if(!pixmap.isNull()) {
         painter->rotate(angle);

@@ -25,6 +25,7 @@ int main(int argc, char **argv) {
 
 //TODO MARCO
 //Soluzioni giuste
+//problemi:multiple grid locate, multiple checklink
 
 //TODO ALESSIO
 //AGGIUNTE:SALVA,CARICA,UNDO,EXPORT

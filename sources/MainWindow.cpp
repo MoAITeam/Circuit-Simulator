@@ -277,7 +277,8 @@ void MainWindow::deleteItems() {
 
     for(auto &item : scene->items())
         if(item->isSelected())
-            delete item;
+            if(item->type()>=Component::component)
+                delete item; //FIXME check again cast
 }
 
 void MainWindow::selectItems() {

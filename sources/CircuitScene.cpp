@@ -38,6 +38,10 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if(clicked->type()<Component::itemType::node) //FIXME togliere
     selecting=true;
     if(myMode==moveItem) {
+        if(clicked->type()==Component::node) {
+            clearSelection();
+            clicked->setSelected(true);
+        }
         QGraphicsScene::mousePressEvent(event);
     }
 }
@@ -62,7 +66,6 @@ void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
     mouseReleasePoint = Node::toGrid(event->scenePos());
-    selecting=false;
     if (event->button() == Qt::LeftButton) {
         if (myMode == insertItem) {
             if ((mousePressPoint - mouseReleasePoint).manhattanLength() < NodeSize) {
@@ -83,10 +86,25 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                 }
         }
         if (myMode == moveItem) {
-            QPainterPath path;
-            path.addRect(QRectF(mousePressPoint,mouseReleasePoint));
-            setSelectionArea(path);
-            update();
+            for(auto &item : selectedItems())
+                if(item->type()==Component::node) {
+                    ((Node*) item)->setPos(Node::toGrid(((Node*) item)->pos()));
+                    ((Node*)item)->checkLink();
+                }
+            for(auto &item : selectedItems())
+                //if selected with CMD
+                if(item->type()>=Component::component) {
+                    ((Component*)item)->getNodes().first->setSelected(true);
+                    ((Component*)item)->getNodes().second->setSelected(true);
+                }
+            //shouldn't run together
+            if(selecting) {
+                QPainterPath path;
+                path.addRect(QRectF(mousePressPoint, mouseReleasePoint));
+                setSelectionArea(path);
+                update();
+                selecting=false;
+            }
         }
     }
 }

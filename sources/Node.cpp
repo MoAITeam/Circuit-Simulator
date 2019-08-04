@@ -17,6 +17,7 @@ Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGr
     //setOpacity(0.01);
     setZValue(nodeOnTop);
     setFlag(ItemIsMovable);
+    setFlag(ItemIsSelectable);
     setX(x);
     setY(y);
 }
@@ -27,6 +28,7 @@ Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGrou
     //setOpacity(0.01);
     setZValue(nodeOnTop);
     setFlag(ItemIsMovable);
+    setFlag(ItemIsSelectable);
     setX(point.x());
     setY(point.y());
 }
