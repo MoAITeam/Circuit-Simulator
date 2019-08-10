@@ -139,6 +139,11 @@ void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
     if(event->key()==Qt::Key::Key_C)
         circuit->print();
+    if(event->key()==Qt::Key_Backspace)
+        for(auto &item : items())
+            if(item->isSelected())
+                if(item->type()>=Component::component)
+                    delete item; //FIXME check again cast
 }
 
 void CircuitScene::setType(Component::types type) {
@@ -178,11 +183,11 @@ void CircuitScene::selectAll() {
 
 void CircuitScene::createComponent() {
     Component *c;
-
+    exSel=c; //FIXME is it already?
     bool gnd=false;
     switch(myType) {
         case Component::resistor:
-            c = new Resistor(cValue);
+            c = new Resistor(100);
             break;
         case Component::voltmeter:
             c = new Voltmeter;
@@ -191,25 +196,25 @@ void CircuitScene::createComponent() {
             c=new Amperometer;
             break;
         case Component::voltageSource:
-            c = new VoltageSource(cValue);
+            c = new VoltageSource(10);
             break;
         case Component::currentSource:
-            c = new CurrentSource(cValue);
+            c = new CurrentSource(10);
             break;
         case Component::wire:
             c = new Wire;
             break;
         case Component::vcvs:
-            c = new VCVS(cValue,selectedDependent);
+            c = new VCVS(1,selectedDependent);
             break;
         case Component::vccs:
-            c = new VCCS(cValue,selectedDependent);
+            c = new VCCS(1,selectedDependent);
             break;
         case Component::ccvs:
-            c = new CCVS(cValue,selectedDependent);
+            c = new CCVS(1,selectedDependent);
             break;
         case Component::cccs:
-            c = new CCCS(cValue,selectedDependent);
+            c = new CCCS(1,selectedDependent);
             break;
         case Component::ground:
             c = new Wire;
@@ -224,12 +229,12 @@ void CircuitScene::createComponent() {
         auto *n = new Node(Node::toGrid(mouseReleasePoint),gnd);
         if (c->type()==Component::component)
             c->setMenu(itemMenu);
-        if (c->type()==Component::activeComponent)
+        if (c->type()==Component::activeComponent) {
             c->setMenu(richItemMenu);
+        }
         circuit->add(c, p, n);
         c->update();
-        setMode(CircuitScene::modes(CircuitScene::moveItem));
-    }
+        setMode(CircuitScene::modes(CircuitScene::moveItem));}
 }
 
 void CircuitScene::createItemMenus(){
@@ -247,4 +252,17 @@ void CircuitScene::createItemMenus(){
     QAction* selectAllAction=new QAction(tr("&Select All"),this);
     connect(selectAllAction, &QAction::triggered, this, &CircuitScene::selectAll);
     sceneMenu->addAction(selectAllAction);
+}
+
+ActiveComponent* CircuitScene::getExSelectedActiveComponent(){
+    if(exSel!= nullptr) {
+        if (exSel->type() == Component::activeComponent)
+            return ((ActiveComponent *) exSel);
+    }
+    else
+        return nullptr;
+}
+
+void CircuitScene::resetExSel() {
+    exSel= nullptr;
 }

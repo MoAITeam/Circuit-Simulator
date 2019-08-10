@@ -17,6 +17,7 @@ public:
     void setValue(float value) override{
         behavior[2]=value;
         voltage=value;
+        this->value=value;
     };
 };
 

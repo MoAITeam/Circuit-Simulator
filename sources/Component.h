@@ -54,6 +54,9 @@ public:
     void removeControlled();
 
     //getters
+    QString getUnit(){
+        return unit;
+    };
     float getCurrent();
     float getVoltage();
     int getSourceType();
@@ -69,6 +72,7 @@ protected:
     float voltage=0;
     nodePair nodes;
     QPixmap pixmap;
+    QString unit="Us";
     ComponentObserver* observer;
 
 private:

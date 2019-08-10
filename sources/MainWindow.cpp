@@ -45,9 +45,16 @@ MainWindow::MainWindow(CircuitScene *scene) {
 }
 
 void MainWindow::showDialog(){
-    std::string text = "Please,insert the correct value";
+    std::string text = "Value in ";
     QString string = QString::fromStdString(text);
-    float value = QInputDialog::getDouble(this->parentWidget(), "Insert Value", string);
+    QString unit= "Unit";
+    float oldVal=0;
+    if(scene->getExSelectedActiveComponent()!= nullptr) {
+        //FIXME ugly call twice
+        oldVal = scene->getExSelectedActiveComponent()->getValue();
+        unit=scene->getExSelectedActiveComponent()->getUnit();
+    }
+    float value = QInputDialog::getDouble(this->parentWidget(), "Dialog", string+unit,oldVal);
     scene->setcValue(value);
 }
 
@@ -209,6 +216,7 @@ void MainWindow::createMenus() {
 
 void MainWindow::buttonGroupClicked(int type) {
     buttonGroup->checkedButton()->setChecked(false);
+    scene->resetExSel();
     toolboxLayout->update();
     samplesLayout->update();
 
@@ -217,11 +225,6 @@ void MainWindow::buttonGroupClicked(int type) {
         scene->setMode(CircuitScene::selectDependent);
     else
         scene->setMode(CircuitScene::insertItem);
-
-    if(type!=Component::wire&&type!=Component::voltmeter&&type!=Component::amperometer&&type!=Component::ground) {
-        showDialog();
-    }
-
 }
 
 

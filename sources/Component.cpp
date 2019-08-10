@@ -11,6 +11,8 @@
 #include <QtGui/QtGui>
 #include <QLabel>
 #include "ResourceManager.h"
+#include "CircuitScene.h"
+
 #define FLT_EPSILON 0.001
 #define solutionOnTop 300
 #define selectedNodesOnTop 400
@@ -244,3 +246,4 @@ void Component::setOrientation() {
         rectLocation=QPointF(30, 30);
     }
 }
+

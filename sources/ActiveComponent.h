@@ -14,6 +14,11 @@ public:
     int type() const override{
         return itemType::activeComponent;
     };
+    float getValue(){
+        return value;
+    };
+protected:
+    float value=0;
 };
 
 

@@ -8,6 +8,8 @@
 CCVS::CCVS(float value,Component *d):ActiveComponent(1/value,0,0,d) {
     pixmap=ResourceManager::getImage(Component::types::ccvs);
     sourceType=ampere;
+    this->value=value;
+    unit="number";
 }
 
 void CCVS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

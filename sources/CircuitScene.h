@@ -48,7 +48,9 @@ public:
 
     void setType(Component::types type);
     void setMode(CircuitScene::modes mode);
+    void resetExSel();
     void setcValue(float v);
+    ActiveComponent* getExSelectedActiveComponent();
 
     //actions
     void changeValue();
