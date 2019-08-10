@@ -10,6 +10,7 @@
 #include <cmath>
 #define FLT_EPSILON 0.001
 #define nodeOnTop 200
+#define solutionOnTop 400
 
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setAcceptHoverEvents(true);
@@ -20,6 +21,7 @@ Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGr
     setFlag(ItemIsSelectable);
     setX(x);
     setY(y);
+    setSelected(false);
 }
 
 Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGround){
@@ -31,6 +33,7 @@ Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGrou
     setFlag(ItemIsSelectable);
     setX(point.x());
     setY(point.y());
+    setSelected(false);
 }
 
 int Node::type() const {
@@ -93,7 +96,10 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
         painter->setPen(QPen(Qt::gray, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     }
     else {
-        painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        if(isSelected())
+            painter->setPen(QPen(Qt::gray, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        else
+            painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
         painter->drawEllipse(-NodeSize / 2, -NodeSize / 2, NodeSize, NodeSize);
     }
     if(hovering){
@@ -156,12 +162,14 @@ QPointF Node::toGrid(QPointF n){
 }
 
 void Node::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
+    setZValue(solutionOnTop);
     hovering=true;
     update();
     //setOpacity(1);
 }
 
 void Node::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
+    setZValue(nodeOnTop);
     hovering=false;
     update();
     //if(!gnd)

@@ -33,26 +33,42 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    mousePressPoint=Node::toGrid(event->scenePos());
+    QGraphicsScene::mousePressEvent(event);
+    mousePressPoint=event->scenePos();
     QGraphicsItem *clicked=itemAt(mousePressPoint,QTransform());
-    if(clicked->type()<Component::itemType::node) //FIXME togliere
-    selecting=true;
+    if(clicked!= nullptr) {//ora non clicco per forza sulle righe
+        if (clicked->type() < Component::itemType::node) //FIXME togliere
+            selecting = true;
+    } else
+        selecting=true;
     if(myMode==moveItem) {
-        if(clicked->type()==Component::node) {
-            clearSelection();
-            clicked->setSelected(true);
+        if(clicked!= nullptr) {
+            if (clicked->type() >= Component::component) {
+                ((Component *) clicked)->getNodes().first->setSelected(true);
+                ((Component *) clicked)->getNodes().second->setSelected(true);
+            }
+            if (clicked->type() == Component::node && !(event->modifiers() & Qt::ControlModifier)) {
+                for (auto &item : selectedItems())
+                    //lascio selezionati solo i nodi
+                    if (item->type() >= Component::component) {
+                        clearSelection();
+                        item->setSelected(false);
+                    }
+            }
         }
-        QGraphicsScene::mousePressEvent(event);
     }
 }
 
 void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
-    mousePressPoint=Node::toGrid(event->scenePos());
+    mousePressPoint=event->scenePos();
     exSel= itemAt(mousePressPoint,QTransform());
-    if (exSel->type()>=Component::itemType::component)
-        ((Component*)exSel)->contextMenu->exec(event->screenPos());
-    else
-        sceneMenu->exec(event->screenPos());
+    if(exSel!= nullptr) {
+        if (exSel->type() >= Component::itemType::component)
+            ((Component *) exSel)->contextMenu->exec(event->screenPos());
+    }
+        else
+            sceneMenu->exec(event->screenPos());
+
 }
 
 void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
@@ -65,7 +81,7 @@ void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
-    mouseReleasePoint = Node::toGrid(event->scenePos());
+    mouseReleasePoint = event->scenePos();
     if (event->button() == Qt::LeftButton) {
         if (myMode == insertItem) {
             if ((mousePressPoint - mouseReleasePoint).manhattanLength() < NodeSize) {
@@ -86,18 +102,21 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                 }
         }
         if (myMode == moveItem) {
-            for(auto &item : selectedItems())
-                if(item->type()==Component::node) {
-                    ((Node*) item)->setPos(Node::toGrid(((Node*) item)->pos()));
-                    ((Node*)item)->checkLink();
-                }
-            for(auto &item : selectedItems())
-                //if selected with CMD
+            for(auto &item : selectedItems()) {
                 if(item->type()>=Component::component) {
-                    ((Component*)item)->getNodes().first->setSelected(true);
-                    ((Component*)item)->getNodes().second->setSelected(true);
+                    //bug fixing
+                    if(!((Component*) item)->getNodes().first->isSelected() && !((Component*) item)->getNodes().second->isSelected()) {
+                        ((Component *) item)->getNodes().first->setSelected(true);
+                        ((Component *) item)->getNodes().second->setSelected(true);
+                    }
+                    //item->setSelected(true);
+                    selecting=false;
                 }
-            //shouldn't run together
+                if (item->type() == Component::node) {
+                    ((Node *) item)->setPos(Node::toGrid(((Node *) item)->pos()));
+                    ((Node *) item)->checkLink();
+                }
+            }
             if(selecting) {
                 QPainterPath path;
                 path.addRect(QRectF(mousePressPoint, mouseReleasePoint));
@@ -111,7 +130,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
 void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     if(myMode==moveItem) {
-        mouseReleasePoint = Node::toGrid(event->scenePos());
+        mouseReleasePoint = event->scenePos();
         update();//FIXME togliere
     }
     QGraphicsScene::mouseMoveEvent(event);
@@ -201,8 +220,8 @@ void CircuitScene::createComponent() {
     }
 
     if(c!= nullptr) {
-        auto *p = new Node(mousePressPoint);
-        auto *n = new Node(mouseReleasePoint,gnd);
+        auto *p = new Node(Node::toGrid(mousePressPoint));
+        auto *n = new Node(Node::toGrid(mouseReleasePoint),gnd);
         if (c->type()==Component::component)
             c->setMenu(itemMenu);
         if (c->type()==Component::activeComponent)

@@ -118,10 +118,22 @@ QPainterPath Component::shape() const
 {
     QPainterPath path;
     QPolygon polygon;
-    polygon << QPoint(nodes.first->x()-20-x(),nodes.first->y()-y());
-    polygon << QPoint(nodes.first->x()+20-x(),nodes.first->y()-y());
-    polygon << QPoint(nodes.second->x()+20-x(), nodes.second->y()-y());
-    polygon << QPoint(nodes.second->x()-20-x(), nodes.second->y()-y());
+    //FIXME duplicated but fixes bug of showing wrong rect first
+    float angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
+    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y())) {
+        angle=-angle;
+    }
+    if((nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())){
+        angle=180-angle;
+    }
+    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() < nodes.first->y())) {
+        angle=180+angle;
+    }
+    angle=this->angle/360*2*M_PI;
+    polygon << QPoint(nodes.first->x()-20*cos(angle)-x(),nodes.first->y()-20*sin(angle)-y());
+    polygon << QPoint(nodes.first->x()+20*cos(angle)-x(),nodes.first->y()+20*sin(angle)-y());
+    polygon << QPoint(nodes.second->x()+20*cos(angle)-x(), nodes.second->y()+20*sin(angle)-y());
+    polygon << QPoint(nodes.second->x()-20*cos(angle)-x(), nodes.second->y()-20*sin(angle)-y());
     path.addPolygon(polygon);
     return path;
 }
@@ -143,39 +155,19 @@ void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
 }
 
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    /*//save initial position
-    press=event->pos();
-    pressfirst=nodes.first->pos();
-    pressecond=nodes.second->pos();*/
-
     QGraphicsItem::mousePressEvent(event);
     prepareGeometryChange();
     update();
 }
 
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
-    /*nodes.first->setPos(pressfirst+event->pos()-press);
-    nodes.second->setPos(pressecond+event->pos()-press);
-    for (auto c : nodes.first->getComponents())
-        c->update();
-    for (auto c : nodes.second->getComponents())
-        c->update();*/
-    //to make single selection work
-    nodes.first->setSelected(true);
-    nodes.second->setSelected(true);
+
     QGraphicsItem::mouseMoveEvent(event);
     prepareGeometryChange();
     update();
 }
 
 void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
-    //gridify
-    //nodes.first->setPos(Node::toGrid(nodes.first->pos()));
-    //nodes.second->setPos(Node::toGrid(nodes.second->pos()));
-
-    //connect
-    //nodes.first->checkLink();
-    //nodes.second->checkLink();
     QGraphicsItem::mouseReleaseEvent(event);
     prepareGeometryChange();
     update();

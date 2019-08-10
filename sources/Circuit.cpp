@@ -145,9 +145,9 @@ void Circuit::checkLink(Node &n) {
                 int componentIndex=getIndex(component,components);
 
                 matrix.update(componentIndex,getIndex(existing,nonGround()),getIndex(keep,nonGround()));
+                delete &n;
             }
         }
-        delete &n;
     }
 }
 
