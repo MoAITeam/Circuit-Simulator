@@ -33,15 +33,19 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsScene::mousePressEvent(event);
     mousePressPoint=event->scenePos();
     QGraphicsItem *clicked=itemAt(mousePressPoint,QTransform());
     if(clicked!= nullptr) {//ora non clicco per forza sulle righe
-        if (clicked->type() < Component::itemType::node) //FIXME togliere
+        if (clicked->type() < Component::itemType::node) { //FIXME togliere
             selecting = true;
-    } else
-        selecting=true;
+            QGraphicsScene::mousePressEvent(event);
+        }
+    } else {
+        selecting = true;
+        QGraphicsScene::mousePressEvent(event);
+    }
     if(myMode==moveItem) {
+        QGraphicsScene::mousePressEvent(event);
         if(clicked!= nullptr) {
             if (clicked->type() >= Component::component) {
                 ((Component *) clicked)->getNodes().first->setSelected(true);
@@ -174,6 +178,19 @@ void CircuitScene::changeValue() {
     }
 }
 
+void CircuitScene::disconnectModel() {
+    if (exSel->type()>=Component::component) {
+        Node* a_saved=new Node(((Component*)exSel)->getNodes().first->x(),((Component*)exSel)->getNodes().first->y());
+        Node* b_saved=new Node(((Component*)exSel)->getNodes().second->x(),((Component*)exSel)->getNodes().second->y());
+        a_saved->setX(a_saved->x()+20);
+        b_saved->setX(b_saved->x()+20);
+        ((Component*)exSel)->disconnect();
+        circuit->add(((Component*)exSel),a_saved,b_saved);
+        exSel->update();
+        clearSelection();//FIXME what should be selected??
+    }
+}
+
 void CircuitScene::selectAll() {
     for(auto &item : items())
         if (item->type()>=Component::component)
@@ -233,6 +250,10 @@ void CircuitScene::createComponent() {
             c->setMenu(richItemMenu);
         }
         circuit->add(c, p, n);
+        clearSelection();
+        c->setSelected(true);
+        p->setSelected(true);
+        n->setSelected(true);
         c->update();
         setMode(CircuitScene::modes(CircuitScene::moveItem));}
 }
@@ -252,6 +273,11 @@ void CircuitScene::createItemMenus(){
     QAction* selectAllAction=new QAction(tr("&Select All"),this);
     connect(selectAllAction, &QAction::triggered, this, &CircuitScene::selectAll);
     sceneMenu->addAction(selectAllAction);
+
+    QAction* disconnectModel=new QAction(tr("&Disconnect"),this);
+    connect(disconnectModel, &QAction::triggered, this, &CircuitScene::disconnectModel);
+    itemMenu->addAction(disconnectModel);
+    richItemMenu->addAction(disconnectModel);
 }
 
 ActiveComponent* CircuitScene::getExSelectedActiveComponent(){

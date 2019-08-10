@@ -53,6 +53,7 @@ public:
     ActiveComponent* getExSelectedActiveComponent();
 
     //actions
+    void disconnectModel();
     void changeValue();
     void deleteItem();
     void selectAll();

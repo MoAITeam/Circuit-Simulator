@@ -46,7 +46,7 @@ void Component::disconnect() {
         delete nodes.first;
     if (nodes.second->getComponents().size()==0)
         delete nodes.second;
-    update();
+    update(); //FIXME maybe not here if I only disconnect model
 }
 
 void Component::setObserver(ComponentObserver* o){
