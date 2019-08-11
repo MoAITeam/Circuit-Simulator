@@ -10,10 +10,10 @@ CCVS::CCVS(float value,Component *d):ActiveComponent(1/value,0,0,d) {
     sourceType=ampere;
     this->value=value;
     unit="number";
+    label=label+" ∝ "+dependent->label;
 }
 
 void CCVS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {
-
     painter->setPen(QPen(Qt::red, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     ActiveComponent::paint(painter,qg,qw);
 }

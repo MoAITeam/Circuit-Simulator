@@ -232,25 +232,25 @@ void Component::drawSolution(QPainter* painter) {
 
 void Component::setOrientation() {
     angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
-    rectLocation=QPointF(30, 30);//sennò primo stampa sopra componente
+    rectLocation=QPointF(-60, -60);//sennò primo stampa sopra componente
     if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y())) {
         //quarto
         angle=-angle;
-        rectLocation=QPointF(30, -50);
+        rectLocation=QPointF(-60, -60);
     }
         if((nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())){
             //secondo
             angle=180-angle;
-            rectLocation=QPointF(30, -50);
+            rectLocation=QPointF(-60, -60);
         }
     if ((nodes.second->x() < nodes.first->x() && nodes.second->y() > nodes.first->y())) {
         //primo
-        rectLocation=QPointF(30, 30);
+        rectLocation=QPointF(-60, -60);
     }
     if ((nodes.second->x() > nodes.first->x() && nodes.second->y() < nodes.first->y())) {
         //terzo
         angle=180+angle;
-        rectLocation=QPointF(30, 30);
+        rectLocation=QPointF(-60, -60);
     }
 }
 

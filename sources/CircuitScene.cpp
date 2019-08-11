@@ -33,34 +33,41 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    mousePressPoint=event->scenePos();
-    QGraphicsItem *clicked=itemAt(mousePressPoint,QTransform());
-    if(clicked!= nullptr) {//ora non clicco per forza sulle righe
-        if (clicked->type() < Component::itemType::node) { //FIXME togliere
+    if(event->button()==Qt::LeftButton) {
+        mousePressPoint = event->scenePos();
+        mouseReleasePoint=mousePressPoint;
+        QGraphicsItem *clicked = itemAt(mousePressPoint, QTransform());
+        if (clicked != nullptr) {//ora non clicco per forza sulle righe
+            if (clicked->type() < Component::itemType::node) { //FIXME togliere
+                selecting = true;
+                QGraphicsScene::mousePressEvent(event);
+            }
+        } else {
             selecting = true;
             QGraphicsScene::mousePressEvent(event);
         }
-    } else {
-        selecting = true;
-        QGraphicsScene::mousePressEvent(event);
-    }
-    if(myMode==moveItem) {
-        QGraphicsScene::mousePressEvent(event);
-        if(clicked!= nullptr) {
-            if (clicked->type() >= Component::component) {
-                ((Component *) clicked)->getNodes().first->setSelected(true);
-                ((Component *) clicked)->getNodes().second->setSelected(true);
-            }
-            if (clicked->type() == Component::node && !(event->modifiers() & Qt::ControlModifier)) {
-                for (auto &item : selectedItems())
-                    //lascio selezionati solo i nodi
-                    if (item->type() >= Component::component) {
-                        clearSelection();
-                        item->setSelected(false);
-                    }
+        if (myMode == moveItem) {
+            QGraphicsScene::mousePressEvent(event);
+            if (clicked != nullptr) {
+                if (clicked->type() >= Component::component) {
+                    ((Component *) clicked)->getNodes().first->setSelected(true);
+                    ((Component *) clicked)->getNodes().second->setSelected(true);
+                }
+                if (clicked->type() == Component::node && !(event->modifiers() & Qt::ControlModifier)) {
+                    for (auto &item : selectedItems())
+                        //lascio selezionati solo i nodi
+                        if (item->type() >= Component::component) {
+                            clearSelection();
+                            item->setSelected(false);
+                        }
+                }
             }
         }
+    } else
+    {
+        QGraphicsScene::mousePressEvent(event);
     }
+    update();//FIXME togliere
 }
 
 void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
@@ -84,60 +91,68 @@ void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsScene::mouseReleaseEvent(event);
-    mouseReleasePoint = event->scenePos();
-    if (event->button() == Qt::LeftButton) {
-        if (myMode == insertItem) {
-            if ((mousePressPoint - mouseReleasePoint).manhattanLength() < NodeSize) {
-                QPoint defaultPos = QPoint(0, 100);
-                mousePressPoint = mousePressPoint - defaultPos;
-                mouseReleasePoint = mousePressPoint + defaultPos;
-            }
-            createComponent();
-        }
-        if (myMode == selectDependent) {
-            QGraphicsItem *clicked = itemAt(event->scenePos(), QTransform());
-            if (clicked != nullptr)
-                if (clicked->type() >= Component::component) {
-                    selectedDependent = (Component *) clicked;
-                    selectedDependent->update();
-                    selectedDependent->setControlled();
-                    myMode = insertItem;
+    if(event->button()==Qt::LeftButton) {
+        QGraphicsScene::mouseReleaseEvent(event);
+        mouseReleasePoint = event->scenePos();
+        if (event->button() == Qt::LeftButton) {
+            if (myMode == insertItem) {
+                if ((mousePressPoint - mouseReleasePoint).manhattanLength() < NodeSize) {
+                    QPoint defaultPos = QPoint(0, 100);
+                    mousePressPoint = mousePressPoint - defaultPos;
+                    mouseReleasePoint = mousePressPoint + defaultPos;
                 }
-        }
-        if (myMode == moveItem) {
-            for(auto &item : selectedItems()) {
-                if(item->type()>=Component::component) {
-                    //bug fixing
-                    if(!((Component*) item)->getNodes().first->isSelected() && !((Component*) item)->getNodes().second->isSelected()) {
-                        ((Component *) item)->getNodes().first->setSelected(true);
-                        ((Component *) item)->getNodes().second->setSelected(true);
+                createComponent();
+            }
+            if (myMode == selectDependent) {
+                QGraphicsItem *clicked = itemAt(event->scenePos(), QTransform());
+                if (clicked != nullptr)
+                    if (clicked->type() >= Component::component) {
+                        selectedDependent = (Component *) clicked;
+                        selectedDependent->update();
+                        selectedDependent->setControlled();
+                        myMode = insertItem;
                     }
-                    //item->setSelected(true);
-                    selecting=false;
-                }
-                if (item->type() == Component::node) {
-                    ((Node *) item)->setPos(Node::toGrid(((Node *) item)->pos()));
-                    ((Node *) item)->checkLink();
-                }
             }
-            if(selecting) {
-                QPainterPath path;
-                path.addRect(QRectF(mousePressPoint, mouseReleasePoint));
-                setSelectionArea(path);
-                update();
-                selecting=false;
+            if (myMode == moveItem) {
+                for (auto &item : selectedItems()) {
+                    if (item->type() >= Component::component) {
+                        //bug fixing
+                        if (!((Component *) item)->getNodes().first->isSelected() &&
+                            !((Component *) item)->getNodes().second->isSelected()) {
+                            ((Component *) item)->getNodes().first->setSelected(true);
+                            ((Component *) item)->getNodes().second->setSelected(true);
+                        }
+                        //item->setSelected(true);
+                        selecting = false;
+                    }
+                    if (item->type() == Component::node) {
+                        ((Node *) item)->setPos(Node::toGrid(((Node *) item)->pos()));
+                        ((Node *) item)->checkLink();
+                    }
+                }
+                if (selecting) {
+                    QPainterPath path;
+                    path.addRect(QRectF(mousePressPoint, mouseReleasePoint));
+                    setSelectionArea(path);
+                    update();
+                    selecting = false;
+                }
             }
         }
+    } else{
+        QGraphicsScene::mouseReleaseEvent(event);
     }
+    update();//FIXME togliere
 }
 
 void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    if(myMode==moveItem) {
-        mouseReleasePoint = event->scenePos();
-        update();//FIXME togliere
+    if(event->button()==Qt::LeftButton) {
+        if (myMode == moveItem) {
+            mouseReleasePoint = event->scenePos();
+        }
     }
     QGraphicsScene::mouseMoveEvent(event);
+    update();//FIXME togliere
 }
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
@@ -228,19 +243,19 @@ void CircuitScene::createComponent() {
             break;
         case Component::vcvs:
             c = new VCVS(1,selectedDependent);
-            c->setlabel("VCVS "+QString::number(labelCount++));
+            c->setlabel("VCVS "+QString::number(labelCount++)+" ∝ "+selectedDependent->label);
             break;
         case Component::vccs:
             c = new VCCS(1,selectedDependent);
-            c->setlabel("VCCS "+QString::number(labelCount++));
+            c->setlabel("VCCS "+QString::number(labelCount++)+" ∝ "+selectedDependent->label);
             break;
         case Component::ccvs:
             c = new CCVS(1,selectedDependent);
-            c->setlabel("CCVS "+QString::number(labelCount++));
+            c->setlabel("CCVS "+QString::number(labelCount++)+" ∝ "+selectedDependent->label);
             break;
         case Component::cccs:
             c = new CCCS(1,selectedDependent);
-            c->setlabel("CCCS "+QString::number(labelCount++));
+            c->setlabel("CCCS "+QString::number(labelCount++)+" ∝ "+selectedDependent->label);//TODO what if name changes?
             break;
         case Component::ground:
             c = new Wire;

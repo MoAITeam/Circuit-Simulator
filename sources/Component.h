@@ -68,6 +68,7 @@ public:
     float behavior[3];
     Component *dependent;
     QMenu* contextMenu;
+    QString label="";//FIXME should be private?
 
 protected:
     int sourceType=0;
@@ -76,7 +77,6 @@ protected:
     nodePair nodes;
     QPixmap pixmap;
     QString unit="Us";
-    QString label="";
     ComponentObserver* observer;
     QPointF rectLocation;
 
