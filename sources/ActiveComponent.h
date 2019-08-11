@@ -17,7 +17,10 @@ public:
     float getValue(){
         return value;
     };
-protected:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *s, QWidget *w) override{
+            Component::paint(painter,s,w);
+    };
+public: //FIXME should be protected
     float value=0;
 };
 

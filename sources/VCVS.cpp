@@ -15,5 +15,5 @@ VCVS::VCVS(float value,Component *d):ActiveComponent(1/value,0,0,d) {
 void VCVS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {
 
     painter->setPen(QPen(Qt::red, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    Component::paint(painter,qg,qw);
+    ActiveComponent::paint(painter,qg,qw);
 }

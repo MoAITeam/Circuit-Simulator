@@ -91,7 +91,6 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     setOrientation();
     drawComponent(painter);
     drawSolution(painter);
-
 }
 
 void Component::setCurrent(float value) {
@@ -201,25 +200,33 @@ void Component::drawComponent(QPainter* painter){
     painter->translate(center-pos());
 
     if(!pixmap.isNull()) {
+        if (type()==activeComponent){//TODO make a function
+            painter->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            painter->drawText(rectLocation, label);
+            painter->drawText(rectLocation+QPointF(0,20),QString::number(((ActiveComponent*)this)->value)+unit);//FIXME brutto forte
+        }
         painter->rotate(angle);
         if (line.length() > 100)
             painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
         else
             painter->drawPixmap(-50, -line.length() / 2, 100, line.length(), pixmap); //reduced
         painter->resetTransform(); //reset rotation
-        painter->translate(center);
+        painter->translate(center-pos());
     }
 }
 
 void Component::drawSolution(QPainter* painter) {
+    QPointF center((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2);//FIXME duplicated
+    painter->resetTransform();
     if(hovering){
         QPainterPath path;
         painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        path.addRoundedRect(QRectF(rectLocation.x()-5,rectLocation.y()-17.5,150,45),10,10);
+        //path.addRoundedRect(QRectF(rectLocation.x()-5,rectLocation.y()-17.5,150,45),10,10);
+        path.addRoundedRect(QRectF(10,10,150,45),10,10);
         painter->fillPath(path,QColor(220, 245, 247));
         painter->drawPath(path);
-        painter->drawText(rectLocation, "Current:"+QString().number(current));
-        painter->drawText(rectLocation+QPointF(0,20), "Voltage:"+QString().number(voltage));
+        painter->drawText(QPointF(15,25), "Current:"+QString().number(current));
+        painter->drawText(QPointF(15,25)+QPointF(0,20), "Voltage:"+QString().number(voltage));
     }
 }
 

@@ -77,6 +77,7 @@ private:
     QMenu* sceneMenu;
     Component *selectedDependent;
     QGraphicsItem *exSel;
+    int labelCount=0;
 };
 
 

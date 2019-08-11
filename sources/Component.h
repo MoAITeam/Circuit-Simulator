@@ -52,6 +52,9 @@ public:
 
     void setControlled();
     void removeControlled();
+    void setlabel(QString label){
+        this->label=label;
+    };
 
     //getters
     QString getUnit(){
@@ -73,13 +76,14 @@ protected:
     nodePair nodes;
     QPixmap pixmap;
     QString unit="Us";
+    QString label="";
     ComponentObserver* observer;
+    QPointF rectLocation;
 
 private:
     bool hovering=false;
     int controlled=0;
     QPointF mousePress;
-    QPointF rectLocation;
     float angle;
 
     QPointF press;

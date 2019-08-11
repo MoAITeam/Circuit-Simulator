@@ -205,33 +205,42 @@ void CircuitScene::createComponent() {
     switch(myType) {
         case Component::resistor:
             c = new Resistor(100);
+            c->setlabel("R "+QString::number(labelCount++));
             break;
         case Component::voltmeter:
             c = new Voltmeter;
+            c->setlabel("VM "+QString::number(labelCount++));
             break;
         case Component::amperometer:
             c=new Amperometer;
+            c->setlabel("AM "+QString::number(labelCount++));
             break;
         case Component::voltageSource:
             c = new VoltageSource(10);
+            c->setlabel("VS "+QString::number(labelCount++));
             break;
         case Component::currentSource:
             c = new CurrentSource(10);
+            c->setlabel("CS "+QString::number(labelCount++));
             break;
         case Component::wire:
             c = new Wire;
             break;
         case Component::vcvs:
             c = new VCVS(1,selectedDependent);
+            c->setlabel("VCVS "+QString::number(labelCount++));
             break;
         case Component::vccs:
             c = new VCCS(1,selectedDependent);
+            c->setlabel("VCCS "+QString::number(labelCount++));
             break;
         case Component::ccvs:
             c = new CCVS(1,selectedDependent);
+            c->setlabel("CCVS "+QString::number(labelCount++));
             break;
         case Component::cccs:
             c = new CCCS(1,selectedDependent);
+            c->setlabel("CCCS "+QString::number(labelCount++));
             break;
         case Component::ground:
             c = new Wire;
