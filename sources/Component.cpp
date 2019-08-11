@@ -201,8 +201,13 @@ void Component::drawComponent(QPainter* painter){
 
     if(!pixmap.isNull()) {
         if (type()==activeComponent){//TODO make a function
+            QFont font=painter->font();
+            font.setBold(true);
+            painter->setFont(font);
             painter->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter->drawText(rectLocation, label);
+            font.setBold(false);
+            painter->setFont(font);
             painter->drawText(rectLocation+QPointF(0,20),QString::number(((ActiveComponent*)this)->value)+unit);//FIXME brutto forte
         }
         painter->rotate(angle);
