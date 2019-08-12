@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 }
 
 //TODO MARCO
-//Soluzioni giuste
+//Soluzioni giuste con generatore di corrente
 
 //TODO ALESSIO
 //AGGIUNTE:SALVA,CARICA,UNDO,EXPORT

@@ -17,8 +17,3 @@ CurrentSource::CurrentSource(float value):ActiveComponent(0,1,value) {
     this->value=value;
     unit="A";
 }
-
-void CurrentSource::setCurrent(float value) {
-    current=current;
-    //FIXME should be zero when it returns the half bug
-}

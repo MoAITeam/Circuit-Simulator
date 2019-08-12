@@ -37,7 +37,7 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         mousePressPoint = event->scenePos();
         mouseReleasePoint=mousePressPoint;
         QGraphicsItem *clicked = itemAt(mousePressPoint, QTransform());
-        if (clicked != nullptr) {//ora non clicco per forza sulle righe
+        if (clicked != nullptr) {
             if (clicked->type() < Component::itemType::node) { //FIXME togliere
                 selecting = true;
                 QGraphicsScene::mousePressEvent(event);
@@ -74,8 +74,14 @@ void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
     mousePressPoint=event->scenePos();
     exSel= itemAt(mousePressPoint,QTransform());
     if(exSel!= nullptr) {
-        if (exSel->type() >= Component::itemType::component)
-            ((Component *) exSel)->contextMenu->exec(event->screenPos());
+        switch (exSel->type()){
+            case Component::component:
+                itemMenu->exec(event->screenPos());
+                break;
+            case Component::activeComponent:
+                richItemMenu->exec(event->screenPos());
+                break;
+        }
     }
         else
             sceneMenu->exec(event->screenPos());
@@ -162,7 +168,7 @@ void CircuitScene::keyPressEvent(QKeyEvent *event) {
         for(auto &item : items())
             if(item->isSelected())
                 if(item->type()>=Component::component)
-                    delete item; //FIXME check again cast
+                    delete item;
 }
 
 void CircuitScene::setType(Component::types type) {
@@ -195,16 +201,15 @@ void CircuitScene::changeValue() {
 
 void CircuitScene::disconnectModel() {
     if (exSel->type()>=Component::component) {
-        Node* a_saved=new Node(((Component*)exSel)->getNodes().first->x(),((Component*)exSel)->getNodes().first->y());
-        Node* b_saved=new Node(((Component*)exSel)->getNodes().second->x(),((Component*)exSel)->getNodes().second->y());
-        a_saved->setX(a_saved->x()+20);
-        a_saved->setY(a_saved->y()+20);
-        b_saved->setX(b_saved->x()+20);
-        b_saved->setY(b_saved->y()+20);
-        ((Component*)exSel)->disconnect();
-        circuit->add(((Component*)exSel),a_saved,b_saved);
-        exSel->update();
-        clearSelection();//FIXME what should be selected??
+        Component* disconnecting=((Component*)exSel);
+        nodePair pair=disconnecting->getNodes();
+        Node* a_saved=new Node(pair.first->x()+20,pair.first->y()+20);
+        Node* b_saved=new Node(pair.second->x()+20,pair.second->y()+20);
+        disconnecting->disconnect();
+        circuit->add(disconnecting,a_saved,b_saved);
+        disconnecting->update();
+        clearSelection();
+        disconnecting->setSelected(true);
     }
 }
 
@@ -217,7 +222,7 @@ void CircuitScene::selectAll() {
 
 void CircuitScene::createComponent() {
     Component *c;
-    exSel=c; //FIXME is it already?
+    exSel=c;
     bool gnd=false;
     switch(myType) {
         case Component::resistor:
@@ -270,11 +275,6 @@ void CircuitScene::createComponent() {
     if(c!= nullptr) {
         auto *p = new Node(Node::toGrid(mousePressPoint));
         auto *n = new Node(Node::toGrid(mouseReleasePoint),gnd);
-        if (c->type()==Component::component)
-            c->setMenu(itemMenu);
-        if (c->type()==Component::activeComponent) {
-            c->setMenu(richItemMenu);
-        }
         circuit->add(c, p, n);
         clearSelection();
         c->setSelected(true);

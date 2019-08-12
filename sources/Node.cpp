@@ -45,6 +45,7 @@ Node::~Node(){
         observer->removeNotify(this);
 
     std::list<Component*> toDelete=components;
+    if(toDelete.size()!=0)
     for(auto &component : toDelete) {
         delete component;
     }

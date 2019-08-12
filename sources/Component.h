@@ -34,6 +34,7 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
     QPainterPath shape() const override;
     void drawComponent(QPainter *painter);
+    void drawLabels(QPainter *painter);
     void drawSolution(QPainter *painter);
     void setOrientation();
     void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
@@ -48,7 +49,6 @@ public:
     void setVoltage(float value);
 
     void setObserver(ComponentObserver *o);
-    void setMenu(QMenu* m);
 
     void setControlled();
     void removeControlled();
@@ -67,7 +67,6 @@ public:
 
     float behavior[3];
     Component *dependent;
-    QMenu* contextMenu;
     QString label="";//FIXME should be private?
 
 protected:
@@ -81,6 +80,7 @@ protected:
     QPointF rectLocation;
 
 private:
+    bool connected=false;
     bool hovering=false;
     int controlled=0;
     QPointF mousePress;

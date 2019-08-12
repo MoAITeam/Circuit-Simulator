@@ -49,10 +49,10 @@ void MainWindow::showDialog(){
     QString string = QString::fromStdString(text);
     QString unit= "Unit";
     float oldVal=0;
-    if(scene->getExSelectedActiveComponent()!= nullptr) {
-        //FIXME ugly call twice
-        oldVal = scene->getExSelectedActiveComponent()->getValue();
-        unit=scene->getExSelectedActiveComponent()->getUnit();
+    ActiveComponent* exSel=scene->getExSelectedActiveComponent();//TODO should it be removed from here?
+    if(exSel!= nullptr) {
+        oldVal = exSel->getValue();
+        unit=exSel->getUnit();
     }
     float value = QInputDialog::getDouble(this->parentWidget(), "Dialog", string+unit,oldVal);
     scene->setcValue(value);
@@ -282,7 +282,7 @@ void MainWindow::deleteItems() {
     for(auto &item : scene->items())
         if(item->isSelected())
             if(item->type()>=Component::component)
-                delete item; //FIXME check again cast
+                delete item;
 }
 
 void MainWindow::selectItems() {
@@ -306,7 +306,6 @@ void MainWindow::loadImages(){
 
 void MainWindow::drawCircuits(QString text) {
 
-    //TODO gli eventi non hanno menu
     if(text=="Parallel Circuit"){
 
         scene->getCircuit()->clear();

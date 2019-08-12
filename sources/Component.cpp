@@ -26,7 +26,6 @@ Component::Component(float a,float b,float c, Component* d): behavior{a,b,c}, de
     setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
     setFlag(ItemIsMovable,true);
-    contextMenu=new QMenu();
 }
 
 Component::~Component() {
@@ -46,7 +45,7 @@ void Component::disconnect() {
         delete nodes.first;
     if (nodes.second->getComponents().size()==0)
         delete nodes.second;
-    update(); //FIXME maybe not here if I only disconnect model
+    connected=false;
 }
 
 void Component::setObserver(ComponentObserver* o){
@@ -55,14 +54,15 @@ void Component::setObserver(ComponentObserver* o){
 
 void Component::connect(Node* p, Node* n){
     if(p!= nullptr && n!=nullptr) {
-        if (nodes.first!= nullptr)
+        if (nodes.first!= nullptr && connected==true)
             nodes.first->disconnect(this);
-        if (nodes.second!= nullptr)
+        if (nodes.second!= nullptr && connected==true)
             nodes.second->disconnect(this);
         nodes.first = p;
         nodes.second = n;
         p->connect(this);
         n->connect(this);
+        connected=true;//FIXME maybe we can do without? bug of disconnecting one connected to two
     }
 }
 
@@ -186,10 +186,6 @@ void Component::removeControlled() {
     controlled--;
 }
 
-void Component::setMenu(QMenu *m) {
-    contextMenu=m;
-}
-
 void Component::drawComponent(QPainter* painter){
     QPointF center((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2);
     QPoint n1(nodes.first->x()-x(),nodes.first->y()-y());
@@ -200,16 +196,9 @@ void Component::drawComponent(QPainter* painter){
     painter->translate(center-pos());
 
     if(!pixmap.isNull()) {
-        if (type()==activeComponent){//TODO make a function
-            QFont font=painter->font();
-            font.setBold(true);
-            painter->setFont(font);
-            painter->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            painter->drawText(rectLocation, label);
-            font.setBold(false);
-            painter->setFont(font);
-            painter->drawText(rectLocation+QPointF(0,20),QString::number(((ActiveComponent*)this)->value)+unit);//FIXME brutto forte
-        }
+        if (type()==activeComponent){
+            drawLabels(painter);
+            }
         painter->rotate(angle);
         if (line.length() > 100)
             painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
@@ -232,6 +221,17 @@ void Component::drawSolution(QPainter* painter) {
         painter->drawText(QPointF(15,25), "Current:"+QString().number(round(current)));
         painter->drawText(QPointF(15,25)+QPointF(0,20), "Voltage:"+QString().number(round(voltage)));
     }
+}
+
+void Component::drawLabels(QPainter* painter){
+    QFont font=painter->font();
+    font.setBold(true);
+    painter->setFont(font);
+    painter->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter->drawText(rectLocation, label);
+    font.setBold(false);
+    painter->setFont(font);
+    painter->drawText(rectLocation+QPointF(0,20),QString::number(((ActiveComponent*)this)->value)+unit);//FIXME brutto forte
 }
 
 void Component::setOrientation() {
