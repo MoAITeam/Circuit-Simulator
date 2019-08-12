@@ -260,6 +260,7 @@ void MainWindow::sceneScaleChanged(const QString &scale)
 void MainWindow::runCircuit() {
 
     scene->getCircuit()->solve();
+    scene->update();
 
 }
 

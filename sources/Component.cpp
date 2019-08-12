@@ -221,7 +221,6 @@ void Component::drawComponent(QPainter* painter){
 }
 
 void Component::drawSolution(QPainter* painter) {
-    QPointF center((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2);//FIXME duplicated
     painter->resetTransform();
     if(hovering){
         QPainterPath path;
