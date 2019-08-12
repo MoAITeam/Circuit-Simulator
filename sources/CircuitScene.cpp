@@ -198,7 +198,9 @@ void CircuitScene::disconnectModel() {
         Node* a_saved=new Node(((Component*)exSel)->getNodes().first->x(),((Component*)exSel)->getNodes().first->y());
         Node* b_saved=new Node(((Component*)exSel)->getNodes().second->x(),((Component*)exSel)->getNodes().second->y());
         a_saved->setX(a_saved->x()+20);
+        a_saved->setY(a_saved->y()+20);
         b_saved->setX(b_saved->x()+20);
+        b_saved->setY(b_saved->y()+20);
         ((Component*)exSel)->disconnect();
         circuit->add(((Component*)exSel),a_saved,b_saved);
         exSel->update();

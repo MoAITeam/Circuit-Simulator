@@ -230,8 +230,8 @@ void Component::drawSolution(QPainter* painter) {
         path.addRoundedRect(QRectF(10,10,150,45),10,10);
         painter->fillPath(path,QColor(220, 245, 247));
         painter->drawPath(path);
-        painter->drawText(QPointF(15,25), "Current:"+QString().number(current));
-        painter->drawText(QPointF(15,25)+QPointF(0,20), "Voltage:"+QString().number(voltage));
+        painter->drawText(QPointF(15,25), "Current:"+QString().number(round(current)));
+        painter->drawText(QPointF(15,25)+QPointF(0,20), "Voltage:"+QString().number(round(voltage)));
     }
 }
 

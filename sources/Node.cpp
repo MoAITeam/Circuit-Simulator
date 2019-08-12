@@ -110,7 +110,7 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
         path.addRoundedRect(QRectF(10,10,150,45),10,10);
         painter->fillPath(path,QColor(255, 189, 189));
         painter->drawPath(path);
-        painter->drawText(QPointF(15,25), "Voltage:"+QString().number(voltage));
+        painter->drawText(QPointF(15,25), "Voltage:"+QString().number(round(voltage)));
     }
 }
 
