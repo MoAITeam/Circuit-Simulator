@@ -40,19 +40,18 @@ MainWindow::MainWindow(CircuitScene *scene) {
     setWindowTitle(tr("Circuit Simulator"));
     setUnifiedTitleAndToolBarOnMac(true);
 
-    connect(scene,SIGNAL(insertValue()),this,SLOT(showDialog()));
+    connect(scene,SIGNAL(insertValue(ActiveComponent*)),this,SLOT(showDialog(ActiveComponent*)));
 
 }
 
-void MainWindow::showDialog(){
+void MainWindow::showDialog(ActiveComponent*c){
     std::string text = "Value in ";
     QString string = QString::fromStdString(text);
     QString unit= "Unit";
     float oldVal=0;
-    ActiveComponent* exSel=scene->getExSelectedActiveComponent();//TODO should it be removed from here?
-    if(exSel!= nullptr) {
-        oldVal = exSel->getValue();
-        unit=exSel->getUnit();
+    if(c!= nullptr) {
+        oldVal = c->getValue();
+        unit=c->getUnit();
     }
     float value = QInputDialog::getDouble(this->parentWidget(), "Dialog", string+unit,oldVal);
     scene->setcValue(value);

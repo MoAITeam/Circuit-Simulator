@@ -6,6 +6,7 @@
 #define FIRSTSIMULATORTEST_ACTIVECOMPONENT_H
 
 #include "Component.h"
+#include "Node.h"
 
 class ActiveComponent: public Component {
 public:
@@ -18,9 +19,24 @@ public:
         return value;
     };
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *s, QWidget *w) override{
-            Component::paint(painter,s,w);
+        painter->save();
+        Component::paint(painter,s,w);
+        painter->restore();
+        drawLabels(painter);
     };
-public: //FIXME should be protected
+
+    void drawLabels(QPainter* painter){
+        painter->translate(QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos());
+        QFont font=painter->font();
+        font.setBold(true);
+        painter->setFont(font);
+        painter->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        painter->drawText(rectLocation, label);
+        font.setBold(false);
+        painter->setFont(font);
+        painter->drawText(rectLocation+QPointF(0,20),QString::number(value)+unit);
+    };
+protected:
     float value=0;
 };
 

@@ -187,25 +187,21 @@ void Component::removeControlled() {
 }
 
 void Component::drawComponent(QPainter* painter){
-    QPointF center((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2);
     QPoint n1(nodes.first->x()-x(),nodes.first->y()-y());
     QPoint n2(nodes.second->x()-x(),nodes.second->y()-y());
     QLineF line(n1,n2);
 
     painter->drawLine(line);
-    painter->translate(center-pos());
+    painter->translate(QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos());
 
     if(!pixmap.isNull()) {
-        if (type()==activeComponent){
-            drawLabels(painter);
-            }
         painter->rotate(angle);
         if (line.length() > 100)
             painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
         else
             painter->drawPixmap(-50, -line.length() / 2, 100, line.length(), pixmap); //reduced
         painter->resetTransform(); //reset rotation
-        painter->translate(center-pos());
+        painter->translate(QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos());
     }
 }
 
@@ -223,38 +219,27 @@ void Component::drawSolution(QPainter* painter) {
     }
 }
 
-void Component::drawLabels(QPainter* painter){
-    QFont font=painter->font();
-    font.setBold(true);
-    painter->setFont(font);
-    painter->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter->drawText(rectLocation, label);
-    font.setBold(false);
-    painter->setFont(font);
-    painter->drawText(rectLocation+QPointF(0,20),QString::number(((ActiveComponent*)this)->value)+unit);//FIXME brutto forte
-}
-
 void Component::setOrientation() {
     angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
-    rectLocation=QPointF(-60, -60);//sennò primo stampa sopra componente
+    rectLocation=QPointF(-40, -50);//sennò primo stampa sopra componente
     if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y())) {
         //quarto
         angle=-angle;
-        rectLocation=QPointF(-60, -60);
+        rectLocation=QPointF(-40, -50);
     }
         if((nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())){
             //secondo
             angle=180-angle;
-            rectLocation=QPointF(-60, -60);
+            rectLocation=QPointF(-40, -50);
         }
     if ((nodes.second->x() < nodes.first->x() && nodes.second->y() > nodes.first->y())) {
         //primo
-        rectLocation=QPointF(-60, -60);
+        rectLocation=QPointF(-40, -50);
     }
     if ((nodes.second->x() > nodes.first->x() && nodes.second->y() < nodes.first->y())) {
         //terzo
         angle=180+angle;
-        rectLocation=QPointF(-60, -60);
+        rectLocation=QPointF(-40, -50);
     }
 }
 

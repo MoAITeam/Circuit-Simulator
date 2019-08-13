@@ -19,7 +19,7 @@ class Component: public  QGraphicsItem{
 public:
     enum sourceTypes {none, volts, ampere};
     enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs, cccs, ccvs};
-    //FIXME brutto
+    //FIXME brutto (node in component)
     enum itemType {node = QGraphicsItem::UserType+1, component = QGraphicsItem::UserType+2, activeComponent = QGraphicsItem::UserType+3};
 
     Component(float a,float b, float c,Component* d=nullptr);
@@ -60,6 +60,9 @@ public:
     QString getUnit(){
         return unit;
     };
+    QString getLabel(){
+        return label;
+    };
     float getCurrent();
     float getVoltage();
     int getSourceType();
@@ -67,7 +70,6 @@ public:
 
     float behavior[3];
     Component *dependent;
-    QString label="";//FIXME should be private?
 
 protected:
     int sourceType=0;
@@ -76,6 +78,7 @@ protected:
     nodePair nodes;
     QPixmap pixmap;
     QString unit="Us";
+    QString label="";
     ComponentObserver* observer;
     QPointF rectLocation;
 

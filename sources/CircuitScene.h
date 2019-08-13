@@ -50,7 +50,6 @@ public:
     void setMode(CircuitScene::modes mode);
     void resetExSel();
     void setcValue(float v);
-    ActiveComponent* getExSelectedActiveComponent();
 
     //actions
     void disconnectModel();
@@ -61,7 +60,7 @@ public:
     Circuit* getCircuit();
 
 signals:
-    void insertValue();
+    void insertValue(ActiveComponent* c);
 
 private:
     static QColor gridColor;
@@ -76,7 +75,7 @@ private:
     QMenu* itemMenu;
     QMenu* sceneMenu;
     Component *selectedDependent;
-    QGraphicsItem *exSel;
+    QGraphicsItem *focus;
     int labelCount=0;
 };
 

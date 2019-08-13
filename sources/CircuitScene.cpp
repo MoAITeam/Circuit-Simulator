@@ -72,9 +72,9 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
     mousePressPoint=event->scenePos();
-    exSel= itemAt(mousePressPoint,QTransform());
-    if(exSel!= nullptr) {
-        switch (exSel->type()){
+    focus= itemAt(mousePressPoint,QTransform());
+    if(focus!= nullptr) {
+        switch (focus->type()){
             case Component::component:
                 itemMenu->exec(event->screenPos());
                 break;
@@ -188,20 +188,20 @@ Circuit* CircuitScene::getCircuit() {
 }
 
 void CircuitScene::deleteItem() {
-    if(exSel!=nullptr)
-        delete exSel;
+    if(focus!=nullptr)
+        delete focus;
 }
 
 void CircuitScene::changeValue() {
-    if (exSel->type()==Component::activeComponent) {
-        emit insertValue();
-        circuit->update((ActiveComponent*)exSel,cValue);
+    if (focus->type()==Component::activeComponent) {
+        emit insertValue((ActiveComponent*)focus);
+        circuit->update((ActiveComponent*)focus,cValue);
     }
 }
 
 void CircuitScene::disconnectModel() {
-    if (exSel->type()>=Component::component) {
-        Component* disconnecting=((Component*)exSel);
+    if (focus->type()>=Component::component) {
+        Component* disconnecting=((Component*)focus);
         nodePair pair=disconnecting->getNodes();
         Node* a_saved=new Node(pair.first->x()+20,pair.first->y()+20);
         Node* b_saved=new Node(pair.second->x()+20,pair.second->y()+20);
@@ -222,7 +222,7 @@ void CircuitScene::selectAll() {
 
 void CircuitScene::createComponent() {
     Component *c;
-    exSel=c;
+    focus=c;
     bool gnd=false;
     switch(myType) {
         case Component::resistor:
@@ -250,22 +250,23 @@ void CircuitScene::createComponent() {
             break;
         case Component::vcvs:
             c = new VCVS(1,selectedDependent);
-            c->setlabel("VCVS "+QString::number(labelCount++)+" ∝ "+selectedDependent->label);
+            c->setlabel("VCVS "+QString::number(labelCount++));
             break;
         case Component::vccs:
             c = new VCCS(1,selectedDependent);
-            c->setlabel("VCCS "+QString::number(labelCount++)+" ∝ "+selectedDependent->label);
+            c->setlabel("VCCS "+QString::number(labelCount++));
             break;
         case Component::ccvs:
             c = new CCVS(1,selectedDependent);
-            c->setlabel("CCVS "+QString::number(labelCount++)+" ∝ "+selectedDependent->label);
+            c->setlabel("CCVS "+QString::number(labelCount++));
             break;
         case Component::cccs:
             c = new CCCS(1,selectedDependent);
-            c->setlabel("CCCS "+QString::number(labelCount++)+" ∝ "+selectedDependent->label);//TODO what if name changes?
+            c->setlabel("CCCS "+QString::number(labelCount++));
             break;
         case Component::ground:
             c = new Wire;
+            c->setlabel("wire");
             gnd=true;
             break;
         default:
@@ -306,15 +307,6 @@ void CircuitScene::createItemMenus(){
     richItemMenu->addAction(disconnectModel);
 }
 
-ActiveComponent* CircuitScene::getExSelectedActiveComponent(){
-    if(exSel!= nullptr) {
-        if (exSel->type() == Component::activeComponent)
-            return ((ActiveComponent *) exSel);
-    }
-    else
-        return nullptr;
-}
-
 void CircuitScene::resetExSel() {
-    exSel= nullptr;
+    focus= nullptr;
 }
