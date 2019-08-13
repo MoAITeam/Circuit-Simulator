@@ -67,7 +67,6 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     {
         QGraphicsScene::mousePressEvent(event);
     }
-    update();//FIXME togliere
 }
 
 void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
@@ -97,6 +96,7 @@ void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    //UPDATE CLEAN
     if(event->button()==Qt::LeftButton) {
         QGraphicsScene::mouseReleaseEvent(event);
         mouseReleasePoint = event->scenePos();
@@ -134,6 +134,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                     if (item->type() == Component::node) {
                         ((Node *) item)->setPos(Node::toGrid(((Node *) item)->pos()));
                         ((Node *) item)->checkLink();
+                        item->update();
                     }
                 }
                 if (selecting) {
@@ -148,17 +149,19 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     } else{
         QGraphicsScene::mouseReleaseEvent(event);
     }
-    update();//FIXME togliere
 }
+
 
 void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     if(event->button()==Qt::LeftButton) {
         if (myMode == moveItem) {
             mouseReleasePoint = event->scenePos();
+            //update(QRectF(mousePressPoint,mouseReleasePoint).normalized());//selection area
         }
     }
     QGraphicsScene::mouseMoveEvent(event);
-    update();//FIXME togliere
+    //update(QRectF(0,0,150,100));//values
+    update();
 }
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {

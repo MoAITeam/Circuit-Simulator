@@ -54,9 +54,9 @@ void Component::setObserver(ComponentObserver* o){
 
 void Component::connect(Node* p, Node* n){
     if(p!= nullptr && n!=nullptr) {
-        if (nodes.first!= nullptr && connected==true)
+        if (nodes.first!= nullptr && connected)
             nodes.first->disconnect(this);
-        if (nodes.second!= nullptr && connected==true)
+        if (nodes.second!= nullptr && connected)
             nodes.second->disconnect(this);
         nodes.first = p;
         nodes.second = n;
