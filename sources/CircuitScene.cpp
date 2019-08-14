@@ -132,9 +132,11 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                         selecting = false;
                     }
                     if (item->type() == Component::node) {
+                        std::list<Component*> to_update=((Node*) item)->getComponents();
                         ((Node *) item)->setPos(Node::toGrid(((Node *) item)->pos()));
                         ((Node *) item)->checkLink();
-                        item->update();
+                        for(auto &comp : to_update)
+                            comp->update();
                     }
                 }
                 if (selecting) {
