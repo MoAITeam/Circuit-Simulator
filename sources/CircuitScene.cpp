@@ -38,11 +38,11 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         mouseReleasePoint=mousePressPoint;
         QGraphicsItem *clicked = itemAt(mousePressPoint, QTransform());
         if (clicked != nullptr) {
-            if (clicked->type() < Component::itemType::node) { //FIXME togliere
+            if (clicked->type()==Qt::SolidLine) { //FIXME linee non cliccabili
                 selecting = true;
                 QGraphicsScene::mousePressEvent(event);
             }
-        } else {
+        } else {//se non clicco nulla
             selecting = true;
             QGraphicsScene::mousePressEvent(event);
         }
@@ -52,14 +52,6 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
                 if (clicked->type() >= Component::component) {
                     ((Component *) clicked)->getNodes().first->setSelected(true);
                     ((Component *) clicked)->getNodes().second->setSelected(true);
-                }
-                if (clicked->type() == Component::node && !(event->modifiers() & Qt::ControlModifier)) {
-                    for (auto &item : selectedItems())
-                        //lascio selezionati solo i nodi
-                        if (item->type() >= Component::component) {
-                            clearSelection();
-                            item->setSelected(false);
-                        }
                 }
             }
         }

@@ -19,8 +19,7 @@ class Component: public  QGraphicsItem{
 public:
     enum sourceTypes {none, volts, ampere};
     enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs, cccs, ccvs};
-    //FIXME brutto (node in component)
-    enum itemType {node = QGraphicsItem::UserType+1, component = QGraphicsItem::UserType+2, activeComponent = QGraphicsItem::UserType+3};
+    enum itemType {component = QGraphicsItem::UserType+1, activeComponent = QGraphicsItem::UserType+2};
 
     Component(float a,float b, float c,Component* d=nullptr);
     virtual ~Component() override;

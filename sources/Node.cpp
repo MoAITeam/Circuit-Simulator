@@ -36,10 +36,6 @@ Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGrou
     setSelected(false);
 }
 
-int Node::type() const {
-    return Component::node;
-}
-
 Node::~Node(){
     if(observer!= nullptr)
         observer->removeNotify(this);
@@ -145,8 +141,15 @@ void Node::setVoltage(float value) {
 }
 
 void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    std::cout<<"Node Voltage:"<<voltage<<std::endl;
     QGraphicsItem::mousePressEvent(event);
+    if (!(event->modifiers() & Qt::ControlModifier)) {
+        for (auto &item : scene()->selectedItems())
+            //lascio selezionati solo i nodi
+            if (item->type() >= Component::component) {
+                scene()->clearSelection();
+                item->setSelected(false);
+            }
+    }
 }
 
 bool Node::isGround(){
