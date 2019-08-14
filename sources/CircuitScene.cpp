@@ -123,10 +123,11 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                         //item->setSelected(true);
                         selecting = false;
                     }
-                    if (item->type() == Component::node) {
-                        std::list<Component*> to_update=((Node*) item)->getComponents();
-                        ((Node *) item)->setPos(Node::toGrid(((Node *) item)->pos()));
-                        ((Node *) item)->checkLink();
+                    Node* node =dynamic_cast<Node*>(item);//FIXME togliere
+                    if (node!= nullptr) {
+                        std::list<Component*> to_update=node->getComponents();
+                        node->setPos(Node::toGrid(node->pos()));
+                        node->checkLink();
                         for(auto &comp : to_update)
                             comp->update();
                     }
