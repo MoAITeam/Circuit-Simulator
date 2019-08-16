@@ -41,7 +41,13 @@ MainWindow::MainWindow(CircuitScene *scene) {
     setUnifiedTitleAndToolBarOnMac(true);
 
     connect(scene,SIGNAL(insertValue(ActiveComponent*)),this,SLOT(showDialog(ActiveComponent*)));
+    connect(view->verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(handleScroll()));
+    connect(view->horizontalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(handleScroll()));
 
+}
+
+void MainWindow::handleScroll() {
+    scene->display=QPointF(view->horizontalScrollBar()->value(),view->verticalScrollBar()->value());
 }
 
 void MainWindow::showDialog(ActiveComponent*c){

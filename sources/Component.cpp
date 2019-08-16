@@ -134,8 +134,9 @@ QPainterPath Component::shape() const
 void Component::hoverEnterEvent(QGraphicsSceneHoverEvent*){
     hovering=true;
     setZValue(solutionOnTop);
-    //nodes.first->setZValue(selectedNodesOnTop);
-    //nodes.second->setZValue(selectedNodesOnTop);
+    nodes.first->setZValue(selectedNodesOnTop);
+    nodes.second->setZValue(selectedNodesOnTop);
+    update();
 }
 
 void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
@@ -148,7 +149,6 @@ void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
     QGraphicsItem::mousePressEvent(event);
     prepareGeometryChange();
-    update();
 }
 
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){

@@ -142,19 +142,25 @@ void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     }
     if(selecting)
         update(QRectF(mousePressPoint,mouseReleasePoint).normalized());
-    else
-        update();
+    else {
+        QGraphicsItem* item=itemAt(event->scenePos(),QTransform());
+        if(item!= nullptr)
+            item->update();
+        update(QRectF(display,QSize(200,100)));
+        //update();
+    }
     QGraphicsScene::mouseMoveEvent(event);
 }
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
-    if(event->key()==Qt::Key::Key_C)
+    //FIXME doesn't work
+    /*if(event->key()==Qt::Key::Key_C)
         circuit->print();
     if(event->key()==Qt::Key_Backspace)
         for(auto &item : items())
             if(item->isSelected())
                 if(item->type()>=Component::component)
-                    delete item;
+                    delete item;*/
 }
 
 void CircuitScene::setType(Component::types type) {

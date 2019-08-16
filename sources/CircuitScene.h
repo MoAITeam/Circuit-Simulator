@@ -58,6 +58,7 @@ public:
     void selectAll();
 
     Circuit* getCircuit();
+    QPointF display;
 
 signals:
     void insertValue(ActiveComponent* c);

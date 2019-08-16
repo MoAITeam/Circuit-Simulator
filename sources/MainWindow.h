@@ -17,6 +17,7 @@ public:
     MainWindow(CircuitScene *scene);
 public slots:
     void showDialog(ActiveComponent*c);
+    void handleScroll();
 private:
     void createToolBox();
     void createActions();
