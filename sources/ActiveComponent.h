@@ -19,21 +19,16 @@ public:
         return value;
     };
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *s, QWidget *w) override{
-        painter->save();
-        QString originalLabel=label;
-
-
-        Component::paint(painter,s,w);
-
-        painter->restore();
         if(dependent!= nullptr)
             drawLabels(painter,label+" ∝ "+dependent->getLabel());
         else
             drawLabels(painter,label);
+        Component::paint(painter,s,w);
 
     };
 
     void drawLabels(QPainter* painter, QString text){
+        painter->save();
         painter->translate(QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos());
         QFont font=painter->font();
         font.setBold(true);
@@ -43,6 +38,7 @@ public:
         font.setBold(false);
         painter->setFont(font);
         painter->drawText(QPointF(-40,-50)+QPointF(0,20),QString::number(value)+unit);
+        painter->restore();
     };
 protected:
     float value=0;

@@ -134,9 +134,8 @@ QPainterPath Component::shape() const
 void Component::hoverEnterEvent(QGraphicsSceneHoverEvent*){
     hovering=true;
     setZValue(solutionOnTop);
-    nodes.first->setZValue(selectedNodesOnTop);
-    nodes.second->setZValue(selectedNodesOnTop);
-    update();
+    //nodes.first->setZValue(selectedNodesOnTop);
+    //nodes.second->setZValue(selectedNodesOnTop);
 }
 
 void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
@@ -144,7 +143,6 @@ void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
     setZValue(underNode);
     nodes.first->setZValue(nodeOnTop);
     nodes.second->setZValue(nodeOnTop);
-    update();
 }
 
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
@@ -205,7 +203,8 @@ void Component::drawSolution(QPainter* painter) {
         QPainterPath path;
         painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
         //path.addRoundedRect(QRectF(labelLocation.x()-5,labelLocation.y()-17.5,150,45),10,10);
-        path.addRoundedRect(QRectF(10,10,150,45),10,10);
+        QRectF solRect = QRectF(10,10,150,45);
+        path.addRoundedRect(solRect,10,10);
         painter->fillPath(path,QColor(220, 245, 247));
         painter->drawPath(path);
         painter->drawText(QPointF(15,25), "Current:"+QString().number(round(current)));

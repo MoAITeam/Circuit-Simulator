@@ -15,12 +15,6 @@ CircuitScene::CircuitScene(Circuit* c):circuit(c){
     setSceneRect(0, 0, sceneSize, sceneSize);
     circuit->setObserver(this);
 
-    //for(int x=0; x<=sceneSize; x+=nodeGridSize)
-    //    addLine(x,0,x,1000,QPen(gridColor));
-
-    //for(int y=0; y<=sceneSize; y+=nodeGridSize)
-    //    addLine(0,y,sceneSize,y, QPen(gridColor));
-
     const QBrush brush(QImage(":/images/Rect.png"));
     setBackgroundBrush(brush);
 
@@ -144,12 +138,13 @@ void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     if(event->button()==Qt::LeftButton) {
         if (myMode == moveItem) {
             mouseReleasePoint = event->scenePos();
-            //update(QRectF(mousePressPoint,mouseReleasePoint).normalized());//selection area
         }
     }
+    if(selecting)
+        update(QRectF(mousePressPoint,mouseReleasePoint).normalized());
+    else
+        update();
     QGraphicsScene::mouseMoveEvent(event);
-    //update(QRectF(0,0,150,100));//values
-    update();//FIXME super peso togliere
 }
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
