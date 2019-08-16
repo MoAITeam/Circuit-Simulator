@@ -15,11 +15,14 @@ CircuitScene::CircuitScene(Circuit* c):circuit(c){
     setSceneRect(0, 0, sceneSize, sceneSize);
     circuit->setObserver(this);
 
-    for(int x=0; x<=sceneSize; x+=nodeGridSize)
-        addLine(x,0,x,1000,QPen(gridColor));
+    //for(int x=0; x<=sceneSize; x+=nodeGridSize)
+    //    addLine(x,0,x,1000,QPen(gridColor));
 
-    for(int y=0; y<=sceneSize; y+=nodeGridSize)
-        addLine(0,y,sceneSize,y, QPen(gridColor));
+    //for(int y=0; y<=sceneSize; y+=nodeGridSize)
+    //    addLine(0,y,sceneSize,y, QPen(gridColor));
+
+    const QBrush brush(QImage(":/images/Rect.png"));
+    setBackgroundBrush(brush);
 
     sceneMenu=new QMenu();
     createItemMenus();
@@ -37,15 +40,10 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         mousePressPoint = event->scenePos();
         mouseReleasePoint=mousePressPoint;
         QGraphicsItem *clicked = itemAt(mousePressPoint, QTransform());
-        if (clicked != nullptr) {
-            if (clicked->type()==Qt::SolidLine) { //FIXME linee non cliccabili
+            if (clicked== nullptr) {
                 selecting = true;
                 QGraphicsScene::mousePressEvent(event);
             }
-        } else {//se non clicco nulla
-            selecting = true;
-            QGraphicsScene::mousePressEvent(event);
-        }
         if (myMode == moveItem) {
             QGraphicsScene::mousePressEvent(event);
             if (clicked != nullptr) {
@@ -88,7 +86,6 @@ void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
 }
 
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    //UPDATE CLEAN
     if(event->button()==Qt::LeftButton) {
         QGraphicsScene::mouseReleaseEvent(event);
         mouseReleasePoint = event->scenePos();
@@ -112,24 +109,20 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                     }
             }
             if (myMode == moveItem) {
-                for (auto &item : selectedItems()) {
-                    if (item->type() >= Component::component) {
-                        //bug fixing
-                        if (!((Component *) item)->getNodes().first->isSelected() &&
-                            !((Component *) item)->getNodes().second->isSelected()) {
-                            ((Component *) item)->getNodes().first->setSelected(true);
-                            ((Component *) item)->getNodes().second->setSelected(true);
+                for (auto &item : items()) {
+                    if(item->isSelected()==true) {
+                        if (item->type() >= Component::component) {
+                            //bug fixing
+                            if (!((Component *) item)->getNodes().first->isSelected() &&
+                                !((Component *) item)->getNodes().second->isSelected()) {
+                                ((Component *) item)->getNodes().first->setSelected(true);
+                                ((Component *) item)->getNodes().second->setSelected(true);
+                            }
+                            ((Component *) item)->getNodes().first->checkLink();
+                            ((Component *) item)->getNodes().second->checkLink();
+                            item->update();
+                            selecting = false;
                         }
-                        //item->setSelected(true);
-                        selecting = false;
-                    }
-                    Node* node =dynamic_cast<Node*>(item);//FIXME togliere
-                    if (node!= nullptr) {
-                        std::list<Component*> to_update=node->getComponents();
-                        node->setPos(Node::toGrid(node->pos()));
-                        node->checkLink();
-                        for(auto &comp : to_update)
-                            comp->update();
                     }
                 }
                 if (selecting) {
@@ -156,7 +149,7 @@ void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     }
     QGraphicsScene::mouseMoveEvent(event);
     //update(QRectF(0,0,150,100));//values
-    update();
+    update();//FIXME super peso togliere
 }
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {

@@ -20,21 +20,29 @@ public:
     };
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *s, QWidget *w) override{
         painter->save();
+        QString originalLabel=label;
+
+
         Component::paint(painter,s,w);
+
         painter->restore();
-        drawLabels(painter);
+        if(dependent!= nullptr)
+            drawLabels(painter,label+" ∝ "+dependent->getLabel());
+        else
+            drawLabels(painter,label);
+
     };
 
-    void drawLabels(QPainter* painter){
+    void drawLabels(QPainter* painter, QString text){
         painter->translate(QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos());
         QFont font=painter->font();
         font.setBold(true);
         painter->setFont(font);
         painter->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        painter->drawText(rectLocation, label);
+        painter->drawText(QPointF(-40,-50), text);
         font.setBold(false);
         painter->setFont(font);
-        painter->drawText(rectLocation+QPointF(0,20),QString::number(value)+unit);
+        painter->drawText(QPointF(-40,-50)+QPointF(0,20),QString::number(value)+unit);
     };
 protected:
     float value=0;

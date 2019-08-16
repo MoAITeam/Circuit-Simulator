@@ -12,6 +12,8 @@
 #define nodeOnTop 200
 #define solutionOnTop 400
 
+#include <QApplication>
+
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setAcceptHoverEvents(true);
     //if(!gnd)
@@ -19,6 +21,7 @@ Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGr
     setZValue(nodeOnTop);
     setFlag(ItemIsMovable);
     setFlag(ItemIsSelectable);
+    setFlag(ItemSendsGeometryChanges);
     setX(x);
     setY(y);
     setSelected(false);
@@ -31,6 +34,7 @@ Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGrou
     setZValue(nodeOnTop);
     setFlag(ItemIsMovable);
     setFlag(ItemIsSelectable);
+    setFlag(ItemSendsGeometryChanges);
     setX(point.x());
     setY(point.y());
     setSelected(false);
@@ -121,7 +125,7 @@ void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseReleaseEvent(event);
-    this->setPos(Node::toGrid(this->pos()));
+    //this->setPos(Node::toGrid(this->pos()));
     checkLink();
     for (auto component : components) {
         prepareGeometryChange();
@@ -144,7 +148,6 @@ void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mousePressEvent(event);
     if (!(event->modifiers() & Qt::ControlModifier)) {
         for (auto &item : scene()->selectedItems())
-            //lascio selezionati solo i nodi
             if (item->type() >= Component::component) {
                 scene()->clearSelection();
                 item->setSelected(false);
@@ -183,4 +186,19 @@ void Node::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
 
 void Node::setGnd(bool value) {
     gnd=value;
+}
+
+QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
+    if(change==ItemPositionChange && scene()){
+        QPointF newPos = value.toPointF();
+        if(QApplication::mouseButtons()==Qt::LeftButton){
+            qreal xV = Node::toGrid(newPos).x();
+            qreal yV = Node::toGrid(newPos).y();
+            return QPointF(xV,yV);
+        }
+        else
+            return newPos;
+    }
+    else
+        return QGraphicsItem::itemChange(change,value);
 }

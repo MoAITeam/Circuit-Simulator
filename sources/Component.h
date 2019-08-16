@@ -79,12 +79,10 @@ protected:
     QString unit="Us";
     QString label="";
     ComponentObserver* observer;
-    QPointF rectLocation;
+    int controlled=0;
 
 private:
-    bool connected=false;
     bool hovering=false;
-    int controlled=0;
     QPointF mousePress;
     float angle;
 

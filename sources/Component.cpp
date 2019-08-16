@@ -45,7 +45,6 @@ void Component::disconnect() {
         delete nodes.first;
     if (nodes.second->getComponents().size()==0)
         delete nodes.second;
-    connected=false;
 }
 
 void Component::setObserver(ComponentObserver* o){
@@ -54,15 +53,14 @@ void Component::setObserver(ComponentObserver* o){
 
 void Component::connect(Node* p, Node* n){
     if(p!= nullptr && n!=nullptr) {
-        if (nodes.first!= nullptr && connected)
+        if (nodes.first!= nullptr)
             nodes.first->disconnect(this);
-        if (nodes.second!= nullptr && connected)
+        if (nodes.second!= nullptr)
             nodes.second->disconnect(this);
         nodes.first = p;
         nodes.second = n;
         p->connect(this);
         n->connect(this);
-        connected=true;//FIXME maybe we can do without? bug of disconnecting one connected to two
     }
 }
 
@@ -80,11 +78,12 @@ QRectF Component::boundingRect() const {
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-    //draw selected
+    // draw selection
     if (isSelected()) {
         painter->setPen(QPen(Qt::green, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-        painter->strokePath(shape().simplified(),painter->pen());
+        painter->strokePath(shape().simplified(), painter->pen());
     }
+
     if (controlled>0)
         painter->setPen(QPen(Qt::darkGreen, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
@@ -119,22 +118,15 @@ QPainterPath Component::shape() const
 {
     QPainterPath path;
     QPolygon polygon;
-    //FIXME duplicated but fixes bug of showing wrong rect first
-    float angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
-    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y())) {
-        angle=-angle;
-    }
-    if((nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())){
-        angle=180-angle;
-    }
-    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() < nodes.first->y())) {
-        angle=180+angle;
-    }
-    angle=this->angle/360*2*M_PI;
-    polygon << QPoint(nodes.first->x()-20*cos(angle)-x(),nodes.first->y()-20*sin(angle)-y());
-    polygon << QPoint(nodes.first->x()+20*cos(angle)-x(),nodes.first->y()+20*sin(angle)-y());
-    polygon << QPoint(nodes.second->x()+20*cos(angle)-x(), nodes.second->y()+20*sin(angle)-y());
-    polygon << QPoint(nodes.second->x()-20*cos(angle)-x(), nodes.second->y()-20*sin(angle)-y());
+    QPointF vector=nodes.second->pos()-nodes.first->pos();
+    QPointF pVector=QPointF(-vector.y(),vector.x())/sqrt(pow(vector.x(),2)+pow(vector.y(),2))*20;
+
+    polygon << QPoint((nodes.first->pos()-pVector-pos()).toPoint());
+    polygon << QPoint((nodes.first->pos()+pVector-pos()).toPoint());
+    polygon << QPoint((nodes.second->pos()+pVector-pos()).toPoint());
+    polygon << QPoint((nodes.second->pos()-pVector-pos()).toPoint());
+
+
     path.addPolygon(polygon);
     return path;
 }
@@ -196,10 +188,12 @@ void Component::drawComponent(QPainter* painter){
 
     if(!pixmap.isNull()) {
         painter->rotate(angle);
-        if (line.length() > 100)
+        if (line.length() > 100) {
             painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
-        else
+        }
+        else {
             painter->drawPixmap(-50, -line.length() / 2, 100, line.length(), pixmap); //reduced
+        }
         painter->resetTransform(); //reset rotation
         painter->translate(QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos());
     }
@@ -210,7 +204,7 @@ void Component::drawSolution(QPainter* painter) {
     if(hovering){
         QPainterPath path;
         painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        //path.addRoundedRect(QRectF(rectLocation.x()-5,rectLocation.y()-17.5,150,45),10,10);
+        //path.addRoundedRect(QRectF(labelLocation.x()-5,labelLocation.y()-17.5,150,45),10,10);
         path.addRoundedRect(QRectF(10,10,150,45),10,10);
         painter->fillPath(path,QColor(220, 245, 247));
         painter->drawPath(path);
@@ -221,25 +215,20 @@ void Component::drawSolution(QPainter* painter) {
 
 void Component::setOrientation() {
     angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
-    rectLocation=QPointF(-40, -50);//sennò primo stampa sopra componente
     if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y())) {
         //quarto
         angle=-angle;
-        rectLocation=QPointF(-40, -50);
     }
         if((nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())){
             //secondo
             angle=180-angle;
-            rectLocation=QPointF(-40, -50);
         }
     if ((nodes.second->x() < nodes.first->x() && nodes.second->y() > nodes.first->y())) {
         //primo
-        rectLocation=QPointF(-40, -50);
     }
     if ((nodes.second->x() > nodes.first->x() && nodes.second->y() < nodes.first->y())) {
         //terzo
         angle=180+angle;
-        rectLocation=QPointF(-40, -50);
     }
 }
 

@@ -33,6 +33,7 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent* ) override;
     void hoverEnterEvent(QGraphicsSceneHoverEvent* ) override;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent* ) override;
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
     void setVoltage(float value);
     float getVoltage();

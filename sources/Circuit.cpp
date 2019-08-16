@@ -132,24 +132,27 @@ void Circuit::checkLink(Node &n) {
     if (instances>1)
         throw ModelException("found more than one node to connect to, unexpected behavior");
 
-    bool destroy=false;
+    //bool destroy=false;
     if (existing != nullptr) {
         std::list<Component *> componentsToUpdate = n.getComponents();
         for (auto &component : componentsToUpdate) {
             nodePair pair= component->getNodes();
             Node* keep;
             keep = pair.first == &n ? pair.second :pair.first;
-            if(*keep == n )
-                delete component;
-            else {
+            if(*keep == n ) {
+                //delete component;
+            }
+                else {
                 component->connect(existing, keep);
                 int componentIndex=getIndex(component,components);
                 matrix.update(componentIndex,getIndex(existing,nonGround()),getIndex(keep,nonGround()));
-                destroy=true;
+                if(n.getComponents().size()==0)
+                    delete &n;
+         //       destroy=true;
             }
         }
-        if(destroy)
-            delete &n;
+        //if(destroy)
+        //    delete &n;
     }
 }
 
