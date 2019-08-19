@@ -32,11 +32,7 @@ Component::Component(float a,float b,float c, Component* d): behavior{a,b,c}, co
 }
 
 Component::~Component() {
-    //Node* save_a=nodes.first;
-    //Node* save_b=nodes.second;
-    disconnectCircuit();
-
-    disconnectNodes();
+    disconnect();
 
     if(controller!= nullptr) {
         controller->removeDependent();
@@ -44,7 +40,7 @@ Component::~Component() {
     }
 }
 
-void Component::disconnectNodes() {
+void Component::disconnect() { //rimuove componente e nodi dal circuito
     nodes.first->disconnect(this);
     nodes.second->disconnect(this);
 
@@ -55,12 +51,35 @@ void Component::disconnectNodes() {
 
     nodes.first= nullptr;
     nodes.second= nullptr;
-}
 
-void Component::disconnectCircuit() {
     if (circuit != nullptr) {
         circuit->removeNotify(this);
         circuit = nullptr;
+    }
+}
+
+void Component::connect(Node* p, Node* n){//rimuove nodi dal circuito e setta nuovi nodi
+    if(p!= nullptr && n!=nullptr) {
+        Node* save_a= nullptr;
+        Node* save_b= nullptr;
+        if(nodes.first!= nullptr) {
+            save_a=nodes.first;
+            nodes.first->disconnect(this);
+        }
+        if(nodes.second!= nullptr) {
+            save_b=nodes.second;
+            nodes.second->disconnect(this);
+        }
+        nodes.first = p;
+        nodes.second = n;
+        p->connect(this);
+        n->connect(this);
+        if(save_a!= nullptr)
+            if(save_a->getComponents().empty())
+                delete save_a;
+        if(save_b!= nullptr)
+            if(save_b->getComponents().empty())
+                delete save_b;
     }
 }
 
@@ -68,44 +87,25 @@ void Component::setObserver(ComponentObserver* o){
     circuit=o;
 }
 
-void Component::connect(Node* p, Node* n){
-    if(p!= nullptr && n!=nullptr) {
-        nodes.first = p;
-        nodes.second = n;
-        p->connect(this);
-        n->connect(this);
-    }
-}
-
 nodePair Component::getNodes() {
     return nodes;
 }
 
 QRectF Component::boundingRect() const {
-
-    /* QPointF n1(nodes.first->x()-x(),nodes.first->y()-y());
-    QPointF n2(nodes.second->x()-x(),nodes.second->y()-y());
-    QPointF m=(n1+n2)/2;
-    QPointF length(qAbs(n1.x()-n2.x()),qAbs(n1.y()-n2.y()));
-    QPointF topLeft(m.x()-length.x()/2-50,m.y()-length.y()/2-50);
-    QPointF bottomRight(m.x()+length.x()/2+200,m.y()+length.y()/2+100);
-    QRectF boundingRect(topLeft,bottomRight);
-    return boundingRect;*/
-
-    QPointF n1(nodes.first->x()-x(),nodes.first->y()-y());
-    QPointF n2(nodes.second->x()-x(),nodes.second->y()-y());
-    QPointF m=(n1+n2)/2;
-    QPointF length(qAbs(n1.x()-n2.x()),qAbs(n1.y()-n2.y()));
-    return QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+200,m.y()+length.y()/2+100));
+    QPointF n1(nodes.first->x() - x(), nodes.first->y() - y());
+    QPointF n2(nodes.second->x() - x(), nodes.second->y() - y());
+    QPointF m = (n1 + n2) / 2;
+    QPointF length(qAbs(n1.x() - n2.x()), qAbs(n1.y() - n2.y()));
+    QPointF topLeft(m.x() - length.x() / 2 - 50, m.y() - length.y() / 2 - 50);
+    QPointF bottomRight(m.x() + length.x() / 2 + 200, m.y() + length.y() / 2 + 100);
+    QRectF boundingRect(topLeft, bottomRight);
+    return boundingRect;
 }
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-    // draw selection
-    if (isSelected()) {
-        //painter->setPen(selectedPen);
+    if (isSelected())
         painter->strokePath(shape().simplified(),selectedPen);
-    }
 
     if (dependentSources>0)
         painter->setPen(controllingPen);
@@ -121,8 +121,8 @@ void Component::drawComponent(QPainter* painter){
     painter->save();
 
     QPointF center=QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos();
-    QPoint n1(nodes.first->x()-x(),nodes.first->y()-y());
-    QPoint n2(nodes.second->x()-x(),nodes.second->y()-y());
+    QPointF n1(nodes.first->x()-x(),nodes.first->y()-y());
+    QPointF n2(nodes.second->x()-x(),nodes.second->y()-y());
     QLineF line(n1,n2);
 
     painter->drawLine(line);
@@ -134,7 +134,7 @@ void Component::drawComponent(QPainter* painter){
             painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
         }
         else {
-            painter->drawPixmap(-50, -line.length() / 2, 100, line.length(), pixmap); //reduced
+            painter->drawPixmap(-50,(int) -line.length() / 2, 100,(int) line.length(), pixmap); //scaled
         }
     }
 
@@ -155,8 +155,8 @@ void Component::drawSolution(QPainter* painter) {
     painter->fillPath(path,solutionColor);
     painter->drawPath(path);
 
-    painter->drawText(topLeftDisplay, "Current:"+QString().number(round(current)));
-    painter->drawText(topLeftDisplay+QPointF(0,20), "Voltage:"+QString().number(round(voltage)));
+    painter->drawText(topLeftDisplay, "Current:"+ QString::number(round(current)));
+    painter->drawText(topLeftDisplay+QPointF(0,20), "Voltage:"+QString::number(round(voltage)));
 }
 
 void Component::setCurrent(float value) {

@@ -126,11 +126,6 @@ void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseReleaseEvent(event);
     checkLink();
-
-    //for (auto component : components) {
-    //    prepareGeometryChange();
-    //    component->update();
-    //}
 }
 
 void Node::checkLink(){

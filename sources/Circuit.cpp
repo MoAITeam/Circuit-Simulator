@@ -118,39 +118,36 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
 
 void Circuit::checkLink(Node *n) {
 
-    Node* existing=nullptr;
-    int instances=0;
+    Node *existing = nullptr;
+    int instances = 0;
 
     //The heart of link method: finds the one that is "identical for Node standards" but not the same node
     for (auto &node : nodes) {
-        if (*node==*n && node!=n) {
+        if (*node == *n && node != n) {
             existing = node;
             instances++;
         }
     }
 
-    if (instances>1)
-        throw ModelException("found more than one node to connect to, unexpected behavior");
+    if (instances <= 1){
+        //throw ModelException("found more than one node to connect to, unexpected behavior");
 
-    //bool destroy=false;
-    if (existing != nullptr) {
-        std::list<Component *> componentsToUpdate = n->getComponents();
-        for (auto &component : componentsToUpdate) {
-            nodePair pair= component->getNodes();
-            Node* keep;
-            keep = pair.first == n ? pair.second :pair.first;
+        //bool destroy=false;
+        if (existing != nullptr) {
+            std::list<Component *> componentsToUpdate = n->getComponents();
+            for (auto &component : componentsToUpdate) {
+                nodePair pair = component->getNodes();
+                Node *keep;
+                keep = pair.first == n ? pair.second : pair.first;
 
-            n->disconnect(component);
-            keep->disconnect(component);
-            //FIXME little bug when connected to itself and you close
-                component->connect(existing, keep);
-                int componentIndex=getIndex(component,components);
-                matrix.update(componentIndex,getIndex(existing,nonGround()),getIndex(keep,nonGround()));
-
-            if(n->getComponents().empty())
-                delete n;
+                if (!(*keep == *n)) {
+                    component->connect(existing, keep);
+                    int componentIndex = getIndex(component, components);
+                    matrix.update(componentIndex, getIndex(existing, nonGround()), getIndex(keep, nonGround()));
+                }
             }
         }
+}
     }
 
 template <class T> int Circuit::getIndex(T *x,std::vector<T*> v){

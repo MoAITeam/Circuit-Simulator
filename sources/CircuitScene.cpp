@@ -153,8 +153,8 @@ void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
     //FIXME doesn't work
-    /*if(event->key()==Qt::Key::Key_C)
-        circuit->print();
+    if(event->key()==Qt::Key::Key_C)
+        circuit->print();/*
     if(event->key()==Qt::Key_Backspace)
         for(auto &item : items())
             if(item->isSelected())
@@ -197,9 +197,7 @@ void CircuitScene::disconnectModel() {
         Node* a_saved=new Node(pair.first->x()+20,pair.first->y()+20);
         Node* b_saved=new Node(pair.second->x()+20,pair.second->y()+20);
 
-        disconnecting->disconnectNodes();
-
-        disconnecting->disconnectCircuit();//non c'è bisogno proprio di staccarlo...
+        disconnecting->disconnect();
         circuit->add(disconnecting,a_saved,b_saved);
         disconnecting->update();
         clearSelection();

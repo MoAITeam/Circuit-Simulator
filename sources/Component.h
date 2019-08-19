@@ -25,8 +25,7 @@ public:
     virtual ~Component() override;
 
     void connect(Node* p, Node* n);
-    void disconnectNodes();
-    void disconnectCircuit();
+    void disconnect();
 
     //QGraphicsItem
     int type() const override {return component;};
