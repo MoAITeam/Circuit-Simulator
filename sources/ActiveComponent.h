@@ -19,8 +19,8 @@ public:
         return value;
     };
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *s, QWidget *w) override{
-        if(dependent!= nullptr)
-            drawLabels(painter,label+" ∝ "+dependent->getLabel());
+        if(controller!= nullptr)
+            drawLabels(painter,label+" ∝ "+controller->getLabel());
         else
             drawLabels(painter,label);
         Component::paint(painter,s,w);

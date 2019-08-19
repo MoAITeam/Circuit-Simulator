@@ -25,7 +25,8 @@ public:
     virtual ~Component() override;
 
     void connect(Node* p, Node* n);
-    void disconnect();
+    void disconnectNodes();
+    void disconnectCircuit();
 
     //QGraphicsItem
     int type() const override {return component;};
@@ -49,8 +50,8 @@ public:
 
     void setObserver(ComponentObserver *o);
 
-    void setControlled();
-    void removeControlled();
+    void addDependent();
+    void removeDependent();
     void setlabel(QString label){
         this->label=label;
     };
@@ -68,7 +69,7 @@ public:
     nodePair getNodes();
 
     float behavior[3];
-    Component *dependent;
+    Component *controller;
 
 protected:
     int sourceType=0;
@@ -78,14 +79,17 @@ protected:
     QPixmap pixmap;
     QString unit="Us";
     QString label="";
-    ComponentObserver* observer;
-    int controlled=0;
+    ComponentObserver* circuit;
+    int dependentSources=0;
 
 private:
     bool hovering=false;
     QPointF mousePress;
     float angle;
-
+    QColor solutionColor=QColor(220, 245, 247);
+    QPen controllingPen=QPen(Qt::darkGreen, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    QPen selectedPen=QPen(Qt::green, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+    QPen solutionPen=QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QPointF press;
     QPointF pressfirst;
     QPointF pressecond;

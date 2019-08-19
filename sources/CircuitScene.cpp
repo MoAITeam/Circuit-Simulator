@@ -98,7 +98,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                     if (clicked->type() >= Component::component) {
                         selectedDependent = (Component *) clicked;
                         selectedDependent->update();
-                        selectedDependent->setControlled();
+                        selectedDependent->addDependent();
                         myMode = insertItem;
                     }
             }
@@ -144,10 +144,9 @@ void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
         update(QRectF(mousePressPoint,mouseReleasePoint).normalized());
     else {
         QGraphicsItem* item=itemAt(event->scenePos(),QTransform());
-        if(item!= nullptr)
-            item->update();
+        if(item!=nullptr)
+            item->update();//o non mostra soluzione!
         update(QRectF(display,QSize(200,100)));
-        //update();
     }
     QGraphicsScene::mouseMoveEvent(event);
 }
@@ -197,11 +196,15 @@ void CircuitScene::disconnectModel() {
         nodePair pair=disconnecting->getNodes();
         Node* a_saved=new Node(pair.first->x()+20,pair.first->y()+20);
         Node* b_saved=new Node(pair.second->x()+20,pair.second->y()+20);
-        disconnecting->disconnect();
+
+        disconnecting->disconnectNodes();
+
+        disconnecting->disconnectCircuit();//non c'è bisogno proprio di staccarlo...
         circuit->add(disconnecting,a_saved,b_saved);
         disconnecting->update();
         clearSelection();
         disconnecting->setSelected(true);
+
     }
 }
 

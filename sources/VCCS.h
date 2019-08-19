@@ -16,7 +16,7 @@ public:
         this->value=value;
     }
     void setSource(Component* c){
-        dependent=c;
+        controller=c;
     };
 };
 

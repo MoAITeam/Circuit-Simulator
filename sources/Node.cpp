@@ -125,16 +125,16 @@ void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseReleaseEvent(event);
-    //this->setPos(Node::toGrid(this->pos()));
     checkLink();
-    for (auto component : components) {
-        prepareGeometryChange();
-        component->update();
-    }
+
+    //for (auto component : components) {
+    //    prepareGeometryChange();
+    //    component->update();
+    //}
 }
 
 void Node::checkLink(){
-    observer->update(*this);
+    observer->update(this);
 }
 
 void Node::setVoltage(float value) {

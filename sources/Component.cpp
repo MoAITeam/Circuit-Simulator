@@ -21,7 +21,10 @@
 
 
 
-Component::Component(float a,float b,float c, Component* d): behavior{a,b,c}, dependent(d), nodes{nullptr, nullptr} {
+Component::Component(float a,float b,float c, Component* d): behavior{a,b,c}, controller(d) {
+    nodes={nullptr, nullptr};
+    circuit= nullptr;
+    angle=0;
     setZValue(underNode);
     setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
@@ -29,34 +32,44 @@ Component::Component(float a,float b,float c, Component* d): behavior{a,b,c}, de
 }
 
 Component::~Component() {
-    disconnect();
-    if(dependent!= nullptr) {
-        dependent->removeControlled();
-        dependent->update();
+    //Node* save_a=nodes.first;
+    //Node* save_b=nodes.second;
+    disconnectCircuit();
+
+    disconnectNodes();
+
+    if(controller!= nullptr) {
+        controller->removeDependent();
+        controller->update();
     }
 }
 
-void Component::disconnect() {
-    if (observer!= nullptr)
-        observer->removeNotify(this);
+void Component::disconnectNodes() {
     nodes.first->disconnect(this);
     nodes.second->disconnect(this);
-    if (nodes.first->getComponents().size()==0)
+
+    if(nodes.first->getComponents().empty())
         delete nodes.first;
-    if (nodes.second->getComponents().size()==0)
+    if(nodes.second->getComponents().empty())
         delete nodes.second;
+
+    nodes.first= nullptr;
+    nodes.second= nullptr;
+}
+
+void Component::disconnectCircuit() {
+    if (circuit != nullptr) {
+        circuit->removeNotify(this);
+        circuit = nullptr;
+    }
 }
 
 void Component::setObserver(ComponentObserver* o){
-    observer=o;
+    circuit=o;
 }
 
 void Component::connect(Node* p, Node* n){
     if(p!= nullptr && n!=nullptr) {
-        if (nodes.first!= nullptr)
-            nodes.first->disconnect(this);
-        if (nodes.second!= nullptr)
-            nodes.second->disconnect(this);
         nodes.first = p;
         nodes.second = n;
         p->connect(this);
@@ -69,10 +82,20 @@ nodePair Component::getNodes() {
 }
 
 QRectF Component::boundingRect() const {
-    QPoint n1(nodes.first->x()-x(),nodes.first->y()-y());
-    QPoint n2(nodes.second->x()-x(),nodes.second->y()-y());
-    QPoint m=(n1+n2)/2;
-    QPoint length(qAbs(n1.x()-n2.x()),qAbs(n1.y()-n2.y()));
+
+    /* QPointF n1(nodes.first->x()-x(),nodes.first->y()-y());
+    QPointF n2(nodes.second->x()-x(),nodes.second->y()-y());
+    QPointF m=(n1+n2)/2;
+    QPointF length(qAbs(n1.x()-n2.x()),qAbs(n1.y()-n2.y()));
+    QPointF topLeft(m.x()-length.x()/2-50,m.y()-length.y()/2-50);
+    QPointF bottomRight(m.x()+length.x()/2+200,m.y()+length.y()/2+100);
+    QRectF boundingRect(topLeft,bottomRight);
+    return boundingRect;*/
+
+    QPointF n1(nodes.first->x()-x(),nodes.first->y()-y());
+    QPointF n2(nodes.second->x()-x(),nodes.second->y()-y());
+    QPointF m=(n1+n2)/2;
+    QPointF length(qAbs(n1.x()-n2.x()),qAbs(n1.y()-n2.y()));
     return QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+200,m.y()+length.y()/2+100));
 }
 
@@ -80,16 +103,60 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
 
     // draw selection
     if (isSelected()) {
-        painter->setPen(QPen(Qt::green, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-        painter->strokePath(shape().simplified(), painter->pen());
+        //painter->setPen(selectedPen);
+        painter->strokePath(shape().simplified(),selectedPen);
     }
 
-    if (controlled>0)
-        painter->setPen(QPen(Qt::darkGreen, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    if (dependentSources>0)
+        painter->setPen(controllingPen);
 
     setOrientation();
     drawComponent(painter);
+    if(hovering)
     drawSolution(painter);
+}
+
+void Component::drawComponent(QPainter* painter){
+
+    painter->save();
+
+    QPointF center=QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos();
+    QPoint n1(nodes.first->x()-x(),nodes.first->y()-y());
+    QPoint n2(nodes.second->x()-x(),nodes.second->y()-y());
+    QLineF line(n1,n2);
+
+    painter->drawLine(line);
+    painter->translate(center);
+
+    if(!pixmap.isNull()) {
+        painter->rotate(angle);
+        if (line.length() > 100) {
+            painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
+        }
+        else {
+            painter->drawPixmap(-50, -line.length() / 2, 100, line.length(), pixmap); //reduced
+        }
+    }
+
+    painter->restore();
+
+}
+
+void Component::drawSolution(QPainter* painter) {
+    painter->resetTransform();//scene coordinates
+
+    QRectF solRect = QRectF(10,10,150,45);
+    QPointF topLeftDisplay=QPointF(15,25);
+    QPainterPath path;
+
+    path.addRoundedRect(solRect,10,10);
+
+    painter->setPen(solutionPen);
+    painter->fillPath(path,solutionColor);
+    painter->drawPath(path);
+
+    painter->drawText(topLeftDisplay, "Current:"+QString().number(round(current)));
+    painter->drawText(topLeftDisplay+QPointF(0,20), "Voltage:"+QString().number(round(voltage)));
 }
 
 void Component::setCurrent(float value) {
@@ -126,7 +193,6 @@ QPainterPath Component::shape() const
     polygon << QPoint((nodes.second->pos()+pVector-pos()).toPoint());
     polygon << QPoint((nodes.second->pos()-pVector-pos()).toPoint());
 
-
     path.addPolygon(polygon);
     return path;
 }
@@ -136,7 +202,6 @@ void Component::hoverEnterEvent(QGraphicsSceneHoverEvent*){
     setZValue(solutionOnTop);
     nodes.first->setZValue(selectedNodesOnTop);
     nodes.second->setZValue(selectedNodesOnTop);
-    update();
 }
 
 void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
@@ -152,82 +217,36 @@ void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
 }
 
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
-
     QGraphicsItem::mouseMoveEvent(event);
     prepareGeometryChange();
-    update();
 }
 
 void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     QGraphicsItem::mouseReleaseEvent(event);
     prepareGeometryChange();
-    update();
 }
 
-void Component::setControlled() {
-    controlled++;
+void Component::addDependent() {
+    dependentSources++;
 }
 
 int Component::getSourceType() {
     return sourceType;
 }
 
-void Component::removeControlled() {
-    controlled--;
-}
-
-void Component::drawComponent(QPainter* painter){
-    QPoint n1(nodes.first->x()-x(),nodes.first->y()-y());
-    QPoint n2(nodes.second->x()-x(),nodes.second->y()-y());
-    QLineF line(n1,n2);
-
-    painter->drawLine(line);
-    painter->translate(QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos());
-
-    if(!pixmap.isNull()) {
-        painter->rotate(angle);
-        if (line.length() > 100) {
-            painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
-        }
-        else {
-            painter->drawPixmap(-50, -line.length() / 2, 100, line.length(), pixmap); //reduced
-        }
-        painter->resetTransform(); //reset rotation
-        painter->translate(QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos());
-    }
-}
-
-void Component::drawSolution(QPainter* painter) {
-    painter->resetTransform();
-    if(hovering){
-        QPainterPath path;
-        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        //path.addRoundedRect(QRectF(labelLocation.x()-5,labelLocation.y()-17.5,150,45),10,10);
-        QRectF solRect = QRectF(10,10,150,45);
-        path.addRoundedRect(solRect,10,10);
-        painter->fillPath(path,QColor(220, 245, 247));
-        painter->drawPath(path);
-        painter->drawText(QPointF(15,25), "Current:"+QString().number(round(current)));
-        painter->drawText(QPointF(15,25)+QPointF(0,20), "Voltage:"+QString().number(round(voltage)));
-    }
+void Component::removeDependent() {
+    dependentSources--;
 }
 
 void Component::setOrientation() {
-    angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
-    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y())) {
-        //quarto
+
+    Node* p=nodes.first;
+    Node* n=nodes.second;
+
+    angle = qAtan(qAbs(p->x()-n->x()) / qAbs(p->y()-n->y())) * 180 / M_PI;
+    if ((p->x() < n->x() && p->y() < n->y())||(p->x() > n->x() && p->y() > n->y()))
         angle=-angle;
-    }
-        if((nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())){
-            //secondo
-            angle=180-angle;
-        }
-    if ((nodes.second->x() < nodes.first->x() && nodes.second->y() > nodes.first->y())) {
-        //primo
-    }
-    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() < nodes.first->y())) {
-        //terzo
+    if(p->y() > n->y())
         angle=180+angle;
-    }
 }
 

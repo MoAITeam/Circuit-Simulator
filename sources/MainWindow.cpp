@@ -502,11 +502,11 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->add(w4,n6,n10);
 
         auto cccs=new CCCS(2,w3);
-        w3->setControlled();
+        w3->addDependent();
         scene->getCircuit()->add(cccs,n3,n4);
 
         auto vcvs= new VCVS(2,cccs);
-        cccs->setControlled();
+        cccs->addDependent();
         scene->getCircuit()->add(vcvs,n6,n5);
 
         auto curr=new CurrentSource(10);
