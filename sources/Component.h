@@ -18,7 +18,7 @@ class Component: public  QGraphicsItem{
 
 public:
     enum sourceTypes {none, volts, ampere};
-    enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs, cccs, ccvs};
+    enum types {resistor, currentSource, voltageSource, wire, voltmeter ,amperometer, ground, vcvs, vccs, cccs, ccvs}; //keep controlled as last
     enum itemType {component = QGraphicsItem::UserType+1, activeComponent = QGraphicsItem::UserType+2};
 
     Component(float a,float b, float c,Component* d=nullptr);
@@ -43,9 +43,12 @@ public:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 
-    //setters
+    QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
+
+        //setters
     virtual void setCurrent(float value);
     void setVoltage(float value);
+    void setNodesSelection(bool value);
 
     void setObserver(ComponentObserver *o);
 
@@ -80,7 +83,6 @@ protected:
     QString label="";
     ComponentObserver* circuit;
     int dependentSources=0;
-
 private:
     bool hovering=false;
     QPointF mousePress;

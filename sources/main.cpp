@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 }
 
 //MARCO
-//Soluzioni giuste con generatore di corrente
+//Grafica migliore per toolbox
 
 //ALESSIO
 //AGGIUNTE:SALVA,CARICA,UNDO,EXPORT

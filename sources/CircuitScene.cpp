@@ -6,11 +6,15 @@
 
 #define sceneSize 1100
 
-QColor CircuitScene::gridColor = QColor(237,237,237,125);
-
 CircuitScene::CircuitScene(Circuit* c):circuit(c){
 
     myMode=moveItem;
+    myType=Component::types::ground;
+    itemMenu=new QMenu();
+    richItemMenu=new QMenu();
+    selectedDependent= nullptr;//TODO forse posso usarne uno solo?
+    focus= nullptr;
+    cValue=0;
 
     setSceneRect(0, 0, sceneSize, sceneSize);
     circuit->setObserver(this);
@@ -30,26 +34,106 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    //propagation is important, I don't want to move nodes if I'm inserting
     if(event->button()==Qt::LeftButton) {
+
         mousePressPoint = event->scenePos();
-        mouseReleasePoint=mousePressPoint;
-        QGraphicsItem *clicked = itemAt(mousePressPoint, QTransform());
-            if (clicked== nullptr) {
+        mouseDragPoint=mousePressPoint;
+
+        if(myMode==moveItem) {
+            if (itemAt(mousePressPoint, QTransform()) == nullptr)
                 selecting = true;
-                QGraphicsScene::mousePressEvent(event);
-            }
-        if (myMode == moveItem) {
             QGraphicsScene::mousePressEvent(event);
-            if (clicked != nullptr) {
-                if (clicked->type() >= Component::component) {
-                    ((Component *) clicked)->getNodes().first->setSelected(true);
-                    ((Component *) clicked)->getNodes().second->setSelected(true);
-                }
+        }
+    }else{
+        QGraphicsScene::mousePressEvent(event);
+    }
+}
+
+void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    if(event->button()==Qt::LeftButton) {
+        if (myMode == moveItem) {
+            mouseDragPoint = event->scenePos();
+            //used in draw foreground
+        }
+        if (selecting) {
+            update(QRectF(mousePressPoint, mouseDragPoint).normalized());
+        }
+    }
+    else { //hovering to show solutions
+        QGraphicsItem* item=itemAt(event->scenePos(),QTransform());
+        if(item!=nullptr)
+            item->update();
+            //won't show solution otherwise, because this is called first, and the rectangle is not yet drawn
+        update(QRectF(display,QSize(200,100)));
+    }
+    QGraphicsScene::mouseMoveEvent(event);
+}
+
+void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
+    if (selecting) {
+        painter->setPen(QPen(Qt::black, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
+        painter->drawRect(QRectF(mousePressPoint, mouseDragPoint));
+    }
+    QGraphicsScene::drawForeground(painter,rect);
+}
+
+
+void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    if(event->button()==Qt::LeftButton) {
+
+        mouseDragPoint = event->scenePos();
+        QGraphicsItem *clicked;
+
+        if (event->button() == Qt::LeftButton) {
+            switch (myMode) {
+                case insertItem:
+                    if ((mousePressPoint - mouseDragPoint).manhattanLength() < NodeSize) {
+                        QPoint defaultPos = QPoint(0, 50);
+                        createComponent(mousePressPoint-defaultPos,mousePressPoint+defaultPos);
+                    } else{
+                        createComponent(mousePressPoint,mouseDragPoint);
+                    }
+                    break;
+                case selectDependent:
+                    clicked = itemAt(mouseDragPoint, QTransform());
+                        if (clicked != nullptr)
+                            if (clicked->type() >= Component::component) {
+                                selectedDependent = (Component *) clicked;
+                                selectedDependent->update();
+                                selectedDependent->addDependent();
+                                myMode = insertItem;
+                            }
+                        break;
+                case moveItem:
+                        if (selecting) {
+                            QPainterPath path;
+                            QRectF selectionRect=QRectF(mousePressPoint, mouseDragPoint);
+                            path.addRect(selectionRect);
+                            setSelectionArea(path);
+                            selecting = false;
+                            update(selectionRect);//rect remains drawn otherwise
+                        }
+                        else {
+                            linkSelectedNodes();
+                        }
+                    break;
+            }
+            QGraphicsScene::mouseReleaseEvent(event);
+        }
+    } else{
+        QGraphicsScene::mouseReleaseEvent(event);
+    }
+}
+
+void CircuitScene::linkSelectedNodes() {
+    for (auto &item : items()) {
+        if(item->isSelected()) {
+            Node* n=dynamic_cast<Node*>(item);
+            if (n!= nullptr) {
+                n->checkLink();
             }
         }
-    } else
-    {
-        QGraphicsScene::mousePressEvent(event);
     }
 }
 
@@ -66,100 +150,19 @@ void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
                 break;
         }
     }
-        else
-            sceneMenu->exec(event->screenPos());
+    else
+        sceneMenu->exec(event->screenPos());
 
-}
-
-void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
-    if (selecting) {
-        painter->setPen(QPen(Qt::black, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-        painter->drawRect(QRectF(mousePressPoint, mouseReleasePoint));
-    }
-    QGraphicsScene::drawForeground(painter,rect);
-}
-
-void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    if(event->button()==Qt::LeftButton) {
-        QGraphicsScene::mouseReleaseEvent(event);
-        mouseReleasePoint = event->scenePos();
-        if (event->button() == Qt::LeftButton) {
-            if (myMode == insertItem) {
-                if ((mousePressPoint - mouseReleasePoint).manhattanLength() < NodeSize) {
-                    QPoint defaultPos = QPoint(0, 100);
-                    mousePressPoint = mousePressPoint - defaultPos;
-                    mouseReleasePoint = mousePressPoint + defaultPos;
-                }
-                createComponent();
-            }
-            if (myMode == selectDependent) {
-                QGraphicsItem *clicked = itemAt(event->scenePos(), QTransform());
-                if (clicked != nullptr)
-                    if (clicked->type() >= Component::component) {
-                        selectedDependent = (Component *) clicked;
-                        selectedDependent->update();
-                        selectedDependent->addDependent();
-                        myMode = insertItem;
-                    }
-            }
-            if (myMode == moveItem) {
-                for (auto &item : items()) {
-                    if(item->isSelected()==true) {
-                        if (item->type() >= Component::component) {
-                            //bug fixing
-                            if (!((Component *) item)->getNodes().first->isSelected() &&
-                                !((Component *) item)->getNodes().second->isSelected()) {
-                                ((Component *) item)->getNodes().first->setSelected(true);
-                                ((Component *) item)->getNodes().second->setSelected(true);
-                            }
-                            ((Component *) item)->getNodes().first->checkLink();
-                            ((Component *) item)->getNodes().second->checkLink();
-                            item->update();
-                            selecting = false;
-                        }
-                    }
-                }
-                if (selecting) {
-                    QPainterPath path;
-                    path.addRect(QRectF(mousePressPoint, mouseReleasePoint));
-                    setSelectionArea(path);
-                    update();
-                    selecting = false;
-                }
-            }
-        }
-    } else{
-        QGraphicsScene::mouseReleaseEvent(event);
-    }
-}
-
-
-void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    if(event->button()==Qt::LeftButton) {
-        if (myMode == moveItem) {
-            mouseReleasePoint = event->scenePos();
-        }
-    }
-    if(selecting)
-        update(QRectF(mousePressPoint,mouseReleasePoint).normalized());
-    else {
-        QGraphicsItem* item=itemAt(event->scenePos(),QTransform());
-        if(item!=nullptr)
-            item->update();//o non mostra soluzione!
-        update(QRectF(display,QSize(200,100)));
-    }
-    QGraphicsScene::mouseMoveEvent(event);
 }
 
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
-    //FIXME doesn't work
     if(event->key()==Qt::Key::Key_C)
-        circuit->print();/*
+        circuit->print();
     if(event->key()==Qt::Key_Backspace)
         for(auto &item : items())
             if(item->isSelected())
                 if(item->type()>=Component::component)
-                    delete item;*/
+                    delete item;
 }
 
 void CircuitScene::setType(Component::types type) {
@@ -179,7 +182,6 @@ Circuit* CircuitScene::getCircuit() {
 }
 
 void CircuitScene::deleteItem() {
-    if(focus!=nullptr)
         delete focus;
 }
 
@@ -213,9 +215,8 @@ void CircuitScene::selectAll() {
 }
 
 
-void CircuitScene::createComponent() {
+void CircuitScene::createComponent(QPointF P, QPointF N) {
     Component *c;
-    focus=c;
     bool gnd=false;
     switch(myType) {
         case Component::resistor:
@@ -265,10 +266,10 @@ void CircuitScene::createComponent() {
         default:
             c = nullptr;
     }
-
+    focus=c;
     if(c!= nullptr) {
-        auto *p = new Node(Node::toGrid(mousePressPoint));
-        auto *n = new Node(Node::toGrid(mouseReleasePoint),gnd);
+        auto *p = new Node(Node::toGrid(P));
+        auto *n = new Node(Node::toGrid(N),gnd);
         circuit->add(c, p, n);
         clearSelection();
         c->setSelected(true);
@@ -279,8 +280,6 @@ void CircuitScene::createComponent() {
 }
 
 void CircuitScene::createItemMenus(){
-    richItemMenu=new QMenu();
-    itemMenu=new QMenu();
     QAction* deleteAction=new QAction(tr("&Delete"),this);
     connect(deleteAction, &QAction::triggered, this, &CircuitScene::deleteItem);
     richItemMenu->addAction(deleteAction);

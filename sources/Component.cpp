@@ -13,7 +13,6 @@
 #include "ResourceManager.h"
 #include "CircuitScene.h"
 
-#define FLT_EPSILON 0.001
 #define solutionOnTop 300
 #define selectedNodesOnTop 400
 #define underNode 100
@@ -113,7 +112,7 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     setOrientation();
     drawComponent(painter);
     if(hovering)
-    drawSolution(painter);
+        drawSolution(painter);
 }
 
 void Component::drawComponent(QPainter* painter){
@@ -160,17 +159,11 @@ void Component::drawSolution(QPainter* painter) {
 }
 
 void Component::setCurrent(float value) {
-    if(abs(value)<FLT_EPSILON)
-        current=0;
-    else
-        current=value;
+    current=value;
 }
 
 void Component::setVoltage(float value) {
-    if(abs(value)<FLT_EPSILON)
-        voltage=0;
-    else
-        voltage=value;
+    voltage=value;
 }
 
 float Component::getCurrent() {
@@ -213,6 +206,7 @@ void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
 
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
     QGraphicsItem::mousePressEvent(event);
+    setNodesSelection(true);
     prepareGeometryChange();
 }
 
@@ -223,6 +217,7 @@ void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
 
 void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     QGraphicsItem::mouseReleaseEvent(event);
+    setNodesSelection(true);
     prepareGeometryChange();
 }
 
@@ -250,3 +245,15 @@ void Component::setOrientation() {
         angle=180+angle;
 }
 
+void Component::setNodesSelection(bool value){
+    nodes.first->setSelected(value);
+    nodes.second->setSelected(value);
+}
+
+QVariant Component::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
+    if (change == ItemSelectedHasChanged && scene()) {
+        nodes.first->setSelected(this->isSelected());
+        nodes.second->setSelected(this->isSelected());
+    }
+    return QGraphicsItem::itemChange(change, value);
+}

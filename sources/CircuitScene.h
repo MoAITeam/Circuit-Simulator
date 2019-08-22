@@ -34,7 +34,7 @@ Q_OBJECT
 public:
     CircuitScene(Circuit* c);
     void addNotify(QGraphicsItem *c) override;
-    void createComponent();
+    void createComponent(QPointF p, QPointF n);
     void createItemMenus();
 
     enum modes{insertItem,moveItem,selectDependent};
@@ -45,6 +45,7 @@ public:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     void keyPressEvent(QKeyEvent *event) override ;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+    void linkSelectedNodes();
 
     void setType(Component::types type);
     void setMode(CircuitScene::modes mode);
@@ -69,7 +70,7 @@ private:
     CircuitScene::modes myMode;
     Circuit* circuit;
     QPointF mousePressPoint;
-    QPointF mouseReleasePoint;
+    QPointF mouseDragPoint;
     bool selecting=false;
     float cValue;
     QMenu* richItemMenu;

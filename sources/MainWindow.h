@@ -14,6 +14,7 @@ class MainWindow: public QMainWindow{
 Q_OBJECT
 
 public:
+    enum samples {parallelCircuit, voltageDivider, currentDivider, strangeOne, controlledOne, trasformatore};
     MainWindow(CircuitScene *scene);
 public slots:
     void showDialog(ActiveComponent*c);
@@ -24,23 +25,23 @@ private:
     void createMenus();
     void createToolbars();
 
-    void buttonGroupClicked(int type);
-    void backgroundButtonGroupClicked(QAbstractButton *button);
+    void componentsButtonGroupClicked(int type);
+    void samplesButtonGroupClicked(QAbstractButton *button);
 
     void sceneScaleChanged(const QString &scale);
 
     void selectItems();
     void deleteItems();
     void runCircuit();
-    void loadImages();
+    void fillComponentsToolbox();
+    void fillSamplesToolbox();
     void drawCircuits(QString text);
     void clearAll();
     void selectAll();
 
     void about();
 
-    QWidget *createCellWidget(const QString &text,const QPixmap &image, int id);
-    QWidget *createBackgroundCellWidget(const QString &text,const QString &image);
+    QWidget *createCellWidget(const QString &text,const QPixmap &image, int id, QButtonGroup*);
 
     CircuitScene *scene;
     QGraphicsView *view;
@@ -63,8 +64,8 @@ private:
     QAction *selectAllAction;
 
     QToolBox *toolBox;
-    QButtonGroup *buttonGroup;
-    QButtonGroup *circuitButtonGroup;
-    QGridLayout *toolboxLayout;
+    QButtonGroup *componentsButtonGroup;
+    QButtonGroup *samplesButtonGroup;
+    QGridLayout *componentsToolboxLayout;
     QGridLayout *samplesLayout;
 };
