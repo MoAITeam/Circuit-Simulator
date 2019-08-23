@@ -293,3 +293,14 @@ void MainWindow::fillSamplesToolbox(){
     samplesLayout->addItem(verticalSpacer,3,0);
 }
 
+QAction* MainWindow::getDeleteAction(){
+    return deleteAction;
+}
+
+QAction* MainWindow::getSelectAllAction(){
+    return selectAllAction;
+}
+
+QAction* MainWindow::getClearAction(){
+    return clearAction;
+}

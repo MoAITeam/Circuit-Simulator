@@ -19,6 +19,9 @@ public:
 public slots:
     void showDialog(ActiveComponent*c);
     void handleScroll();
+    QAction* getDeleteAction();
+    QAction* getClearAction();
+    QAction* getSelectAllAction();
 private:
     void createToolBox();
     void createActions();

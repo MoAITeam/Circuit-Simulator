@@ -218,6 +218,5 @@ void Circuit::update(ActiveComponent *component,float value) {
 }
 
 SparseMatrix Circuit::getMatrix() {
-
     return matrix;
 }

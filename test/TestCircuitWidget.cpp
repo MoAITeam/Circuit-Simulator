@@ -240,7 +240,7 @@ private slots:
 
         auto *vol = new VoltageSource(10);
         auto *vol_p = new Node(100,50);
-        auto *vol_n = new Node(200,75);         //FIXME ERRORE STRANO
+        auto *vol_n = new Node(200,75);
         circuit->add(vol,vol_p,vol_n);
 
         auto *res1 = new Resistor(100);
