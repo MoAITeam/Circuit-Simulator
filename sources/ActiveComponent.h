@@ -26,8 +26,6 @@ public:
             drawLabels(painter,label);
         Component::paint(painter,s,w);
 
-        scene()->update();
-
 
     };
 

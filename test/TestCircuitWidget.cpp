@@ -55,8 +55,8 @@ private slots:
         QVERIFY(found);
     };
 
-    //FIXME double click doesn't work anymore...
-    /*void removeRandomComponent() {
+
+    void removeRandomComponent() {
         QMainWindow *mainWindow = new QMainWindow();
          auto circuit = new Circuit;
          auto scene = new CircuitScene(circuit);
@@ -67,14 +67,12 @@ private slots:
          auto n = new Node(100, 100);
         mainWindow->setCentralWidget(widget);
         circuit->add(c, p, n);
-         QTest::mouseDClick(widget->viewport(), Qt::LeftButton, Qt::NoModifier, widget->mapFromScene(100,100));
-         QTest::mouseClick(widget->viewport(), Qt::LeftButton, Qt::NoModifier,  widget->mapFromScene(0,0));
-         QTest::mouseDClick(widget->viewport(), Qt::LeftButton, Qt::NoModifier,  widget->mapFromScene(48,48));
+        circuit->clear();
          bool status = false;
          if (widget->scene()->items().size() == 0) //items has always one void
              status = true;
          QVERIFY(status);
-    };*/
+    };
 
 
     void testSampleCircuit() {
@@ -228,6 +226,120 @@ private slots:
 
 
     };
+
+
+   void testMatrix(){
+
+        auto circuit = new Circuit;
+        auto scene = new CircuitScene(circuit);
+        auto widget = new QGraphicsView();
+        widget->setScene(scene);
+
+        auto *vol = new VoltageSource(10);
+        auto *vol_p = new Node(100,50);
+        auto *vol_n = new Node(200,75);
+        circuit->add(vol,vol_p,vol_n);
+
+        auto *res1 = new Resistor(100);
+        auto* res_n=new Node(100,100);
+        circuit->add(res1,res_n,vol_p);
+
+        auto* res2=new Resistor(100);
+        circuit->add(res2,res_n,vol_n);
+
+        int check= circuit->getMatrix()(2,3);
+        QVERIFY(circuit->getMatrix()(0,0)==1);
+        QVERIFY(circuit->getMatrix()(0,1)==0);
+        QVERIFY(circuit->getMatrix()(0,2)==0);
+        QVERIFY(circuit->getMatrix()(0,3)==0);
+        QVERIFY(circuit->getMatrix()(0,4)==0);
+        QVERIFY(circuit->getMatrix()(0,5)==0);
+        QVERIFY(circuit->getMatrix()(0,6)==0);
+        QVERIFY(circuit->getMatrix()(0,7)==-1);
+        QVERIFY(circuit->getMatrix()(0,8)==1);
+
+       QVERIFY(circuit->getMatrix()(1,0)==0);
+       QVERIFY(circuit->getMatrix()(1,1)==1);
+       QVERIFY(circuit->getMatrix()(1,2)==0);
+       QVERIFY(circuit->getMatrix()(1,3)==0);
+       QVERIFY(circuit->getMatrix()(1,4)==0);
+       QVERIFY(circuit->getMatrix()(1,5)==0);
+       QVERIFY(circuit->getMatrix()(1,6)==-1);
+       QVERIFY(circuit->getMatrix()(1,7)==0);
+       QVERIFY(circuit->getMatrix()(1,8)==1);
+
+       QVERIFY(circuit->getMatrix()(2,0)==0);
+       QVERIFY(circuit->getMatrix()(2,1)==0);
+       QVERIFY(circuit->getMatrix()(2,2)==1);
+       QVERIFY(circuit->getMatrix()(2,3)==0);
+       QVERIFY(circuit->getMatrix()(2,4)==0);
+       QVERIFY(circuit->getMatrix()(2,5)==-1);
+       QVERIFY(circuit->getMatrix()(2,6)==1);
+       QVERIFY(circuit->getMatrix()(2,7)==0);
+       QVERIFY(circuit->getMatrix()(2,8)==0);
+
+       QVERIFY(circuit->getMatrix()(3,0)==1);
+       QVERIFY(circuit->getMatrix()(3,1)==0);
+       QVERIFY(circuit->getMatrix()(3,2)==0);
+       QVERIFY(circuit->getMatrix()(3,3)==-100);
+       QVERIFY(circuit->getMatrix()(3,4)==0);
+       QVERIFY(circuit->getMatrix()(3,5)==0);
+       QVERIFY(circuit->getMatrix()(3,6)==0);
+       QVERIFY(circuit->getMatrix()(3,7)==0);
+       QVERIFY(circuit->getMatrix()(3,8)==0);
+
+       QVERIFY(circuit->getMatrix()(4,0)==0);
+       QVERIFY(circuit->getMatrix()(4,1)==1);
+       QVERIFY(circuit->getMatrix()(4,2)==0);
+       QVERIFY(circuit->getMatrix()(4,3)==0);
+       QVERIFY(circuit->getMatrix()(4,4)==-100);
+       QVERIFY(circuit->getMatrix()(4,5)==0);
+       QVERIFY(circuit->getMatrix()(4,6)==0);
+       QVERIFY(circuit->getMatrix()(4,7)==0);
+       QVERIFY(circuit->getMatrix()(4,8)==0);
+
+       QVERIFY(circuit->getMatrix()(5,0)==0);
+       QVERIFY(circuit->getMatrix()(5,1)==0);
+       QVERIFY(circuit->getMatrix()(5,2)==1);
+       QVERIFY(circuit->getMatrix()(5,3)==0);
+       QVERIFY(circuit->getMatrix()(5,4)==0);
+       QVERIFY(circuit->getMatrix()(5,5)==0);
+       QVERIFY(circuit->getMatrix()(5,6)==0);
+       QVERIFY(circuit->getMatrix()(5,7)==0);
+       QVERIFY(circuit->getMatrix()(5,8)==10);
+
+       QVERIFY(circuit->getMatrix()(6,0)==0);
+       QVERIFY(circuit->getMatrix()(6,1)==0);
+       QVERIFY(circuit->getMatrix()(6,2)==0);
+       QVERIFY(circuit->getMatrix()(6,3)==0);
+       QVERIFY(circuit->getMatrix()(6,4)==1);
+       QVERIFY(circuit->getMatrix()(6,5)==1);
+       QVERIFY(circuit->getMatrix()(6,6)==0);
+       QVERIFY(circuit->getMatrix()(6,7)==0);
+       QVERIFY(circuit->getMatrix()(6,8)==0);
+
+       QVERIFY(circuit->getMatrix()(7,0)==0);
+       QVERIFY(circuit->getMatrix()(7,1)==0);
+       QVERIFY(circuit->getMatrix()(7,2)==0);
+       QVERIFY(circuit->getMatrix()(7,3)==1);
+       QVERIFY(circuit->getMatrix()(7,4)==0);
+       QVERIFY(circuit->getMatrix()(7,5)==-1);
+       QVERIFY(circuit->getMatrix()(7,6)==0);
+       QVERIFY(circuit->getMatrix()(7,7)==0);
+       QVERIFY(circuit->getMatrix()(7,8)==0);
+
+       QVERIFY(circuit->getMatrix()(8,0)==0);
+       QVERIFY(circuit->getMatrix()(8,1)==0);
+       QVERIFY(circuit->getMatrix()(8,2)==0);
+       QVERIFY(circuit->getMatrix()(8,3)==-1);
+       QVERIFY(circuit->getMatrix()(8,4)==-1);
+       QVERIFY(circuit->getMatrix()(8,5)==0);
+       QVERIFY(circuit->getMatrix()(8,6)==0);
+       QVERIFY(circuit->getMatrix()(8,7)==0);
+       QVERIFY(circuit->getMatrix()(8,8)==0);
+
+
+   }
 };
 
 QTEST_MAIN(TestCircuitWidget)

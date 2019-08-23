@@ -30,6 +30,7 @@ public:
     std::vector<Node*> nonGround();
     void print();
     void solve();
+    SparseMatrix getMatrix();
 
 private:
     CircuitObserver* observer;
