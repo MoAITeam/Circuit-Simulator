@@ -31,6 +31,7 @@ public:
     void update(Node *drag) override;
     void print();
     void solve();
+    SparseMatrix getMatrix();
 
 private:
     CircuitObserver* observer;

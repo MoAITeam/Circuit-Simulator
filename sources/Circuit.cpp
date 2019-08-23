@@ -216,3 +216,8 @@ void Circuit::update(ActiveComponent *component,float value) {
     component->setValue(value);
     matrix.update(getIndex((Component*)component,components),component->behavior);
 }
+
+SparseMatrix Circuit::getMatrix() {
+
+    return matrix;
+}

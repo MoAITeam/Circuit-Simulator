@@ -7,6 +7,7 @@
 
 #include "Component.h"
 #include "Node.h"
+#include "QGraphicsScene"
 
 class ActiveComponent: public Component {
 public:
@@ -24,6 +25,7 @@ public:
         else
             drawLabels(painter,label);
         Component::paint(painter,s,w);
+
 
     };
 
