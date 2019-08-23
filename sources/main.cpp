@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 }
 
 //MARCO
-//Grafica migliore per toolbox
+//Filo attaccabile in mezzo, forse nodi troppo piccoli shape?
 
 //ALESSIO
-//AGGIUNTE:SALVA,CARICA,UNDO,EXPORT
+//AGGIUNTE:SALVA,CARICA,UNDO,EXPORT, amperometro, v nel voltmetro

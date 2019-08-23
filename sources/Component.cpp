@@ -108,6 +108,8 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
 
     if (dependentSources>0)
         painter->setPen(controllingPen);
+    else
+        painter->setPen(componentPen);
 
     setOrientation();
     drawComponent(painter);
@@ -144,18 +146,18 @@ void Component::drawComponent(QPainter* painter){
 void Component::drawSolution(QPainter* painter) {
     painter->resetTransform();//scene coordinates
 
-    QRectF solRect = QRectF(10,10,150,45);
+    //QRectF solRect = QRectF(10,10,150,45);
     QPointF topLeftDisplay=QPointF(15,25);
-    QPainterPath path;
+    //QPainterPath path;
 
-    path.addRoundedRect(solRect,10,10);
+    //path.addRoundedRect(solRect,10,10);
 
     painter->setPen(solutionPen);
-    painter->fillPath(path,solutionColor);
-    painter->drawPath(path);
+    //painter->fillPath(path,solutionColor);
+    //painter->drawPath(path);
 
-    painter->drawText(topLeftDisplay, "Current:"+ QString::number(round(current)));
-    painter->drawText(topLeftDisplay+QPointF(0,20), "Voltage:"+QString::number(round(voltage)));
+    painter->drawText(topLeftDisplay, "Current:"+ QString::number(round(current*100)/100));
+    painter->drawText(topLeftDisplay+QPointF(0,20), "Voltage:"+QString::number(round(voltage*100)/100));
 }
 
 void Component::setCurrent(float value) {

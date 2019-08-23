@@ -21,13 +21,14 @@ public:
     void add(Component *c, Node*& p, Node*& n);
     void removeNotify(Component *c) override;
     void removeNotify(Node *n) override;
+    bool overlaps(Node *p, Node *n);
+    Node* getNode(Node* n);
     void checkLink(Node *n);
     void update(ActiveComponent* component,float value);
     template <typename T> int getIndex(T*x,std::vector<T*> v);
 
     void setObserver(CircuitObserver* graphics);
     void update(Node *drag) override;
-    std::vector<Node*> nonGround();
     void print();
     void solve();
 
@@ -35,6 +36,7 @@ private:
     CircuitObserver* observer;
     std::vector<Component*> components;
     std::vector<Node*> nodes;
+    std::vector<Node*> notGrounds;
     SparseMatrix matrix;
 };
 

@@ -15,9 +15,6 @@
 
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setAcceptHoverEvents(true);
-    //TODO ma è una buona decisione? Chiedere a
-    //if(!gnd) commento sennò non capisco
-    //setOpacity(0.01);
     setZValue(nodeOnTop);
     setFlag(ItemIsMovable);
     setFlag(ItemIsSelectable);
@@ -75,10 +72,14 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
         painter->drawPixmap(-15, 0, 30, 20, pic);
     }
     else {
-        if(isSelected())
+        if(isSelected()) {
             painter->setPen(selectedPen);
-        else
+            painter->setBrush(QBrush(Qt::gray));
+        }
+        else {
             painter->setPen(renderPen);
+            painter->setBrush(QBrush(Qt::black));
+        }
         painter->drawEllipse(-NodeSize / 2, -NodeSize / 2, NodeSize, NodeSize);
     }
     if(hovering)
@@ -88,17 +89,17 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 void Node::paintSolution(QPainter *painter){
     painter->resetTransform();//scene coordinates
 
-    QRectF solRect = QRectF(10,10,150,45);
-    QPainterPath path;
+    //QRectF solRect = QRectF(10,10,150,45);
+    //QPainterPath path;
     QPointF topLeftDisplay(15,25);
 
-    path.addRoundedRect(solRect,10,10);
+    //path.addRoundedRect(solRect,10,10);
 
     painter->setPen(solutionPen);
-    painter->fillPath(path,solutionColor);
-    painter->drawPath(path);
+    //painter->fillPath(path,solutionColor);
+    //painter->drawPath(path);
 
-    painter->drawText(topLeftDisplay, "Voltage:"+QString::number(round(voltage)));
+    painter->drawText(topLeftDisplay, "Voltage:"+QString::number(round(voltage*100)/100));
 }
 
 void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -144,14 +145,11 @@ float Node::getVoltage() {
 void Node::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
     setZValue(solutionOnTop);
     hovering=true;
-    //setOpacity(1);
 }
 
 void Node::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
     setZValue(nodeOnTop);
     hovering=false;
-    //if(!gnd)
-    //setOpacity(0.01);
 }
 
 QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {

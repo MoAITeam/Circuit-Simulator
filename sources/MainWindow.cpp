@@ -159,7 +159,7 @@ void MainWindow::createToolbars() {
 
 QWidget* MainWindow::createCellWidget(const QString &text, const QPixmap &image, int id, QButtonGroup* buttonGroup ) {
 
-    QToolButton *button= new QToolButton;
+    auto *button= new QToolButton;
     button->setText(text);
     button->setIcon(QIcon(image));
     button->setIconSize(QSize(45,45));
@@ -267,7 +267,7 @@ void MainWindow::selectItems() {
 }
 
 void MainWindow::fillComponentsToolbox(){
-    QSpacerItem* verticalSpacer=new QSpacerItem(0,1000,QSizePolicy::Expanding,QSizePolicy::Expanding);
+    auto verticalSpacer=new QSpacerItem(0,1000,QSizePolicy::Expanding,QSizePolicy::Expanding);
     componentsToolboxLayout->addWidget(createCellWidget(tr("Resistor"),ResourceManager::getImage(Component::types::resistor),Component::resistor,componentsButtonGroup),0,0);
     componentsToolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),ResourceManager::getImage(Component::types::voltageSource),Component::voltageSource,componentsButtonGroup),0,1);
     componentsToolboxLayout->addWidget(createCellWidget(tr("Current Source"),ResourceManager::getImage(Component::types::currentSource),Component::currentSource,componentsButtonGroup),1,0);
@@ -283,7 +283,7 @@ void MainWindow::fillComponentsToolbox(){
 }
 
 void MainWindow::fillSamplesToolbox(){
-    QSpacerItem* verticalSpacer=new QSpacerItem(0,1000,QSizePolicy::Expanding,QSizePolicy::Expanding);
+    auto verticalSpacer=new QSpacerItem(0,1000,QSizePolicy::Expanding,QSizePolicy::Expanding);
     samplesLayout->addWidget(createCellWidget("Parallel Circuit",QPixmap(":/images/parallelcircuit.png"),samples::parallelCircuit,samplesButtonGroup),0,0);
     samplesLayout->addWidget(createCellWidget("Voltage Divider",QPixmap(":/images/voltagedivider.png"),samples::voltageDivider,samplesButtonGroup),0,1);
     samplesLayout->addWidget(createCellWidget("Current Divider",QPixmap(":/images/currentdivider.png"),samples::currentDivider,samplesButtonGroup),1,1);

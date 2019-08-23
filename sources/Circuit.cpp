@@ -30,47 +30,19 @@ void Circuit::setObserver(CircuitObserver *o) {
     }
 }
 
-void Circuit::add(Component *c, Node*& p, Node*& n) {
-
-    for (auto &component : components) {
-        if (c == component)
-            throw ModelException("duplicated component won't add it...");
+bool Circuit::overlaps(Node* p, Node* n){
+    bool result=false;
+    for(auto component : components){
         if ((*(p) == *(component->getNodes().first) && *(n)==*(component->getNodes().second))
             ||(*(n) == *(component->getNodes().first) && *(p)==*(component->getNodes().second))) {
-            p->setX(p->x() + 30);
-            n->setX(n->x() + 30);
-            //because it overlaps an existing component
+            result=true;
         }
     }
+    return result;
+}
 
-    if(*p==*n) {
-        throw ModelException("Connecting component to the same node, component won't be connected...");
-    }
-
+Node* Circuit::getNode(Node* n){
     bool found=false;
-    for (auto &node : nodes) {
-        if (*p == *node && p != node) {
-            delete p;
-            p = node;
-            found = true;
-        }
-        if(p==node)
-            found=true;
-    }
-    if (!found){
-        if(!p->isGround()) {
-            matrix.add();
-        }
-
-        nodes.push_back(p);
-        p->setObserver(this);
-
-        if(observer!=nullptr) {
-            observer->addNotify(p);
-        }
-    }
-
-    found= false;
     for (auto &node : nodes) {
         if (*n == *node && n != node) {
             delete n;
@@ -83,34 +55,47 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
     if (!found){
         if(!n->isGround()) {
             matrix.add();
+            notGrounds.push_back(n);
         }
 
         nodes.push_back(n);
         n->setObserver(this);
 
-        if(observer!= nullptr) {
+        if(observer!=nullptr) {
             observer->addNotify(n);
         }
     }
+    return n;
+}
 
-    for(auto& component:components){
-        nodePair toCheck=component->getNodes();
-        if(((p==toCheck.first)||(p==toCheck.second))&&((n==toCheck.first)||(n==toCheck.second))) {
-            delete component;
-        }
+void Circuit::add(Component *c, Node*& p, Node*& n) {
+
+    if(p==n)
+        throw ModelException("Nodes point to the same memory location, component won't be connected...");
+
+    for (auto &component : components)
+        if (c == component)
+            throw ModelException("duplicated component won't add it...");
+
+    while(overlaps(p,n)){
+        p->setX(p->x() + 30);
+        n->setX(n->x() + 30);
     }
+
+    p=getNode(p);
+    n=getNode(n);
 
     components.push_back(c);
     c->setObserver(this);
     if(observer!= nullptr)
         observer->addNotify(c);
 
-    int a=getIndex(p,nonGround());   //find the indexes of comp'sourceType nodes in the list
-    int b=getIndex(n,nonGround());
+    int a=getIndex(p, notGrounds);   //find the indexes of comp'sourceType nodes in the list
+    int b=getIndex(n, notGrounds);
 
     c->connect(p, n);
     if(c->controller==nullptr)
-        matrix.add(c->behavior,a,b); //here indexes of nodes are necessary
+        matrix.add(c->behavior,a,b);
     else
         matrix.add(c->behavior,getIndex(c->controller,components),c->getSourceType(),a,b);
 
@@ -143,7 +128,7 @@ void Circuit::checkLink(Node *n) {
                 if (!(*keep == *n)) {
                     component->connect(existing, keep);
                     int componentIndex = getIndex(component, components);
-                    matrix.update(componentIndex, getIndex(existing, nonGround()), getIndex(keep, nonGround()));
+                    matrix.update(componentIndex, getIndex(existing, notGrounds), getIndex(keep, notGrounds));
                 }
             }
         }
@@ -165,18 +150,6 @@ template <class T> int Circuit::getIndex(T *x,std::vector<T*> v){
         throw ModelException("getIndex found duplicated, unexpected behavior");
 }
 
-std::vector<Node*> Circuit::nonGround(){
-    std::vector<Node*> nonGrounds=nodes;
-    auto node=nonGrounds.begin();
-    while (node!=nonGrounds.end()) {
-        if ((*node)->isGround())
-            node = nonGrounds.erase(node);
-        else
-            node++;
-    }
-    return nonGrounds;
-}
-
 void Circuit::removeNotify(Component *c) {
     matrix.removeComponent(getIndex(c,components));
 
@@ -194,11 +167,14 @@ void Circuit::removeNotify(Component *c) {
 
 void Circuit::removeNotify(Node *n) {
     if (!n->isGround())
-        matrix.removeNode(getIndex(n, nonGround()));
+        matrix.removeNode(getIndex(n, notGrounds));
     auto removeTail = std::remove(nodes.begin(), nodes.end(), n);
     if(nodes.end()-removeTail>1)
         throw ModelException("found more than one node to remove when expected one, undefined behavoir");
     nodes.erase(removeTail,nodes.end());
+
+    removeTail = std::remove(notGrounds.begin(), notGrounds.end(), n);
+    notGrounds.erase(removeTail,notGrounds.end());
 }
 void Circuit::update(Node *drag) {
     checkLink(drag);
@@ -229,10 +205,9 @@ void Circuit::solve(){
         (*comp)->setCurrent(solution[2*components.size()-1-(comp-components.begin())]);
         comp++;
     }
-    auto nonGrounds=nonGround();
-    auto node=nonGrounds.begin();
-    while(node!=nonGrounds.end()){
-        (*node)->setVoltage(solution[2*components.size()+(node-nonGrounds.begin())]);
+    auto node=notGrounds.begin();
+    while(node!=notGrounds.end()){
+        (*node)->setVoltage(solution[2*components.size()+(node-notGrounds.begin())]);
         node++;
     }
 }

@@ -4,6 +4,8 @@
 
 #include "MainWindow.h"
 
+//TODO these have no label
+
 void MainWindow::drawCircuits(QString text) {
 
     if(text=="Parallel Circuit"){

@@ -34,6 +34,7 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    //FIXME problema con spostamento che torna a 0,0
     //propagation is important, I don't want to move nodes if I'm inserting
     if(event->button()==Qt::LeftButton) {
 
@@ -88,7 +89,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         if (event->button() == Qt::LeftButton) {
             switch (myMode) {
                 case insertItem:
-                    if ((mousePressPoint - mouseDragPoint).manhattanLength() < NodeSize) {
+                    if ((mousePressPoint - mouseDragPoint).manhattanLength() < NodeSize*2) {
                         QPoint defaultPos = QPoint(0, 50);
                         createComponent(mousePressPoint-defaultPos,mousePressPoint+defaultPos);
                     } else{
@@ -111,15 +112,15 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                             QRectF selectionRect=QRectF(mousePressPoint, mouseDragPoint);
                             path.addRect(selectionRect);
                             setSelectionArea(path);
-                            selecting = false;
                             update(selectionRect);//rect remains drawn otherwise
-                        }
-                        else {
-                            linkSelectedNodes();
                         }
                     break;
             }
             QGraphicsScene::mouseReleaseEvent(event);
+            if(!selecting) {
+                linkSelectedNodes();//should stay here or you get a bug, caller event destroyed sooner
+            }
+            selecting = false;
         }
     } else{
         QGraphicsScene::mouseReleaseEvent(event);

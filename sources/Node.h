@@ -10,7 +10,7 @@
 #include <QGraphicsItem>
 #include "NodeObserver.h"
 #include "ResourceManager.h"
-#define NodeSize 10
+#define NodeSize 4
 #define nodeGridSize 20
 
 class Component;

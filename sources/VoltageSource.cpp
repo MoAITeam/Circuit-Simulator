@@ -7,7 +7,6 @@
 #include "Component.h"
 
 void VoltageSource::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {
-    painter->setPen(QPen(Qt::red, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     ActiveComponent::paint(painter,qg,qw);
 }
 

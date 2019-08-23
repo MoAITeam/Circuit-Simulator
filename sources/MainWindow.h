@@ -41,7 +41,7 @@ private:
 
     void about();
 
-    QWidget *createCellWidget(const QString &text,const QPixmap &image, int id, QButtonGroup*);
+    static QWidget *createCellWidget(const QString &text,const QPixmap &image, int id, QButtonGroup*);
 
     CircuitScene *scene;
     QGraphicsView *view;
