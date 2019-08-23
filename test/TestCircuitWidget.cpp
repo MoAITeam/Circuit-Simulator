@@ -9,10 +9,13 @@
 #include <iostream>
 #include <QApplication>
 #include <QMainWindow>
+#include <QtWidgets>
+
 #include "../sources/CircuitScene.h"
 #include "../sources/ResourceManager.h"
 #include "../sources/ModelException.h"
 #include "../sources/MatrixException.h"
+#include "../sources/MainWindow.h"
 
 #define EPSILON 0.1
 
@@ -228,7 +231,7 @@ private slots:
     };
 
 
-   void testMatrix(){
+  void testMatrix(){
 
         auto circuit = new Circuit;
         auto scene = new CircuitScene(circuit);
@@ -237,7 +240,7 @@ private slots:
 
         auto *vol = new VoltageSource(10);
         auto *vol_p = new Node(100,50);
-        auto *vol_n = new Node(200,75);
+        auto *vol_n = new Node(200,75);         //FIXME ERRORE STRANO
         circuit->add(vol,vol_p,vol_n);
 
         auto *res1 = new Resistor(100);
@@ -338,6 +341,46 @@ private slots:
        QVERIFY(circuit->getMatrix()(8,7)==0);
        QVERIFY(circuit->getMatrix()(8,8)==0);
 
+
+   }
+
+   void checkButtons(){
+
+       auto circuit = new Circuit;
+       auto scene = new CircuitScene(circuit);
+       auto widget = new QGraphicsView();
+       widget->setScene(scene);
+       auto mw=new MainWindow(scene);
+
+       auto *vol = new VoltageSource(10);
+       auto *vol_p = new Node(100,50);
+       auto *vol_n = new Node(200,75);
+       circuit->add(vol,vol_p,vol_n);
+
+       auto *res1 = new Resistor(100);
+       auto* res_n=new Node(100,100);
+       circuit->add(res1,res_n,vol_p);
+
+       auto* res2=new Resistor(100);
+       circuit->add(res2,res_n,vol_n);
+
+       res2->setSelected(true);
+       int check=widget->scene()->items().size();
+       mw->getDeleteAction()->triggered(true);
+        QVERIFY(widget->scene()->items().size()==5);
+
+       mw->getSelectAllAction()->triggered(true);
+       mw->getDeleteAction()->triggered(true);
+       QVERIFY(widget->scene()->items().size()==0);
+
+
+        auto res=new Resistor(10);
+        auto n1=new Node(300,100);
+        auto n2=new Node(300,50);
+        circuit->add(res,n1,n2);
+
+        mw->getClearAction()->triggered(true);
+        QVERIFY(widget->scene()->items().size()==0);
 
    }
 };

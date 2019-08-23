@@ -515,3 +515,15 @@ void MainWindow::drawCircuits(QString text) {
     }
 
 }
+
+QAction *MainWindow::getSelectAllAction() const {
+    return selectAllAction;
+}
+
+QAction *MainWindow::getClearAction() const {
+    return clearAction;
+}
+
+QAction *MainWindow::getDeleteAction() const {
+    return deleteAction;
+}

@@ -14,11 +14,21 @@ class MainWindow: public QMainWindow{
 Q_OBJECT
 
 public:
+    QAction *getSelectAllAction() const;
+
+    QAction *getClearAction() const;
+
+    QAction *getDeleteAction() const;
+
     MainWindow(CircuitScene *scene);
+
 public slots:
+
     void showDialog(ActiveComponent*c);
     void handleScroll();
+
 private:
+
     void createToolBox();
     void createActions();
     void createMenus();
