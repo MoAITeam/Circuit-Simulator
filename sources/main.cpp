@@ -23,9 +23,8 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-//TODO MARCO
-//Soluzioni giuste
-//Selected Area
+//MARCO
+//Soluzioni giuste con generatore di corrente
 
-//TODO ALESSIO
+//ALESSIO
 //AGGIUNTE:SALVA,CARICA,UNDO,EXPORT

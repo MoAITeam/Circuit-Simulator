@@ -16,7 +16,8 @@ Q_OBJECT
 public:
     MainWindow(CircuitScene *scene);
 public slots:
-    void showDialog();
+    void showDialog(ActiveComponent*c);
+    void handleScroll();
 private:
     void createToolBox();
     void createActions();

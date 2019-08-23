@@ -40,14 +40,26 @@ MainWindow::MainWindow(CircuitScene *scene) {
     setWindowTitle(tr("Circuit Simulator"));
     setUnifiedTitleAndToolBarOnMac(true);
 
-    connect(scene,SIGNAL(insertValue()),this,SLOT(showDialog()));
+    connect(scene,SIGNAL(insertValue(ActiveComponent*)),this,SLOT(showDialog(ActiveComponent*)));
+    connect(view->verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(handleScroll()));
+    connect(view->horizontalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(handleScroll()));
 
 }
 
-void MainWindow::showDialog(){
-    std::string text = "Please,insert the correct value";
+void MainWindow::handleScroll() {
+    scene->display=QPointF(view->horizontalScrollBar()->value(),view->verticalScrollBar()->value());
+}
+
+void MainWindow::showDialog(ActiveComponent*c){
+    std::string text = "Value in ";
     QString string = QString::fromStdString(text);
-    float value = QInputDialog::getDouble(this->parentWidget(), "Insert Value", string);
+    QString unit= "Unit";
+    float oldVal=0;
+    if(c!= nullptr) {
+        oldVal = c->getValue();
+        unit=c->getUnit();
+    }
+    float value = QInputDialog::getDouble(this->parentWidget(), "Dialog", string+unit,oldVal);
     scene->setcValue(value);
 }
 
@@ -209,6 +221,7 @@ void MainWindow::createMenus() {
 
 void MainWindow::buttonGroupClicked(int type) {
     buttonGroup->checkedButton()->setChecked(false);
+    scene->resetExSel();
     toolboxLayout->update();
     samplesLayout->update();
 
@@ -217,11 +230,6 @@ void MainWindow::buttonGroupClicked(int type) {
         scene->setMode(CircuitScene::selectDependent);
     else
         scene->setMode(CircuitScene::insertItem);
-
-    if(type!=Component::wire&&type!=Component::voltmeter&&type!=Component::amperometer&&type!=Component::ground) {
-        showDialog();
-    }
-
 }
 
 
@@ -257,6 +265,7 @@ void MainWindow::sceneScaleChanged(const QString &scale)
 void MainWindow::runCircuit() {
 
     scene->getCircuit()->solve();
+    scene->update();
 
 }
 
@@ -277,7 +286,8 @@ void MainWindow::deleteItems() {
 
     for(auto &item : scene->items())
         if(item->isSelected())
-            delete item;
+            if(item->type()>=Component::component)
+                delete item;
 }
 
 void MainWindow::selectItems() {
@@ -461,6 +471,7 @@ void MainWindow::drawCircuits(QString text) {
 
     else if(text=="Trasformatore"){
 
+        //rapporto di 2
         scene->getCircuit()->clear();
 
         auto vol=new VoltageSource(10);
@@ -480,35 +491,26 @@ void MainWindow::drawCircuits(QString text) {
         auto n6= new Node(300,100);
         scene->getCircuit()->add(w2,n4,n6);
 
-        auto vcvs= new VCVS(10,res1);
-        auto n5=new Node(300,200);
-        scene->getCircuit()->add(vcvs,n6,n5);
+        auto n9=new Node(200,200);
+        auto n10=new Node(200,100);
 
+        auto n5=new Node(300,200);
         auto w3=new Wire;
-        auto n7=new Node(200,200);
-        scene->getCircuit()->add(w3,n5,n7);
+        scene->getCircuit()->add(w3,n5,n9);
 
         auto w4=new Wire;
-        auto n8=new Node(200,100);
-        scene->getCircuit()->add(w4,n6,n8);
+        scene->getCircuit()->add(w4,n6,n10);
 
-        auto res2=new Resistor(10);
-        scene->getCircuit()->add(res2,n7,n8);
+        auto cccs=new CCCS(2,w3);
+        w3->addDependent();
+        scene->getCircuit()->add(cccs,n3,n4);
 
-        auto ccvs=new CCCS(10,res2);
-        scene->getCircuit()->add(ccvs,n3,n4);
-
-        auto w5=new Wire;
-        auto n9=new Node(100,200);
-        scene->getCircuit()->add(w5,n9,n7);
-
-        auto w6=new Wire;
-        auto n10=new Node(100,100);
-        scene->getCircuit()->add(w6,n10,n8);
+        auto vcvs= new VCVS(2,cccs);
+        cccs->addDependent();
+        scene->getCircuit()->add(vcvs,n6,n5);
 
         auto curr=new CurrentSource(10);
         scene->getCircuit()->add(curr,n9,n10);
-
 
     }
 

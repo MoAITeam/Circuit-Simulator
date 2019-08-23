@@ -10,6 +10,9 @@
 #include <cmath>
 #define FLT_EPSILON 0.001
 #define nodeOnTop 200
+#define solutionOnTop 400
+
+#include <QApplication>
 
 Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGround){
     setAcceptHoverEvents(true);
@@ -17,8 +20,11 @@ Node::Node(float x, float y,bool isGround):observer(nullptr),voltage(0),gnd(isGr
     //setOpacity(0.01);
     setZValue(nodeOnTop);
     setFlag(ItemIsMovable);
+    setFlag(ItemIsSelectable);
+    setFlag(ItemSendsGeometryChanges);
     setX(x);
     setY(y);
+    setSelected(false);
 }
 
 Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGround){
@@ -27,8 +33,11 @@ Node::Node(QPointF point, bool isGround):observer(nullptr),voltage(0),gnd(isGrou
     //setOpacity(0.01);
     setZValue(nodeOnTop);
     setFlag(ItemIsMovable);
+    setFlag(ItemIsSelectable);
+    setFlag(ItemSendsGeometryChanges);
     setX(point.x());
     setY(point.y());
+    setSelected(false);
 }
 
 Node::~Node(){
@@ -36,6 +45,7 @@ Node::~Node(){
         observer->removeNotify(this);
 
     std::list<Component*> toDelete=components;
+    if(toDelete.size()!=0)
     for(auto &component : toDelete) {
         delete component;
     }
@@ -87,17 +97,21 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
         painter->setPen(QPen(Qt::gray, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     }
     else {
-        painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        if(isSelected())
+            painter->setPen(QPen(Qt::gray, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        else
+            painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
         painter->drawEllipse(-NodeSize / 2, -NodeSize / 2, NodeSize, NodeSize);
     }
     if(hovering){
         //painter->translate(QPointF(this->x(),this->y()));
+        painter->resetTransform();
         QPainterPath path;
         painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        path.addRoundedRect(QRectF(10,10-17.5,100,30),10,10);
+        path.addRoundedRect(QRectF(10,10,150,45),10,10);
         painter->fillPath(path,QColor(255, 189, 189));
         painter->drawPath(path);
-        painter->drawText(QPointF(20,10), "Voltage:"+QString().number(voltage));
+        painter->drawText(QPointF(15,25), "Voltage:"+QString().number(round(voltage)));
     }
 }
 
@@ -111,16 +125,11 @@ void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseReleaseEvent(event);
-    this->setPos(Node::toGrid(this->pos()));
     checkLink();
-    for (auto component : components) {
-        prepareGeometryChange();
-        component->update();
-    }
 }
 
 void Node::checkLink(){
-    observer->update(*this);
+    observer->update(this);
 }
 
 void Node::setVoltage(float value) {
@@ -131,8 +140,14 @@ void Node::setVoltage(float value) {
 }
 
 void Node::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    std::cout<<"Node Voltage:"<<voltage<<std::endl;
     QGraphicsItem::mousePressEvent(event);
+    if (!(event->modifiers() & Qt::ControlModifier)) {
+        for (auto &item : scene()->selectedItems())
+            if (item->type() >= Component::component) {
+                scene()->clearSelection();
+                item->setSelected(false);
+            }
+    }
 }
 
 bool Node::isGround(){
@@ -150,12 +165,14 @@ QPointF Node::toGrid(QPointF n){
 }
 
 void Node::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
+    setZValue(solutionOnTop);
     hovering=true;
     update();
     //setOpacity(1);
 }
 
 void Node::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
+    setZValue(nodeOnTop);
     hovering=false;
     update();
     //if(!gnd)
@@ -164,4 +181,19 @@ void Node::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
 
 void Node::setGnd(bool value) {
     gnd=value;
+}
+
+QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
+    if(change==ItemPositionChange && scene()){
+        QPointF newPos = value.toPointF();
+        if(QApplication::mouseButtons()==Qt::LeftButton){
+            qreal xV = Node::toGrid(newPos).x();
+            qreal yV = Node::toGrid(newPos).y();
+            return QPointF(xV,yV);
+        }
+        else
+            return newPos;
+    }
+    else
+        return QGraphicsItem::itemChange(change,value);
 }

@@ -33,11 +33,13 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
     QPainterPath shape() const override;
     void drawComponent(QPainter *painter);
+    void drawLabels(QPainter *painter);
     void drawSolution(QPainter *painter);
     void setOrientation();
     void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    //void mouseClick(QGraphicsSceneMouseEvent*) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 
@@ -46,20 +48,27 @@ public:
     void setVoltage(float value);
 
     void setObserver(ComponentObserver *o);
-    void setMenu(QMenu* m);
 
-    void setControlled();
-    void removeControlled();
+    void addDependent();
+    void removeDependent();
+    void setlabel(QString label){
+        this->label=label;
+    };
 
     //getters
+    QString getUnit(){
+        return unit;
+    };
+    QString getLabel(){
+        return label;
+    };
     float getCurrent();
     float getVoltage();
     int getSourceType();
     nodePair getNodes();
 
     float behavior[3];
-    Component *dependent;
-    QMenu* contextMenu;
+    Component *controller;
 
 protected:
     int sourceType=0;
@@ -67,15 +76,19 @@ protected:
     float voltage=0;
     nodePair nodes;
     QPixmap pixmap;
-    ComponentObserver* observer;
+    QString unit="Us";
+    QString label="";
+    ComponentObserver* circuit;
+    int dependentSources=0;
 
 private:
     bool hovering=false;
-    int controlled=0;
     QPointF mousePress;
-    QPointF rectLocation;
     float angle;
-
+    QColor solutionColor=QColor(220, 245, 247);
+    QPen controllingPen=QPen(Qt::darkGreen, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    QPen selectedPen=QPen(Qt::green, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+    QPen solutionPen=QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QPointF press;
     QPointF pressfirst;
     QPointF pressecond;

@@ -11,6 +11,8 @@
 #include <QtGui/QtGui>
 #include <QLabel>
 #include "ResourceManager.h"
+#include "CircuitScene.h"
+
 #define FLT_EPSILON 0.001
 #define solutionOnTop 300
 #define selectedNodesOnTop 400
@@ -19,48 +21,70 @@
 
 
 
-Component::Component(float a,float b,float c, Component* d): behavior{a,b,c}, dependent(d), nodes{nullptr, nullptr} {
+Component::Component(float a,float b,float c, Component* d): behavior{a,b,c}, controller(d) {
+    nodes={nullptr, nullptr};
+    circuit= nullptr;
+    angle=0;
     setZValue(underNode);
     setAcceptHoverEvents(true);
     setFlag(ItemIsSelectable,true);
-    contextMenu=new QMenu();
+    setFlag(ItemIsMovable,true);
 }
 
 Component::~Component() {
     disconnect();
-    if(dependent!= nullptr) {
-        dependent->removeControlled();
-        dependent->update();
+
+    if(controller!= nullptr) {
+        controller->removeDependent();
+        controller->update();
     }
 }
 
-void Component::disconnect() {
-    if (observer!= nullptr)
-        observer->removeNotify(this);
+void Component::disconnect() { //rimuove componente e nodi dal circuito
     nodes.first->disconnect(this);
     nodes.second->disconnect(this);
-    if (nodes.first->getComponents().size()==0)
+
+    if(nodes.first->getComponents().empty())
         delete nodes.first;
-    if (nodes.second->getComponents().size()==0)
+    if(nodes.second->getComponents().empty())
         delete nodes.second;
-    update();
+
+    nodes.first= nullptr;
+    nodes.second= nullptr;
+
+    if (circuit != nullptr) {
+        circuit->removeNotify(this);
+        circuit = nullptr;
+    }
 }
 
-void Component::setObserver(ComponentObserver* o){
-    observer=o;
-}
-
-void Component::connect(Node* p, Node* n){
+void Component::connect(Node* p, Node* n){//rimuove nodi dal circuito e setta nuovi nodi
     if(p!= nullptr && n!=nullptr) {
-        if (nodes.first!= nullptr)
+        Node* save_a= nullptr;
+        Node* save_b= nullptr;
+        if(nodes.first!= nullptr) {
+            save_a=nodes.first;
             nodes.first->disconnect(this);
-        if (nodes.second!= nullptr)
+        }
+        if(nodes.second!= nullptr) {
+            save_b=nodes.second;
             nodes.second->disconnect(this);
+        }
         nodes.first = p;
         nodes.second = n;
         p->connect(this);
         n->connect(this);
+        if(save_a!= nullptr)
+            if(save_a->getComponents().empty())
+                delete save_a;
+        if(save_b!= nullptr)
+            if(save_b->getComponents().empty())
+                delete save_b;
     }
+}
+
+void Component::setObserver(ComponentObserver* o){
+    circuit=o;
 }
 
 nodePair Component::getNodes() {
@@ -68,39 +92,71 @@ nodePair Component::getNodes() {
 }
 
 QRectF Component::boundingRect() const {
-    QPoint n1(nodes.first->x(),nodes.first->y());
-    QPoint n2(nodes.second->x(),nodes.second->y());
-    QPoint m=(n1+n2)/2;
-    QPoint length(qAbs(n1.x()-n2.x()),qAbs(n1.y()-n2.y()));
-    return QRectF(QPointF(m.x()-length.x()/2-50,m.y()-length.y()/2-50),QPointF(m.x()+length.x()/2+200,m.y()+length.y()/2+100));
+    QPointF n1(nodes.first->x() - x(), nodes.first->y() - y());
+    QPointF n2(nodes.second->x() - x(), nodes.second->y() - y());
+    QPointF m = (n1 + n2) / 2;
+    QPointF length(qAbs(n1.x() - n2.x()), qAbs(n1.y() - n2.y()));
+    QPointF topLeft(m.x() - length.x() / 2 - 50, m.y() - length.y() / 2 - 50);
+    QPointF bottomRight(m.x() + length.x() / 2 + 200, m.y() + length.y() / 2 + 100);
+    QRectF boundingRect(topLeft, bottomRight);
+    return boundingRect;
 }
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-    //Draw box on top
-    if(hovering) {
-        setZValue(solutionOnTop);
-        nodes.first->setZValue(selectedNodesOnTop);
-        nodes.second->setZValue(selectedNodesOnTop);
-    }
-    else {
-        setZValue(underNode);
-        nodes.first->setZValue(nodeOnTop);
-        nodes.second->setZValue(nodeOnTop);
-    }
+    if (isSelected())
+        painter->strokePath(shape().simplified(),selectedPen);
 
-    //draw selected
-    if (isSelected()) {
-        painter->setPen(QPen(Qt::green, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-        painter->strokePath(shape().simplified(),painter->pen());
-    }
-    if (controlled>0)
-        painter->setPen(QPen(Qt::darkGreen, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    if (dependentSources>0)
+        painter->setPen(controllingPen);
 
     setOrientation();
     drawComponent(painter);
+    if(hovering)
     drawSolution(painter);
+}
 
+void Component::drawComponent(QPainter* painter){
+
+    painter->save();
+
+    QPointF center=QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos();
+    QPointF n1(nodes.first->x()-x(),nodes.first->y()-y());
+    QPointF n2(nodes.second->x()-x(),nodes.second->y()-y());
+    QLineF line(n1,n2);
+
+    painter->drawLine(line);
+    painter->translate(center);
+
+    if(!pixmap.isNull()) {
+        painter->rotate(angle);
+        if (line.length() > 100) {
+            painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
+        }
+        else {
+            painter->drawPixmap(-50,(int) -line.length() / 2, 100,(int) line.length(), pixmap); //scaled
+        }
+    }
+
+    painter->restore();
+
+}
+
+void Component::drawSolution(QPainter* painter) {
+    painter->resetTransform();//scene coordinates
+
+    QRectF solRect = QRectF(10,10,150,45);
+    QPointF topLeftDisplay=QPointF(15,25);
+    QPainterPath path;
+
+    path.addRoundedRect(solRect,10,10);
+
+    painter->setPen(solutionPen);
+    painter->fillPath(path,solutionColor);
+    painter->drawPath(path);
+
+    painter->drawText(topLeftDisplay, "Current:"+ QString::number(round(current)));
+    painter->drawText(topLeftDisplay+QPointF(0,20), "Voltage:"+QString::number(round(voltage)));
 }
 
 void Component::setCurrent(float value) {
@@ -129,127 +185,68 @@ QPainterPath Component::shape() const
 {
     QPainterPath path;
     QPolygon polygon;
-    polygon << QPoint(nodes.first->x()-20,nodes.first->y());
-    polygon << QPoint(nodes.first->x()+20,nodes.first->y());
-    polygon << QPoint(nodes.second->x()+20, nodes.second->y());
-    polygon << QPoint(nodes.second->x()-20, nodes.second->y());
+    QPointF vector=nodes.second->pos()-nodes.first->pos();
+    QPointF pVector=QPointF(-vector.y(),vector.x())/sqrt(pow(vector.x(),2)+pow(vector.y(),2))*20;
+
+    polygon << QPoint((nodes.first->pos()-pVector-pos()).toPoint());
+    polygon << QPoint((nodes.first->pos()+pVector-pos()).toPoint());
+    polygon << QPoint((nodes.second->pos()+pVector-pos()).toPoint());
+    polygon << QPoint((nodes.second->pos()-pVector-pos()).toPoint());
+
     path.addPolygon(polygon);
     return path;
 }
 
 void Component::hoverEnterEvent(QGraphicsSceneHoverEvent*){
     hovering=true;
-    update();
+    setZValue(solutionOnTop);
+    nodes.first->setZValue(selectedNodesOnTop);
+    nodes.second->setZValue(selectedNodesOnTop);
 }
 
 void Component::hoverLeaveEvent(QGraphicsSceneHoverEvent*){
     hovering=false;
-    update();
+    setZValue(underNode);
+    nodes.first->setZValue(nodeOnTop);
+    nodes.second->setZValue(nodeOnTop);
 }
 
 void Component::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    //save initial position
-    press=event->pos();
-    pressfirst=nodes.first->pos();
-    pressecond=nodes.second->pos();
     QGraphicsItem::mousePressEvent(event);
     prepareGeometryChange();
-    update();
 }
 
 void Component::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
-    nodes.first->setPos(pressfirst+event->pos()-press);
-    nodes.second->setPos(pressecond+event->pos()-press);
-    for (auto c : nodes.first->getComponents())
-        c->update();
-    for (auto c : nodes.second->getComponents())
-        c->update();
     QGraphicsItem::mouseMoveEvent(event);
     prepareGeometryChange();
-    update();
 }
 
 void Component::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
-    //gridify
-    nodes.first->setPos(Node::toGrid(nodes.first->pos()));
-    nodes.second->setPos(Node::toGrid(nodes.second->pos()));
-
-    //connect
-    nodes.first->checkLink();
-    nodes.second->checkLink();
     QGraphicsItem::mouseReleaseEvent(event);
     prepareGeometryChange();
-    update();
 }
 
-void Component::setControlled() {
-    controlled++;
+void Component::addDependent() {
+    dependentSources++;
 }
 
 int Component::getSourceType() {
     return sourceType;
 }
 
-void Component::removeControlled() {
-    controlled--;
-}
-
-void Component::setMenu(QMenu *m) {
-    contextMenu=m;
-}
-
-void Component::drawComponent(QPainter* painter){
-    QPointF center((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2);
-    QPoint n1(nodes.first->x(),nodes.first->y());
-    QPoint n2(nodes.second->x(),nodes.second->y());
-    QLineF line(n1,n2);
-
-    painter->drawLine(line);
-    painter->translate(center);
-
-    if(!pixmap.isNull()) {
-        painter->rotate(angle);
-        if (line.length() > 100)
-            painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
-        else
-            painter->drawPixmap(-50, -line.length() / 2, 100, line.length(), pixmap); //reduced
-        painter->resetTransform(); //reset rotation
-        painter->translate(center);
-    }
-}
-
-void Component::drawSolution(QPainter* painter) {
-    if(hovering){
-        QPainterPath path;
-        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        path.addRoundedRect(QRectF(rectLocation.x()-5,rectLocation.y()-17.5,150,45),10,10);
-        painter->fillPath(path,QColor(220, 245, 247));
-        painter->drawPath(path);
-        painter->drawText(rectLocation, "Current:"+QString().number(current));
-        painter->drawText(rectLocation+QPointF(0,20), "Voltage:"+QString().number(voltage));
-    }
+void Component::removeDependent() {
+    dependentSources--;
 }
 
 void Component::setOrientation() {
-    angle = qAtan(qAbs(nodes.first->x()-nodes.second->x()) / qAbs(nodes.first->y()-nodes.second->y())) * 180 / M_PI;
-    rectLocation=QPointF(30, 30);//sennò primo stampa sopra componente
-    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() > nodes.first->y())) {
-        //quarto
+
+    Node* p=nodes.first;
+    Node* n=nodes.second;
+
+    angle = qAtan(qAbs(p->x()-n->x()) / qAbs(p->y()-n->y())) * 180 / M_PI;
+    if ((p->x() < n->x() && p->y() < n->y())||(p->x() > n->x() && p->y() > n->y()))
         angle=-angle;
-        rectLocation=QPointF(30, -50);
-    }
-        if((nodes.second->x() < nodes.first->x() && nodes.second->y() < nodes.first->y())){
-            //secondo
-            angle=180-angle;
-            rectLocation=QPointF(30, -50);
-        }
-    if ((nodes.second->x() < nodes.first->x() && nodes.second->y() > nodes.first->y())) {
-        //primo
-        rectLocation=QPointF(30, 30);
-    }
-    if ((nodes.second->x() > nodes.first->x() && nodes.second->y() < nodes.first->y())) {
-        //terzo
+    if(p->y() > n->y())
         angle=180+angle;
-        rectLocation=QPointF(30, 30);
-    }
 }
+

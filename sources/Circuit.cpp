@@ -37,9 +37,9 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
             throw ModelException("duplicated component won't add it...");
         if ((*(p) == *(component->getNodes().first) && *(n)==*(component->getNodes().second))
             ||(*(n) == *(component->getNodes().first) && *(p)==*(component->getNodes().second))) {
-            //FIXME flag
             p->setX(p->x() + 30);
             n->setX(n->x() + 30);
+            //because it overlaps an existing component
         }
     }
 
@@ -109,47 +109,46 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
     int b=getIndex(n,nonGround());
 
     c->connect(p, n);
-    if(c->dependent==nullptr)
+    if(c->controller==nullptr)
         matrix.add(c->behavior,a,b); //here indexes of nodes are necessary
     else
-        matrix.add(c->behavior,getIndex(c->dependent,components),c->getSourceType(),a,b);
+        matrix.add(c->behavior,getIndex(c->controller,components),c->getSourceType(),a,b);
 
 }
 
-void Circuit::checkLink(Node &n) {
+void Circuit::checkLink(Node *n) {
 
-    Node* existing=nullptr;
-    int instances=0;
+    Node *existing = nullptr;
+    int instances = 0;
 
     //The heart of link method: finds the one that is "identical for Node standards" but not the same node
     for (auto &node : nodes) {
-        if (*node==n && node!=&n) {
+        if (*node == *n && node != n) {
             existing = node;
             instances++;
         }
     }
 
-    if (instances>1)
-        throw ModelException("found more than one node to connect to, unexpected behavior");
+    if (instances <= 1){
+        //throw ModelException("found more than one node to connect to, unexpected behavior");
 
-    if (existing != nullptr) {
-        std::list<Component *> componentsToUpdate = n.getComponents();
-        for (auto &component : componentsToUpdate) {
-            nodePair pair= component->getNodes();
-            Node* keep;
-            keep = pair.first == &n ? pair.second :pair.first;
-            if(*keep == n )
-                delete component;
-            else {
-                component->connect(existing, keep);
-                int componentIndex=getIndex(component,components);
+        //bool destroy=false;
+        if (existing != nullptr) {
+            std::list<Component *> componentsToUpdate = n->getComponents();
+            for (auto &component : componentsToUpdate) {
+                nodePair pair = component->getNodes();
+                Node *keep;
+                keep = pair.first == n ? pair.second : pair.first;
 
-                matrix.update(componentIndex,getIndex(existing,nonGround()),getIndex(keep,nonGround()));
+                if (!(*keep == *n)) {
+                    component->connect(existing, keep);
+                    int componentIndex = getIndex(component, components);
+                    matrix.update(componentIndex, getIndex(existing, nonGround()), getIndex(keep, nonGround()));
+                }
             }
         }
-        delete &n;
-    }
 }
+    }
 
 template <class T> int Circuit::getIndex(T *x,std::vector<T*> v){
     int result=notFound, count=0, instances=0;
@@ -182,8 +181,8 @@ void Circuit::removeNotify(Component *c) {
     matrix.removeComponent(getIndex(c,components));
 
     for(auto &component : components)
-        if(component->dependent==c)
-            component->dependent=nullptr;
+        if(component->controller==c)
+            component->controller=nullptr;
 
     //Implementation of the erase-remove idiom
 
@@ -201,7 +200,7 @@ void Circuit::removeNotify(Node *n) {
         throw ModelException("found more than one node to remove when expected one, undefined behavoir");
     nodes.erase(removeTail,nodes.end());
 }
-void Circuit::update(Node &drag) {
+void Circuit::update(Node *drag) {
     checkLink(drag);
 }
 

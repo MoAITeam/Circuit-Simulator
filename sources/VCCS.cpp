@@ -9,10 +9,11 @@
 VCCS::VCCS(float value,Component *d):ActiveComponent(0,1/value,0,d) {
     pixmap=ResourceManager::getImage(Component::types::vccs);
     sourceType=volts;
+    this->value=value;
+    unit="number";
 }
 
 void VCCS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {
-
     painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    Component::paint(painter,qg,qw);
+    ActiveComponent::paint(painter,qg,qw);
 }

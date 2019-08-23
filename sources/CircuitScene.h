@@ -40,23 +40,28 @@ public:
     enum modes{insertItem,moveItem,selectDependent};
 
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    void drawForeground(QPainter* painter, const QRectF &rect) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     void keyPressEvent(QKeyEvent *event) override ;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
 
     void setType(Component::types type);
     void setMode(CircuitScene::modes mode);
+    void resetExSel();
     void setcValue(float v);
 
     //actions
+    void disconnectModel();
     void changeValue();
     void deleteItem();
     void selectAll();
 
     Circuit* getCircuit();
+    QPointF display;
 
 signals:
-    void insertValue();
+    void insertValue(ActiveComponent* c);
 
 private:
     static QColor gridColor;
@@ -65,12 +70,14 @@ private:
     Circuit* circuit;
     QPointF mousePressPoint;
     QPointF mouseReleasePoint;
+    bool selecting=false;
     float cValue;
     QMenu* richItemMenu;
     QMenu* itemMenu;
     QMenu* sceneMenu;
     Component *selectedDependent;
-    QGraphicsItem *exSel;
+    QGraphicsItem *focus;
+    int labelCount=0;
 };
 
 

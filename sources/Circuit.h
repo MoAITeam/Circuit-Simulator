@@ -21,12 +21,12 @@ public:
     void add(Component *c, Node*& p, Node*& n);
     void removeNotify(Component *c) override;
     void removeNotify(Node *n) override;
-    void checkLink(Node &n);
+    void checkLink(Node *n);
     void update(ActiveComponent* component,float value);
     template <typename T> int getIndex(T*x,std::vector<T*> v);
 
     void setObserver(CircuitObserver* graphics);
-    void update(Node &drag) override;
+    void update(Node *drag) override;
     std::vector<Node*> nonGround();
     void print();
     void solve();
