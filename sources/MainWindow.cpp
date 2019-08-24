@@ -272,7 +272,7 @@ void MainWindow::fillComponentsToolbox(){
     componentsToolboxLayout->addWidget(createCellWidget(tr("Voltage Source"),ResourceManager::getImage(Component::types::voltageSource),Component::voltageSource,componentsButtonGroup),0,1);
     componentsToolboxLayout->addWidget(createCellWidget(tr("Current Source"),ResourceManager::getImage(Component::types::currentSource),Component::currentSource,componentsButtonGroup),1,0);
     componentsToolboxLayout->addWidget(createCellWidget(tr("Wire"),ResourceManager::getImage(Component::types::wire),Component::wire,componentsButtonGroup),1,1);
-    componentsToolboxLayout->addWidget(createCellWidget(tr("Amperometer"),ResourceManager::getImage(Component::types::amperometer),Component::amperometer,componentsButtonGroup),2,0);
+    componentsToolboxLayout->addWidget(createCellWidget(tr("Amperometer"),ResourceManager::getImage(Component::types::voltmeter),Component::amperometer,componentsButtonGroup),2,0);
     componentsToolboxLayout->addWidget(createCellWidget(tr("Voltmeter"),ResourceManager::getImage(Component::types::voltmeter),Component::voltmeter,componentsButtonGroup),2,1);
     componentsToolboxLayout->addWidget(createCellWidget(tr("Ground"),ResourceManager::getImage(Component::types::ground),Component::ground,componentsButtonGroup),3,0);
     componentsToolboxLayout->addWidget(createCellWidget(tr("VCVS"),ResourceManager::getImage(Component::types::vcvs),Component::vcvs,componentsButtonGroup),3,1);
