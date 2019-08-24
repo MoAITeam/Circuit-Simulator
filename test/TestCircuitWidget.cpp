@@ -438,7 +438,77 @@ private slots:
       mainWindow->getDeleteAction()->triggered();
 
       QVERIFY(widget->scene()->items().size()==0);
+
+
   }
+
+  void testControlledOne(){
+
+      auto circuit = new Circuit;
+      auto scene = new CircuitScene(circuit);
+      auto widget = new QGraphicsView();
+      widget->setScene(scene);
+      auto mainWindow= new MainWindow(scene);
+
+      auto res1=new Resistor(10);
+      auto n2= new Node(300,160);
+      auto n7=new Node(300,60);
+      circuit->add(res1,n2,n7);
+
+      auto wir1=new Wire;
+      auto n1=new Node(400,160);
+      circuit->add(wir1,n2,n1);
+
+      auto vcvs=new VCVS(10,res1);
+      auto n8=new Node(400,60);
+      circuit->add(vcvs,n1,n8);
+
+      auto wir2=new Wire;
+      circuit->add(wir2,n8,n7);
+
+      auto wir4=new Wire;
+      auto n5=new Node(100,60);
+      circuit->add(wir4,n7,n5);
+
+      auto wir5=new Wire;
+      auto n4=new Node(100,160,1);
+      circuit->add(wir5,n2,n4);
+
+      auto curr=new CurrentSource(10);
+      circuit->add(curr,n4,n5);
+
+      mainWindow->getRunCircuitAction()->triggered();
+
+
+      QVERIFY(isEqual(wir1->getCurrent(),-10));
+      QVERIFY(isEqual(wir2->getCurrent(), 10));
+      QVERIFY(isEqual(wir4->getCurrent(),-10));
+      QVERIFY(isEqual(wir5->getCurrent(),-10));
+      QVERIFY(isEqual(res1->getCurrent(),0));
+      QVERIFY(isEqual(curr->getCurrent(),10));
+      QVERIFY(isEqual(vcvs->getCurrent(),10));
+
+      QVERIFY(isEqual(wir1->getVoltage(),0));
+      QVERIFY(isEqual(wir2->getVoltage(),0));
+      QVERIFY(isEqual(wir4->getVoltage(),0));
+      QVERIFY(isEqual(wir5->getVoltage(),0));
+      QVERIFY(isEqual(res1->getVoltage(),0));
+      QVERIFY(isEqual(curr->getVoltage(),0));
+      QVERIFY(isEqual(vcvs->getVoltage(),0));
+
+      QVERIFY(isEqual(n1->getVoltage(),0));
+      QVERIFY(isEqual(n2->getVoltage(),0));
+      QVERIFY(isEqual(n4->getVoltage(),0));
+      QVERIFY(isEqual(n5->getVoltage(),0));
+      QVERIFY(isEqual(n7->getVoltage(),0));
+      QVERIFY(isEqual(n8->getVoltage(),0));
+
+
+
+  }
+
+
+
 };
 
 QTEST_MAIN(TestCircuitWidget)
