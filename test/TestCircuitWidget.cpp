@@ -82,11 +82,11 @@ private slots:
 
 
 
-        QMainWindow *mainWindow = new QMainWindow();
         auto circuit = new Circuit;
         auto scene = new CircuitScene(circuit);
         auto widget = new QGraphicsView();
         widget->setScene(scene);
+        auto mainWindow= new MainWindow(scene);
 
         auto *vol = new VoltageSource(30);
         auto *vol_p = new Node(50, 50);
@@ -120,7 +120,7 @@ private slots:
             std::cout<<e.what()<<std::endl;
         }
 
-        circuit->solve();
+    mainWindow->getRunCircuitAction()->triggered();
 
         float t1 = res1_p->getVoltage();
         float t2 = res2_p->getVoltage();
@@ -153,11 +153,11 @@ private slots:
 
     void testComplicatedCircuit() {
 
-        QMainWindow *mainWindow = new QMainWindow();
         auto circuit = new Circuit;
         auto scene = new CircuitScene(circuit);
         auto widget = new QGraphicsView();
         widget->setScene(scene);
+        auto mainWindow= new MainWindow(scene);
 
         auto *curr = new CurrentSource(10);
         auto *curr_p = new Node(50, 50);
@@ -204,7 +204,8 @@ private slots:
         auto *res6_n = new Node(150, 100);
         circuit->add(res6, res6_p, res6_n);
 
-        circuit->solve();
+        mainWindow->getRunCircuitAction()->triggered();
+
         float t1=curr_p->getVoltage();
         float t2= res1_p->getVoltage();
         float t3= res2_p->getVoltage();
@@ -383,6 +384,61 @@ private slots:
         QVERIFY(widget->scene()->items().size()==0);
 
    }
+
+   void testAmpVoltMeter(){
+
+       auto circuit = new Circuit;
+       auto scene = new CircuitScene(circuit);
+       auto widget = new QGraphicsView();
+       widget->setScene(scene);
+       auto mainWindow= new MainWindow(scene);
+
+      auto vol=new VoltageSource(10);
+      auto n1=new Node(100,100);
+      auto n5=new Node(100,50,1);
+      circuit->add(vol,n1,n5);
+
+      auto res1=new Resistor(100);
+      auto n2=new Node(300,100);
+      circuit->add(res1,n1,n2);
+
+      auto res2=new Resistor(100);
+      auto n3=new Node(300,50);
+      circuit->add(res2,n2,n3);
+
+      auto amp=new Amperometer;
+      auto n4=new Node(200,50);
+      circuit->add(amp,n3,n4);
+
+      auto res3=new Resistor(100);
+      circuit->add(res3,n4,n5);
+
+      auto voltm=new Voltmeter;
+      circuit->add(voltm,n1,n3);
+
+      mainWindow->getRunCircuitAction()->triggered();
+
+      QVERIFY(isEqual(amp->getCurrent(),-0.03));
+
+      QVERIFY(isEqual(voltm->getVoltage(),-6.67));
+
+      mainWindow->getSelectAction()->triggered();
+
+      amp->setSelected(true);
+      mainWindow->getDeleteAction()->triggered();
+
+      QVERIFY(widget->scene()->items().size()==10);
+
+      voltm->setSelected(true);
+      mainWindow->getDeleteAction()->triggered();
+
+      QVERIFY(widget->scene()->items().size()==9);
+
+      mainWindow->getSelectAllAction()->triggered();
+      mainWindow->getDeleteAction()->triggered();
+
+      QVERIFY(widget->scene()->items().size()==0);
+  }
 };
 
 QTEST_MAIN(TestCircuitWidget)

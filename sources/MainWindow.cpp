@@ -304,3 +304,11 @@ QAction* MainWindow::getSelectAllAction(){
 QAction* MainWindow::getClearAction(){
     return clearAction;
 }
+
+QAction *MainWindow::getRunCircuitAction() const {
+    return runCircuitAction;
+}
+
+QAction *MainWindow::getSelectAction() const {
+    return selectAction;
+}

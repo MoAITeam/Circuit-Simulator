@@ -12,6 +12,8 @@
 class MainWindow: public QMainWindow{
 
 Q_OBJECT
+public:
+    QAction *getSelectAction() const;
 
 public:
     enum samples {parallelCircuit, voltageDivider, currentDivider, strangeOne, controlledOne, trasformatore};
@@ -22,6 +24,9 @@ public slots:
     QAction* getDeleteAction();
     QAction* getClearAction();
     QAction* getSelectAllAction();
+
+    QAction *getRunCircuitAction() const;
+
 private:
     void createToolBox();
     void createActions();
