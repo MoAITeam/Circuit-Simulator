@@ -516,45 +516,34 @@ private slots:
       widget->setScene(scene);
       auto mainWindow= new MainWindow(scene);
 
+
       auto res= new Resistor(10);
       QVERIFY(res->getPixmap()==ResourceManager::getImage(Component::types::resistor));
-      delete res;
 
       auto curr=new CurrentSource(10);
       QVERIFY(curr->getPixmap()==ResourceManager::getImage(Component::types::currentSource));
-      delete curr;
 
       auto vol=new VoltageSource(10);
       QVERIFY(vol->getPixmap()==ResourceManager::getImage(Component::types::voltageSource));
-      delete vol;
 
-      auto wir=new Wire;
-      QVERIFY(wir->getPixmap()==ResourceManager::getImage(Component::types::wire));
-      delete wir;
 
       auto amp=new Amperometer;
-      QVERIFY(amp->getPixmap()==ResourceManager::getImage(Component::types::amperometer));
-      delete amp;
+      QVERIFY(amp->getPixmap()==ResourceManager::getImage(Component::types::voltmeter));
 
       auto volt=new Voltmeter;
       QVERIFY(volt->getPixmap()==ResourceManager::getImage(Component::types::voltmeter));
-      delete volt;
 
       auto cccs=new CCCS(10);
       QVERIFY(cccs->getPixmap()==ResourceManager::getImage(Component::types::cccs));
-      delete cccs;
 
       auto ccvs=new CCVS(10);
       QVERIFY(ccvs->getPixmap()==ResourceManager::getImage(Component::types::ccvs));
-      delete ccvs;
 
       auto vccs=new VCCS(10);
       QVERIFY(vccs->getPixmap()==ResourceManager::getImage(Component::types::vccs));
-      delete vccs;
 
       auto vcvs=new VCVS(10);
       QVERIFY(vcvs->getPixmap()==ResourceManager::getImage(Component::types::vcvs));
-      delete vcvs;
 
 
 
