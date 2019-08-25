@@ -259,3 +259,7 @@ QVariant Component::itemChange(QGraphicsItem::GraphicsItemChange change, const Q
     }
     return QGraphicsItem::itemChange(change, value);
 }
+
+const QPixmap &Component::getPixmap() const {
+    return pixmap;
+}

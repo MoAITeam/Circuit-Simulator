@@ -61,7 +61,9 @@ public:
     //getters
     QString getUnit(){
         return unit;
-    };
+    }
+
+    const QPixmap &getPixmap() const;;
     QString getLabel(){
         return label;
     };
