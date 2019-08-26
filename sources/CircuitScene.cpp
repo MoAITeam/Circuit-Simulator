@@ -68,7 +68,10 @@ void CircuitScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
             //won't show solution otherwise, because this is called first, and the rectangle is not yet drawn
         update(QRectF(display,QSize(200,100)));
     }
+
+    this->update();
     QGraphicsScene::mouseMoveEvent(event);
+
 }
 
 void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
@@ -95,6 +98,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                     } else{
                         createComponent(mousePressPoint,mouseDragPoint);
                     }
+                    emit insertedComponent();
                     break;
                 case selectDependent:
                     clicked = itemAt(mouseDragPoint, QTransform());
@@ -195,6 +199,7 @@ void CircuitScene::changeValue() {
     if (focus->type()==Component::activeComponent) {
         emit insertValue((ActiveComponent*)focus);
         circuit->update((ActiveComponent*)focus,cValue);
+        focus->update();
     }
 }
 
@@ -202,6 +207,7 @@ void CircuitScene::changeName() {
     if (focus->type()==Component::activeComponent) {
         emit insertName((ActiveComponent*)focus);
         ((ActiveComponent*)focus)->setlabel(cName);
+        focus->update();
     }
 }
 

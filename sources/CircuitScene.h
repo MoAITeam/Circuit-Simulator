@@ -66,6 +66,7 @@ public:
 signals:
     void insertValue(ActiveComponent* c);
     void insertName(ActiveComponent* c);
+    void insertedComponent();
 
 private:
     static QColor gridColor;

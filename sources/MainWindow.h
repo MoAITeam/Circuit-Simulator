@@ -18,14 +18,17 @@ public:
 public:
     enum samples {parallelCircuit, voltageDivider, currentDivider, strangeOne, controlledOne, trasformatore};
     MainWindow(CircuitScene *scene);
+
 public slots:
     void showValueDialog(ActiveComponent *c);
     void showNameDialog(ActiveComponent* c);
+    void addedComponent();
     void handleScroll();
     QAction* getDeleteAction();
     QAction* getClearAction();
     QAction* getSelectAllAction();
     QAction *getRunCircuitAction() const;
+
 
 private:
     void createToolBox();
@@ -72,6 +75,8 @@ private:
     QAction *selectAllAction;
     QAction *exportAction;
 
+    QTextEdit* label;
+    QTimer*  timer;
     QToolBox *toolBox;
     QButtonGroup *componentsButtonGroup;
     QButtonGroup *samplesButtonGroup;

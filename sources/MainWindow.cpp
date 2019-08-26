@@ -47,6 +47,7 @@ MainWindow::MainWindow(CircuitScene *scene) {
     connect(view->verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(handleScroll()));
     connect(view->horizontalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(handleScroll()));
     connect(scene,SIGNAL(insertName(ActiveComponent*)),this,SLOT(showNameDialog(ActiveComponent * )));
+    connect(scene,SIGNAL(insertedComponent()),this,SLOT (addedComponent()));
 
 
 
@@ -81,6 +82,15 @@ void MainWindow::showNameDialog(ActiveComponent *c) {
     scene->setcName(name);
 }
 
+void MainWindow::addedComponent() {
+
+    componentsButtonGroup->setExclusive(false);
+    componentsButtonGroup->checkedButton()->setChecked(false);
+    componentsButtonGroup->setExclusive(true);
+
+
+}
+
 void MainWindow::createToolBox() {
 
     samplesButtonGroup= new QButtonGroup(this);
@@ -89,7 +99,7 @@ void MainWindow::createToolBox() {
             &MainWindow::samplesButtonGroupClicked);
 
     componentsButtonGroup = new QButtonGroup(this);
-    componentsButtonGroup->setExclusive(false);
+    componentsButtonGroup->setExclusive(true);
     connect(componentsButtonGroup,QOverload<int>::of((&QButtonGroup::buttonClicked)),this,
             &MainWindow::componentsButtonGroupClicked);
 
@@ -118,13 +128,15 @@ void MainWindow::createActions() {
 
     QIcon icon_delete= QIcon(":/images/delete.png");
     deleteAction=new QAction(icon_delete,tr("&Delete"),this);
+    deleteAction->setShortcut(QKeySequence(Qt::CTRL+ Qt::Key_D));
     connect(deleteAction, &QAction::triggered, this, &MainWindow::deleteItems);
 
     QIcon icon_select= QIcon(":/images/pointer.png");
     selectAction=new QAction(icon_select,tr("&Select"),this);
     connect(selectAction, &QAction::triggered, this, &MainWindow::selectItems);
 
-    exitAction = new QAction(tr("&Exit"), this);
+    QIcon icon_exit=QIcon(":/images/delete.png");
+    exitAction = new QAction(icon_exit,tr("&Exit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);
     exitAction->setStatusTip(tr("Quit example"));
     connect(exitAction, &QAction::triggered, this, &QWidget::close);
@@ -135,18 +147,22 @@ void MainWindow::createActions() {
 
     QIcon icon_run=QIcon(":/images/play.png");
     runCircuitAction= new QAction(icon_run,tr("&Run"),this);
+    runCircuitAction->setShortcut(QKeySequence(Qt::CTRL +Qt::Key_R));
     connect(runCircuitAction,&QAction::triggered,this,&MainWindow::runCircuit);
 
     QIcon icon_clear=QIcon(":/images/clear.png");
     clearAction= new QAction(icon_clear,tr("&Clear"),this);
+    clearAction->setShortcut(QKeySequence(Qt::CTRL+ Qt::Key_C));
     connect(clearAction,&QAction::triggered,this,&MainWindow::clearAll);
 
     QIcon icon_selAll=QIcon(":/images/selectall");
     selectAllAction= new QAction(icon_selAll,tr("&Select All"),this);
+    selectAllAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
     connect(selectAllAction,&QAction::triggered,this,&MainWindow::selectAll);
 
     QIcon icon_export=QIcon(":/images/export.png");
     exportAction=new QAction(icon_export,tr("&Export"),this);
+    exportAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(exportAction,&QAction::triggered,this,&MainWindow::exportImage);
 
 }
@@ -161,6 +177,7 @@ void MainWindow::createToolbars() {
     editToolBar->addAction(runCircuitAction);
     editToolBar->addAction(clearAction);
     editToolBar->addAction(selectAllAction);
+    editToolBar->addAction(exportAction);
 
     viewToolBar= addToolBar(tr("View"));
 
@@ -172,7 +189,7 @@ void MainWindow::createToolbars() {
     connect(sceneScaleCombo, QOverload<const QString &>::of(&QComboBox::currentIndexChanged),this, &MainWindow::sceneScaleChanged);
 
     viewToolBar->addWidget(sceneScaleCombo);
-    viewToolBar->addAction(exportAction);
+
 }
 
 
@@ -214,7 +231,7 @@ void MainWindow::createMenus() {
 
 
 void MainWindow::componentsButtonGroupClicked(int type) {
-    componentsButtonGroup->checkedButton()->setChecked(false);
+
     scene->resetExSel();
     componentsToolboxLayout->update();
     samplesLayout->update();
@@ -224,6 +241,7 @@ void MainWindow::componentsButtonGroupClicked(int type) {
         scene->setMode(CircuitScene::selectDependent);
     else
         scene->setMode(CircuitScene::insertItem);
+
 }
 
 
@@ -246,6 +264,7 @@ void MainWindow::about()
                        tr("Our <b>Circuit Simulator</b> can evaluate every kind "
                           "of ideal electronic circuit"));
 }
+
 
 void MainWindow::sceneScaleChanged(const QString &scale)
 {
@@ -278,11 +297,14 @@ void MainWindow::selectAll() {
 void MainWindow::exportImage() {
 
     scene->clearSelection();
+    QRectF getRect=scene->sceneRect();
+    scene->setSceneRect(scene->itemsBoundingRect());
     QImage image(scene->sceneRect().size().toSize(),QImage::Format_ARGB32);
     image.fill(Qt::transparent);
     QPainter painter(&image);
     scene->render(&painter);
     image.save("circuit.png");
+    scene->setSceneRect(getRect);
 
 }
 
