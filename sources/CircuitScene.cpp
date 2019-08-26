@@ -178,6 +178,11 @@ void CircuitScene::setcValue(float v) {
     cValue=v;
 }
 
+void CircuitScene::setcName(QString s) {
+
+    cName=s;
+}
+
 Circuit* CircuitScene::getCircuit() {
     return circuit;
 }
@@ -192,6 +197,14 @@ void CircuitScene::changeValue() {
         circuit->update((ActiveComponent*)focus,cValue);
     }
 }
+
+void CircuitScene::changeName() {
+    if (focus->type()==Component::activeComponent) {
+        emit insertName((ActiveComponent*)focus);
+        ((ActiveComponent*)focus)->setlabel(cName);
+    }
+}
+
 
 void CircuitScene::disconnectModel() {
     if (focus->type()>=Component::component) {
@@ -281,23 +294,31 @@ void CircuitScene::createComponent(QPointF P, QPointF N) {
 }
 
 void CircuitScene::createItemMenus(){
-    QAction* deleteAction=new QAction(tr("&Delete"),this);
+    auto* deleteAction=new QAction(tr("&Delete"),this);
     connect(deleteAction, &QAction::triggered, this, &CircuitScene::deleteItem);
     richItemMenu->addAction(deleteAction);
     itemMenu->addAction(deleteAction);
 
-    QAction* changeAction=new QAction(tr("&Change"),this);
-    connect(changeAction, &QAction::triggered, this, &CircuitScene::changeValue);
-    richItemMenu->addAction(changeAction);
+    auto* changeValueAction=new QAction(tr("&Change Value"),this);
+    connect(changeValueAction, &QAction::triggered, this, &CircuitScene::changeValue);
+    richItemMenu->addAction(changeValueAction);
 
-    QAction* selectAllAction=new QAction(tr("&Select All"),this);
+    auto changeNameAction=new QAction(tr("&Change Name"),this);
+    connect(changeNameAction,&QAction::triggered, this, &CircuitScene::changeName);
+    richItemMenu->addAction(changeNameAction);
+
+    auto* selectAllAction=new QAction(tr("&Select All"),this);
     connect(selectAllAction, &QAction::triggered, this, &CircuitScene::selectAll);
     sceneMenu->addAction(selectAllAction);
 
-    QAction* disconnectModel=new QAction(tr("&Disconnect"),this);
+    auto* disconnectModel=new QAction(tr("&Disconnect"),this);
     connect(disconnectModel, &QAction::triggered, this, &CircuitScene::disconnectModel);
     itemMenu->addAction(disconnectModel);
     richItemMenu->addAction(disconnectModel);
+
+
+
+
 }
 
 void CircuitScene::resetExSel() {

@@ -60,7 +60,7 @@ std::list<Component*> Node::getComponents() {
 QRectF Node::boundingRect() const {
     QPointF topLeft=QPointF(-NodeSize/2.0, -NodeSize/2.0);
     QSize rectSize=QSize(NodeSize,NodeSize);
-    QRectF boundingRect= QRectF( topLeft*2,rectSize*2);
+    QRectF boundingRect= QRectF( topLeft*4,rectSize*4);
     QRectF largeBoundingRect=QRectF( topLeft*6,rectSize*6);
     return gnd ? largeBoundingRect : boundingRect;
 }

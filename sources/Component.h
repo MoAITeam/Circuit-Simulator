@@ -49,24 +49,25 @@ public:
     virtual void setCurrent(float value);
     void setVoltage(float value);
     void setNodesSelection(bool value);
-
     void setObserver(ComponentObserver *o);
-
-    void addDependent();
-    void removeDependent();
     void setlabel(QString label){
         this->label=label;
     };
+
+    void addDependent();
+    void removeDependent();
 
     //getters
     QString getUnit(){
         return unit;
     }
 
-    const QPixmap &getPixmap() const;;
+    const QPixmap &getPixmap() const;
+
     QString getLabel(){
         return label;
     };
+
     float getCurrent();
     float getVoltage();
     int getSourceType();

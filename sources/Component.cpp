@@ -235,6 +235,7 @@ void Component::removeDependent() {
     dependentSources--;
 }
 
+
 void Component::setOrientation() {
 
     Node* p=nodes.first;

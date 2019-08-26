@@ -19,12 +19,12 @@ public:
     enum samples {parallelCircuit, voltageDivider, currentDivider, strangeOne, controlledOne, trasformatore};
     MainWindow(CircuitScene *scene);
 public slots:
-    void showDialog(ActiveComponent*c);
+    void showValueDialog(ActiveComponent *c);
+    void showNameDialog(ActiveComponent* c);
     void handleScroll();
     QAction* getDeleteAction();
     QAction* getClearAction();
     QAction* getSelectAllAction();
-
     QAction *getRunCircuitAction() const;
 
 private:
@@ -46,7 +46,7 @@ private:
     void drawCircuits(QString text);
     void clearAll();
     void selectAll();
-
+    void exportImage();
     void about();
 
     static QWidget *createCellWidget(const QString &text,const QPixmap &image, int id, QButtonGroup*);
@@ -70,6 +70,7 @@ private:
     QAction *runCircuitAction;
     QAction *clearAction;
     QAction *selectAllAction;
+    QAction *exportAction;
 
     QToolBox *toolBox;
     QButtonGroup *componentsButtonGroup;

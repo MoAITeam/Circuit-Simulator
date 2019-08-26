@@ -51,18 +51,21 @@ public:
     void setMode(CircuitScene::modes mode);
     void resetExSel();
     void setcValue(float v);
+    void setcName(QString s);
 
     //actions
     void disconnectModel();
     void changeValue();
     void deleteItem();
     void selectAll();
+    void changeName();
 
     Circuit* getCircuit();
     QPointF display;
 
 signals:
     void insertValue(ActiveComponent* c);
+    void insertName(ActiveComponent* c);
 
 private:
     static QColor gridColor;
@@ -73,12 +76,14 @@ private:
     QPointF mouseDragPoint;
     bool selecting=false;
     float cValue;
+    QString cName;
     QMenu* richItemMenu;
     QMenu* itemMenu;
     QMenu* sceneMenu;
     Component *selectedDependent;
     QGraphicsItem *focus;
     int labelCount=0;
+
 };
 
 

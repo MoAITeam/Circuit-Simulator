@@ -43,9 +43,12 @@ MainWindow::MainWindow(CircuitScene *scene) {
     setWindowTitle(tr("Circuit Simulator"));
     setUnifiedTitleAndToolBarOnMac(true);
 
-    connect(scene,SIGNAL(insertValue(ActiveComponent*)),this,SLOT(showDialog(ActiveComponent*)));
+    connect(scene,SIGNAL(insertValue(ActiveComponent*)),this,SLOT(showValueDialog(ActiveComponent * )));
     connect(view->verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(handleScroll()));
     connect(view->horizontalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(handleScroll()));
+    connect(scene,SIGNAL(insertName(ActiveComponent*)),this,SLOT(showNameDialog(ActiveComponent * )));
+
+
 
 }
 
@@ -53,7 +56,7 @@ void MainWindow::handleScroll() {
     scene->display=QPointF(view->horizontalScrollBar()->value(),view->verticalScrollBar()->value());
 }
 
-void MainWindow::showDialog(ActiveComponent*c){
+void MainWindow::showValueDialog(ActiveComponent *c){
     std::string text = "Value in ";
     QString string = QString::fromStdString(text);
     QString unit= "Unit";
@@ -64,6 +67,18 @@ void MainWindow::showDialog(ActiveComponent*c){
     }
     float value = QInputDialog::getDouble(this->parentWidget(), "Dialog", string+unit,oldVal);
     scene->setcValue(value);
+}
+
+void MainWindow::showNameDialog(ActiveComponent *c) {
+
+    std::string text = "Name ";
+    QString string = QString::fromStdString(text);
+    QString oldName="";
+    if(c!= nullptr)
+        oldName = c->getLabel();
+
+    QString name = QInputDialog::getText(this->parentWidget(), "Dialog", string,QLineEdit::Normal,oldName);
+    scene->setcName(name);
 }
 
 void MainWindow::createToolBox() {
@@ -130,6 +145,10 @@ void MainWindow::createActions() {
     selectAllAction= new QAction(icon_selAll,tr("&Select All"),this);
     connect(selectAllAction,&QAction::triggered,this,&MainWindow::selectAll);
 
+    QIcon icon_export=QIcon(":/images/export.png");
+    exportAction=new QAction(icon_export,tr("&Export"),this);
+    connect(exportAction,&QAction::triggered,this,&MainWindow::exportImage);
+
 }
 
 
@@ -153,7 +172,7 @@ void MainWindow::createToolbars() {
     connect(sceneScaleCombo, QOverload<const QString &>::of(&QComboBox::currentIndexChanged),this, &MainWindow::sceneScaleChanged);
 
     viewToolBar->addWidget(sceneScaleCombo);
-
+    viewToolBar->addAction(exportAction);
 }
 
 
@@ -182,6 +201,7 @@ QWidget* MainWindow::createCellWidget(const QString &text, const QPixmap &image,
 void MainWindow::createMenus() {
     fileMenu=menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(exitAction);
+    fileMenu->addAction(exportAction);
 
     itemMenu= menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(deleteAction);
@@ -253,6 +273,17 @@ void MainWindow::selectAll() {
     for(auto &item : scene->items())
         if (item->type()>=Component::component)
             item->setSelected(true);
+}
+
+void MainWindow::exportImage() {
+
+    scene->clearSelection();
+    QImage image(scene->sceneRect().size().toSize(),QImage::Format_ARGB32);
+    image.fill(Qt::transparent);
+    QPainter painter(&image);
+    scene->render(&painter);
+    image.save("circuit.png");
+
 }
 
 void MainWindow::deleteItems() {

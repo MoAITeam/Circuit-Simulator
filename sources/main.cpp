@@ -23,8 +23,6 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-//MARCO
-//Filo attaccabile in mezzo, forse nodi troppo piccoli shape?, change name
 
 //ALESSIO
-//AGGIUNTE:SALVA,CARICA,UNDO,EXPORT, amperometro, v nel voltmetro
+// amperometro, v nel voltmetro
