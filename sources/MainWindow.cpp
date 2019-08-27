@@ -294,17 +294,15 @@ void MainWindow::runCircuit() {
 void MainWindow::showMatrix() {
 
 
-    DynamicMatrix print(scene->getCircuit()->getMatrix()->rows(),scene->getCircuit()->getMatrix()->cols());
-    print=scene->getCircuit()->getMatrix()->matrix();
+    auto print=scene->getCircuit()->getMatrix();
     QString matrix;
     for(int i=0;i<scene->getCircuit()->getMatrix()->rows();i++){
-        for(int j=0;j<scene->getCircuit()->getMatrix()->cols()-1;j++){
-
-            if(j==scene->getCircuit()->getMatrix()->cols()-1)
-                matrix+"\n";
-            else
-                matrix + QString::number((int)(*(scene->getCircuit()->getMatrix()))(i,j));
+        for(int j=0;j<scene->getCircuit()->getMatrix()->cols();j++){
+                float val=(*print)(i, j);
+                matrix=matrix + QString::number(val);
         }
+        matrix=matrix+"\n";
+
     }
     QMessageBox mat;
     mat.setWindowTitle("Show Matrix");
