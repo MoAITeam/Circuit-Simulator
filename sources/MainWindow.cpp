@@ -166,8 +166,8 @@ void MainWindow::createActions() {
     exportAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(exportAction,&QAction::triggered,this,&MainWindow::exportImage);
 
-    QIcon icon_showMatrix=QIcon(":/images/clear.png");
-    showMatrixAction=new QAction(icon_export,tr("&Show Matrix"),this);
+    QIcon icon_showMatrix=QIcon(":/images/matrix.png");
+    showMatrixAction=new QAction(icon_showMatrix,tr("&Show Matrix"),this);
     showMatrixAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     connect(showMatrixAction,&QAction::triggered,this,&MainWindow::showMatrix);
 
@@ -233,6 +233,8 @@ void MainWindow::createMenus() {
     itemMenu->addAction(deleteAction);
     itemMenu->addAction(clearAction);
     itemMenu->addAction(selectAllAction);
+    itemMenu->addAction(runCircuitAction);
+    itemMenu->addAction(showMatrixAction);
 
     aboutMenu= menuBar()->addMenu(tr("&About"));
     aboutMenu->addAction(aboutAction);
@@ -293,22 +295,24 @@ void MainWindow::runCircuit() {
 
 void MainWindow::showMatrix() {
 
-
+    if(scene->items().size()!=0){
     auto print=scene->getCircuit()->getMatrix();
-    QString matrix;
+    QString matrix="";
     for(int i=0;i<scene->getCircuit()->getMatrix()->rows();i++){
         for(int j=0;j<scene->getCircuit()->getMatrix()->cols();j++){
                 float val=(*print)(i, j);
-                matrix=matrix + QString::number(val);
+                matrix=matrix + "  " +  QString::number(val)+" ";
         }
         matrix=matrix+"\n";
 
     }
     QMessageBox mat;
     mat.setWindowTitle("Show Matrix");
-    mat.setText(matrix);
+    mat.setText("Here is the <b>matrix</b>:");
+    mat.setInformativeText(matrix);
     mat.exec();
 
+    }
 }
 
 void MainWindow::clearAll() {

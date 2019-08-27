@@ -268,7 +268,7 @@ private slots:
       QVERIFY((*matrix)(1,3)==0);
       QVERIFY((*matrix)(1,4)==0);
       QVERIFY((*matrix)(1,5)==0);
-      QVERIFY((*matrix)(1,6)==-1);
+      QVERIFY((*matrix)(1,6)==-1);icon_export
       QVERIFY((*matrix)(1,7)==0);
       QVERIFY((*matrix)(1,8)==1);
 
