@@ -2,6 +2,7 @@
 // Created by Sierra on 2019-06-23.
 //
 
+#include <fstream>
 #include "CircuitScene.h"
 
 #define sceneSize 1100
@@ -163,11 +164,97 @@ void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
     if(event->key()==Qt::Key::Key_C)
         circuit->print();
+    if(event->key()==Qt::Key::Key_S){
+        saveCircuit();
+    }
+    if(event->key()==Qt::Key::Key_L) {
+        loadCircuit();
+    }
     if(event->key()==Qt::Key_Backspace)
         for(auto &item : items())
             if(item->isSelected())
                 if(item->type()>=Component::component)
                     delete item;
+}
+
+void CircuitScene::saveCircuit() {
+    std::ofstream out("save.txt");
+    for(auto item:items()) {
+        if (item->type() == Component::component)
+            out << ((Component *) item)->getData() << std::endl;
+        if(item->type()==Component::activeComponent)
+            out<<((ActiveComponent*)item)->getData()<<std::endl;
+    }
+}
+
+void CircuitScene::loadCircuit() {
+    circuit->clear();
+    std::ifstream in("save.txt");
+    std::string currentString;
+    std::vector<std::string> v;
+    std::vector<Component*> toAdd;
+    std::vector<nodePair> nodesToAdd;
+    std::vector<QString> dependentLabels;
+    std::vector<ActiveComponent*> dependentSources;
+
+    while (std::getline(in, currentString)) {
+        v.clear();
+        std::stringstream ss(currentString);
+        while (ss.good()) {
+            std::string substr;
+            getline(ss, substr, '/');
+            v.push_back(substr);
+        }
+
+        auto type=Component::types(std::stoi(v[0]));
+        QString label=QString::fromStdString(v[1]);
+        float value=stof(v[2]);
+        float pX=std::stof(v[3]);
+        float pY=std::stof(v[4]);
+        float nX=std::stof(v[5]);
+        float nY=std::stof(v[6]);
+
+        Component *c=initComponent(type);
+        c->setlabel(label);
+
+        if(c->type()==Component::activeComponent)
+            ((ActiveComponent*)c)->setValue(value);
+
+        if(c->myType>=Component::vcvs) {
+            dependentSources.push_back((ActiveComponent *) c);
+            dependentLabels.push_back(QString::fromStdString(v[7]));
+        }
+
+        auto *p = new Node(Node::toGrid(QPointF(pX, pY)));
+        Node* n;
+        if(type==Component::ground)
+            n = new Node(Node::toGrid(QPointF(nX,nY)),true);
+        else
+            n = new Node(Node::toGrid(QPointF(nX, nY)));
+        toAdd.push_back(c);
+        nodePair pair;
+        pair.first=p;
+        pair.second=n;
+        nodesToAdd.push_back(pair);
+    }
+
+    int i=0;
+    for(auto &c:dependentSources) {
+        for(auto &comp:toAdd){
+                if(comp->getLabel()==dependentLabels[i]) {
+                    c->controller = comp;
+                    comp->addDependent();
+                }
+        }
+        i++;
+    }
+    for(int i=0; i<toAdd.size();i++)
+        if(toAdd[i]->myType<Component::vcvs)
+            circuit->add(toAdd[i], nodesToAdd[i].first, nodesToAdd[i].second);
+    for(int i=0; i<toAdd.size();i++)
+        if(toAdd[i]->myType>=Component::vcvs)
+            circuit->add(toAdd[i], nodesToAdd[i].first, nodesToAdd[i].second);
+
 }
 
 void CircuitScene::setType(Component::types type) {
@@ -183,7 +270,6 @@ void CircuitScene::setcValue(float v) {
 }
 
 void CircuitScene::setcName(QString s) {
-
     cName=s;
 }
 
@@ -221,6 +307,7 @@ void CircuitScene::disconnectModel() {
 
         disconnecting->disconnect();
         circuit->add(disconnecting,a_saved,b_saved);
+        update();
         disconnecting->update();
         clearSelection();
         disconnecting->setSelected(true);
@@ -236,67 +323,22 @@ void CircuitScene::selectAll() {
 
 
 void CircuitScene::createComponent(QPointF P, QPointF N) {
-    Component *c;
-    bool gnd=false;
-    switch(myType) {
-        case Component::resistor:
-            c = new Resistor(100);
-            c->setlabel("R "+QString::number(labelCount++));
-            break;
-        case Component::voltmeter:
-            c = new Voltmeter;
-            c->setlabel("VM "+QString::number(labelCount++));
-            break;
-        case Component::amperometer:
-            c=new Amperometer;
-            c->setlabel("AM "+QString::number(labelCount++));
-            break;
-        case Component::voltageSource:
-            c = new VoltageSource(10);
-            c->setlabel("VS "+QString::number(labelCount++));
-            break;
-        case Component::currentSource:
-            c = new CurrentSource(10);
-            c->setlabel("CS "+QString::number(labelCount++));
-            break;
-        case Component::wire:
-            c = new Wire;
-            break;
-        case Component::vcvs:
-            c = new VCVS(1,selectedDependent);
-            c->setlabel("VCVS "+QString::number(labelCount++));
-            break;
-        case Component::vccs:
-            c = new VCCS(1,selectedDependent);
-            c->setlabel("VCCS "+QString::number(labelCount++));
-            break;
-        case Component::ccvs:
-            c = new CCVS(1,selectedDependent);
-            c->setlabel("CCVS "+QString::number(labelCount++));
-            break;
-        case Component::cccs:
-            c = new CCCS(1,selectedDependent);
-            c->setlabel("CCCS "+QString::number(labelCount++));
-            break;
-        case Component::ground:
-            c = new Wire;
-            c->setlabel("wire");
-            gnd=true;
-            break;
-        default:
-            c = nullptr;
-    }
+    Component *c=initComponent(myType,selectedDependent);
+    c->setlabel(c->getLabel()+QString::number(labelCount++));
+    auto *p = new Node(Node::toGrid(P));
+    Node* n;
+    if(myType==Component::ground)
+        n = new Node(Node::toGrid(N),true);
+    else
+        n = new Node(Node::toGrid(N));
+    circuit->add(c, p, n);
+    clearSelection();
     focus=c;
-    if(c!= nullptr) {
-        auto *p = new Node(Node::toGrid(P));
-        auto *n = new Node(Node::toGrid(N),gnd);
-        circuit->add(c, p, n);
-        clearSelection();
-        c->setSelected(true);
-        p->setSelected(true);
-        n->setSelected(true);
-        c->update();
-        setMode(CircuitScene::modes(CircuitScene::moveItem));}
+    c->setSelected(true);
+    p->setSelected(true);
+    n->setSelected(true);
+    c->update();
+    setMode(CircuitScene::modes(CircuitScene::moveItem));
 }
 
 void CircuitScene::createItemMenus(){
@@ -322,11 +364,50 @@ void CircuitScene::createItemMenus(){
     itemMenu->addAction(disconnectModel);
     richItemMenu->addAction(disconnectModel);
 
-
-
-
 }
 
 void CircuitScene::resetExSel() {
     focus= nullptr;
+}
+
+Component* CircuitScene::initComponent(Component::types type, Component* source) {
+    Component* c;
+    switch(type) {
+        case Component::resistor:
+            c = new Resistor(100);
+            break;
+        case Component::voltmeter:
+            c = new Voltmeter;
+            break;
+        case Component::amperometer:
+            c=new Amperometer;
+            break;
+        case Component::voltageSource:
+            c = new VoltageSource(10);
+            break;
+        case Component::currentSource:
+            c = new CurrentSource(10);
+            break;
+        case Component::wire:
+            c = new Wire;
+            break;
+        case Component::vcvs:
+            c = new VCVS(1,source);
+            break;
+        case Component::vccs:
+            c = new VCCS(1,source);
+            break;
+        case Component::ccvs:
+            c = new CCVS(1,source);
+            break;
+        case Component::cccs:
+            c = new CCCS(1,source);
+            break;
+        case Component::ground:
+            c = new Wire(true);
+            break;
+        default:
+            c = nullptr;
+    }
+    return c;
 }

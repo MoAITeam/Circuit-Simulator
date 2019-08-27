@@ -22,7 +22,8 @@ void Amperometer::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, Q
 }
 
 Amperometer::Amperometer():Component(1,0,0){
-    
+    myType=Component::amperometer;
+    label="AM";
     voltage=0;
     pixmap=ResourceManager::getImage(Component::types::voltmeter);
 }

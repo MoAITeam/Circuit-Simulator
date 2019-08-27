@@ -10,6 +10,8 @@ VCVS::VCVS(float value,Component *d):ActiveComponent(1/value,0,0,d) {
     sourceType=volts;
     this->value=value;
     unit="number";
+    myType=vcvs;
+    label="VCVS";
 }
 
 void VCVS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

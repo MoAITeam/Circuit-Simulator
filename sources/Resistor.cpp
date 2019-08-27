@@ -10,6 +10,8 @@ Resistor::Resistor(float res):ActiveComponent(1,-res,0){
     resistance=res;
     this->value=res;
     unit="Ω";
+    myType=resistor;
+    label="R";
 }
 
 void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

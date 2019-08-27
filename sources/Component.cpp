@@ -264,3 +264,8 @@ QVariant Component::itemChange(QGraphicsItem::GraphicsItemChange change, const Q
 const QPixmap &Component::getPixmap() const {
     return pixmap;
 }
+
+std::string Component::getData(){
+    return std::to_string(myType)+"/"+label.toStdString()+"/0.000/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"//";
+}
+

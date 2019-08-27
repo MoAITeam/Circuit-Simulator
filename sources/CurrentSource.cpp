@@ -14,4 +14,6 @@ CurrentSource::CurrentSource(float value):ActiveComponent(0,1,value) {
     current=value;
     this->value=value;
     unit="A";
+    label="CS";
+    myType=currentSource;
 }

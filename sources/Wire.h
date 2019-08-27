@@ -11,7 +11,7 @@
 class Wire :public Component{
 
 public:
-    Wire():Component(1,0,0){};
+    Wire(bool isGround=false):Component(1,0,0){label="wire";myType=ground;};
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
 };
 

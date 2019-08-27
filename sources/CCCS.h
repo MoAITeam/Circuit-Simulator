@@ -16,9 +16,9 @@ public:
         behavior[1]=1/value;
         this->value=value;
     }
-    void setSource(Component* c){
-        controller=c;
-    };
+    std::string getData() override{
+        return std::to_string(myType)+"/"+label.toStdString()+"/"+std::to_string(value)+"/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"/"+controller->getLabel().toStdString()+"/";
+    }
 };
 
 

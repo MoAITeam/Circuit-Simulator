@@ -70,11 +70,13 @@ public:
 
     float getCurrent();
     float getVoltage();
+    virtual std::string getData();
     int getSourceType();
     nodePair getNodes();
 
     float behavior[3];
     Component *controller;
+    types myType=wire;
 
 protected:
     int sourceType=0;

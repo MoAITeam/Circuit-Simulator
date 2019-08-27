@@ -42,6 +42,11 @@ public:
         painter->drawText(QPointF(-40,-50)+QPointF(0,20),QString::number(value)+unit);
         painter->restore();
     };
+
+    std::string getData() override{
+            return std::to_string(myType)+"/"+label.toStdString()+"/"+std::to_string(value)+"/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"//";
+    }
+
 protected:
     float value=0;
 };

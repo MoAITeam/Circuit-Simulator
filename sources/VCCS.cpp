@@ -11,6 +11,8 @@ VCCS::VCCS(float value,Component *d):ActiveComponent(0,1/value,0,d) {
     sourceType=volts;
     this->value=value;
     unit="number";
+    myType=vccs;
+    label="VCCS";
 }
 
 void VCCS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget* qw) {

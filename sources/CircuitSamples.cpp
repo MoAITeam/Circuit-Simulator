@@ -181,10 +181,12 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->add(res1,n1,n3);
 
         auto w1=new Wire;
+        w1->setlabel("wire1");
         auto n4=new Node(400,100);
         scene->getCircuit()->add(w1,n2,n4);
 
         auto w2=new Wire;
+        w2->setlabel("wire2");
         auto n6= new Node(300,100);
         scene->getCircuit()->add(w2,n4,n6);
 
@@ -193,21 +195,23 @@ void MainWindow::drawCircuits(QString text) {
 
         auto n5=new Node(300,200);
         auto w3=new Wire;
+        w3->setlabel("wire3");
         scene->getCircuit()->add(w3,n5,n9);
 
         auto w4=new Wire;
+        w4->setlabel("wire4");
         scene->getCircuit()->add(w4,n6,n10);
 
-        auto cccs=new CCCS(2,w3);
-        w3->addDependent();
+        auto curr=new CurrentSource(10);
+        scene->getCircuit()->add(curr,n9,n10);
+
+        auto cccs=new CCCS(2,curr);
+        curr->addDependent();
         scene->getCircuit()->add(cccs,n3,n4);
 
         auto vcvs= new VCVS(2,cccs);
         cccs->addDependent();
         scene->getCircuit()->add(vcvs,n6,n5);
-
-        auto curr=new CurrentSource(10);
-        scene->getCircuit()->add(curr,n9,n10);
 
     }
 

@@ -35,7 +35,10 @@ public:
     CircuitScene(Circuit* c);
     void addNotify(QGraphicsItem *c) override;
     void createComponent(QPointF p, QPointF n);
+    Component* initComponent(Component::types type, Component* source= nullptr);
     void createItemMenus();
+    void saveCircuit();
+    void loadCircuit();
 
     enum modes{insertItem,moveItem,selectDependent};
 
