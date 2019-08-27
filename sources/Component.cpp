@@ -146,15 +146,15 @@ void Component::drawComponent(QPainter* painter){
 void Component::drawSolution(QPainter* painter) {
     painter->resetTransform();//scene coordinates
 
-    //QRectF solRect = QRectF(10,10,150,45);
+    QRectF solRect = QRectF(10,10,150,45);
     QPointF topLeftDisplay=QPointF(15,25);
-    //QPainterPath path;
+    QPainterPath path;
 
-    //path.addRoundedRect(solRect,10,10);
+    path.addRect(solRect);
 
     painter->setPen(solutionPen);
-    //painter->fillPath(path,solutionColor);
-    //painter->drawPath(path);
+    painter->fillPath(path,solutionColor);
+    painter->drawPath(path);
 
     painter->drawText(topLeftDisplay, "Current:"+ QString::number(round(current*100)/100));
     painter->drawText(topLeftDisplay+QPointF(0,20), "Voltage:"+QString::number(round(voltage*100)/100));

@@ -35,7 +35,6 @@ void CircuitScene::addNotify(QGraphicsItem *item) {
 }
 
 void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    //FIXME problema con spostamento che torna a 0,0
     //propagation is important, I don't want to move nodes if I'm inserting
     if(event->button()==Qt::LeftButton) {
 

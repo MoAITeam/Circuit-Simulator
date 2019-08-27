@@ -13,7 +13,7 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->clear();
 
         auto res=new Resistor(10);
-        auto n1=new Node(400,160);
+        auto n1=new Node(400,160,1);
         auto n2=new Node(400,60);
         scene->getCircuit()->add(res,n1,n2);
 
@@ -47,7 +47,7 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->clear();
 
         auto res1=new Resistor(10);
-        auto n1=new Node(400,160);
+        auto n1=new Node(400,160,1);
         auto n2=new Node(400,60);
         scene->getCircuit()->add(res1,n1,n2);
 
@@ -78,7 +78,7 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->clear();
 
         auto res1=new Resistor(10);
-        auto n1=new Node(400,160);
+        auto n1=new Node(400,160,1);
         auto n2=new Node(400,60);
         scene->getCircuit()->add(res1,n1,n2);
 
@@ -112,7 +112,7 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->clear();
 
         auto vol1=new VoltageSource(10);
-        auto n1=new Node(400,200);
+        auto n1=new Node(400,200,1);
         auto n2=new Node(400,50);
         scene->getCircuit()->add(vol1,n1,n2);
 
@@ -143,7 +143,7 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->add(res1,n2,n7);
 
         auto wir1=new Wire;
-        auto n1=new Node(400,160);
+        auto n1=new Node(400,160,1);
         scene->getCircuit()->add(wir1,n2,n1);
 
         auto vcvs=new VCVS(10,res1);
@@ -172,7 +172,7 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->clear();
 
         auto vol=new VoltageSource(10);
-        auto n1=new Node(500,200);
+        auto n1=new Node(500,200,1);
         auto n2=new Node(500,100);
         scene->getCircuit()->add(vol,n1,n2);
 
