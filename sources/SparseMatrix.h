@@ -24,6 +24,7 @@ public:
     void update(int i, const float behavior[3]);
     void print();
     std::vector<float> solve();
+    EigenInterface* getTerms() const;
 
 private:
     int components;

@@ -50,6 +50,7 @@ private:
     void clearAll();
     void selectAll();
     void exportImage();
+    void showMatrix();
     void about();
 
     static QWidget *createCellWidget(const QString &text,const QPixmap &image, int id, QButtonGroup*);
@@ -75,6 +76,7 @@ private:
     QAction *clearAction;
     QAction *selectAllAction;
     QAction *exportAction;
+    QAction *showMatrixAction;
 
     QToolBox *toolBox;
 

@@ -10,6 +10,7 @@
 #include "CircuitScene.h"
 #include "ResourceManager.h"
 #include "Voltmeter.h"
+#include "SparseMatrix.h"
 
 #include <QtWidgets>
 #include <iostream>
@@ -165,6 +166,13 @@ void MainWindow::createActions() {
     exportAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(exportAction,&QAction::triggered,this,&MainWindow::exportImage);
 
+    QIcon icon_showMatrix=QIcon(":/images/clear.png");
+    showMatrixAction=new QAction(icon_export,tr("&Show Matrix"),this);
+    showMatrixAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    connect(showMatrixAction,&QAction::triggered,this,&MainWindow::showMatrix);
+
+
+
 }
 
 
@@ -178,6 +186,7 @@ void MainWindow::createToolbars() {
     editToolBar->addAction(clearAction);
     editToolBar->addAction(selectAllAction);
     editToolBar->addAction(exportAction);
+    editToolBar->addAction(showMatrixAction);
 
     viewToolBar= addToolBar(tr("View"));
 
@@ -279,6 +288,28 @@ void MainWindow::runCircuit() {
 
     scene->getCircuit()->solve();
     scene->update();
+
+}
+
+void MainWindow::showMatrix() {
+
+
+    DynamicMatrix print(scene->getCircuit()->getMatrix()->rows(),scene->getCircuit()->getMatrix()->cols());
+    print=scene->getCircuit()->getMatrix()->matrix();
+    QString matrix;
+    for(int i=0;i<scene->getCircuit()->getMatrix()->rows();i++){
+        for(int j=0;j<scene->getCircuit()->getMatrix()->cols()-1;j++){
+
+            if(j==scene->getCircuit()->getMatrix()->cols()-1)
+                matrix+"\n";
+            else
+                matrix + QString::number((int)(*(scene->getCircuit()->getMatrix()))(i,j));
+        }
+    }
+    QMessageBox mat;
+    mat.setWindowTitle("Show Matrix");
+    mat.setText(matrix);
+    mat.exec();
 
 }
 

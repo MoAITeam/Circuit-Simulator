@@ -159,3 +159,8 @@ std::vector<float> SparseMatrix::solve(){
     return sol;
 
 }
+
+EigenInterface* SparseMatrix::getTerms() const {
+
+    return terms;
+}
