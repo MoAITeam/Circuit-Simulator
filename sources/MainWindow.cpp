@@ -158,7 +158,7 @@ void MainWindow::createActions() {
 
     QIcon icon_selAll=QIcon(":/images/selectall");
     selectAllAction= new QAction(icon_selAll,tr("&Select All"),this);
-    selectAllAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+    selectAllAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
     connect(selectAllAction,&QAction::triggered,this,&MainWindow::selectAll);
 
     QIcon icon_export=QIcon(":/images/export.png");
@@ -171,10 +171,24 @@ void MainWindow::createActions() {
     showMatrixAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     connect(showMatrixAction,&QAction::triggered,this,&MainWindow::showMatrix);
 
+    saveAction=new QAction(tr("&Save"),this);
+    saveAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+    connect(saveAction,&QAction::triggered,this,&MainWindow::save);
+
+    loadAction=new QAction(tr("&Load"),this);
+    loadAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
+    connect(loadAction,&QAction::triggered,this,&MainWindow::load);
 
 
 }
 
+void MainWindow::save() {
+    scene->saveCircuit();
+}
+
+void MainWindow::load() {
+    scene->loadCircuit();
+}
 
 void MainWindow::createToolbars() {
 
@@ -226,8 +240,11 @@ QWidget* MainWindow::createCellWidget(const QString &text, const QPixmap &image,
 
 void MainWindow::createMenus() {
     fileMenu=menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(exitAction);
+    fileMenu->addAction(loadAction);
+    fileMenu->addAction(saveAction);
     fileMenu->addAction(exportAction);
+    fileMenu->addAction(exitAction);
+
 
     itemMenu= menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(deleteAction);
@@ -292,7 +309,6 @@ void MainWindow::runCircuit() {
 }
 
 void MainWindow::showMatrix() {
-
 
     auto print=scene->getCircuit()->getMatrix();
     QString matrix;

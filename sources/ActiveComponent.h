@@ -13,39 +13,11 @@ class ActiveComponent: public Component {
 public:
     virtual void setValue(float value)=0;
     ActiveComponent(float a,float b, float c,Component* d=nullptr):Component(a,b,c,d){};
-    int type() const override{
-        return itemType::activeComponent;
-    };
-    float getValue(){
-        return value;
-    };
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *s, QWidget *w) override{
-        if(controller!= nullptr)
-            drawLabels(painter,label+" ∝ "+controller->getLabel());
-        else
-            drawLabels(painter,label);
-        Component::paint(painter,s,w);
-
-
-    };
-
-    void drawLabels(QPainter* painter, QString text){
-        painter->save();
-        painter->translate(QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos());
-        QFont font=painter->font();
-        font.setBold(true);
-        painter->setFont(font);
-        painter->setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        painter->drawText(QPointF(-40,-50), text);
-        font.setBold(false);
-        painter->setFont(font);
-        painter->drawText(QPointF(-40,-50)+QPointF(0,20),QString::number(value)+unit);
-        painter->restore();
-    };
-
-    std::string getData() override{
-            return std::to_string(myType)+"/"+label.toStdString()+"/"+std::to_string(value)+"/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"//";
-    }
+    int type() const override;
+    float getValue();
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *s, QWidget *w) override;
+    void drawLabels(QPainter* painter, QString text);
+    std::string getData() override;
 
 protected:
     float value=0;
