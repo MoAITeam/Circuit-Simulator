@@ -163,12 +163,6 @@ void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
 void CircuitScene::keyPressEvent(QKeyEvent *event) {
     if(event->key()==Qt::Key::Key_C)
         circuit->print();
-    if(event->key()==Qt::Key::Key_S){
-        saveCircuit();
-    }
-    if(event->key()==Qt::Key::Key_L) {
-        loadCircuit();
-    }
     if(event->key()==Qt::Key_Backspace)
         for(auto &item : items())
             if(item->isSelected())
@@ -176,8 +170,8 @@ void CircuitScene::keyPressEvent(QKeyEvent *event) {
                     delete item;
 }
 
-void CircuitScene::saveCircuit() {
-    std::ofstream out("save.txt");
+void CircuitScene::saveCircuit(std::string path) {
+    std::ofstream out(path);
     for(auto item:items()) {
         if (item->type() == Component::component)
             out << ((Component *) item)->getData() << std::endl;
@@ -186,9 +180,9 @@ void CircuitScene::saveCircuit() {
     }
 }
 
-void CircuitScene::loadCircuit() {
+void CircuitScene::loadCircuit(std::string path) {
     circuit->clear();
-    std::ifstream in("save.txt");
+    std::ifstream in(path);
     std::string currentString;
     std::vector<std::string> v;
     std::vector<Component*> toAdd;

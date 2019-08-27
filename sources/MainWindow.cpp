@@ -183,11 +183,15 @@ void MainWindow::createActions() {
 }
 
 void MainWindow::save() {
-    scene->saveCircuit();
+    QString dir = QFileDialog::getSaveFileName(this, tr("Open File"),"/");
+    if(!dir.isNull())
+        scene->saveCircuit(dir.toStdString());
 }
 
 void MainWindow::load() {
-    scene->loadCircuit();
+    QString dir = QFileDialog::getOpenFileName(this, tr("Save File"),"/circuit.txt",tr("Circuit Files (*.txt)"));
+    if(!dir.isNull())
+        scene->loadCircuit(dir.toStdString());
 }
 
 void MainWindow::createToolbars() {
