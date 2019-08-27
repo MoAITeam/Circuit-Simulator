@@ -56,7 +56,7 @@ private:
     QPen selectedPen=QPen(Qt::gray, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QPen renderPen=QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QPen solutionPen=QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-    QColor solutionColor=QColor(255, 189, 189);
+    QColor solutionColor=QColor(220, 220, 220);
 };
 
 

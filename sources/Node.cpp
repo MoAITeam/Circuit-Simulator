@@ -89,15 +89,16 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 void Node::paintSolution(QPainter *painter){
     painter->resetTransform();//scene coordinates
 
-    //QRectF solRect = QRectF(10,10,150,45);
-    //QPainterPath path;
+    QRectF solRect = QRectF(10,10,150,45);
+    QPainterPath path;
     QPointF topLeftDisplay(15,25);
 
-    //path.addRoundedRect(solRect,10,10);
+    path.addRect(solRect);
 
     painter->setPen(solutionPen);
-    //painter->fillPath(path,solutionColor);
-    //painter->drawPath(path);
+    painter->setBrush(solutionColor);
+    painter->fillPath(path,solutionColor);
+    painter->drawPath(path);
 
     painter->drawText(topLeftDisplay, "Voltage:"+QString::number(round(voltage*100)/100));
 }

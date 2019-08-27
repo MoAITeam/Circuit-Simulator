@@ -55,6 +55,7 @@ private:
     static QWidget *createCellWidget(const QString &text,const QPixmap &image, int id, QButtonGroup*);
 
     CircuitScene *scene;
+
     QGraphicsView *view;
 
     QToolBar *editToolBar;
@@ -75,11 +76,11 @@ private:
     QAction *selectAllAction;
     QAction *exportAction;
 
-    QTextEdit* label;
-    QTimer*  timer;
     QToolBox *toolBox;
+
     QButtonGroup *componentsButtonGroup;
     QButtonGroup *samplesButtonGroup;
     QGridLayout *componentsToolboxLayout;
+
     QGridLayout *samplesLayout;
 };

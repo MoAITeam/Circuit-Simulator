@@ -90,7 +90,7 @@ private:
     bool hovering=false;
     QPointF mousePress;
     float angle;
-    QColor solutionColor=QColor(220, 245, 247);
+    QColor solutionColor=QColor(220, 220, 220);
     QPen controllingPen=QPen(Qt::darkGreen, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QPen componentPen=QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QPen selectedPen=QPen(Qt::green, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
