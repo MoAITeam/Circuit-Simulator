@@ -10,7 +10,7 @@ CCVS::CCVS(float value,Component *d):ActiveComponent(1/value,0,0,d) {
     sourceType=ampere;
     this->value=value;
     myType=ccvs;
-    unit="number";
+    unit="x";
     label="CCVS";
 }
 

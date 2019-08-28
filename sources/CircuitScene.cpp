@@ -12,7 +12,7 @@ CircuitScene::CircuitScene(Circuit* c):circuit(c){
     myType=Component::types::ground;
     itemMenu=new QMenu();
     richItemMenu=new QMenu();
-    selectedDependent= nullptr;//TODO forse posso usarne uno solo?
+    selectedDependent= nullptr;
     focus= nullptr;
     cValue=0;
 
@@ -85,7 +85,7 @@ void CircuitScene::drawForeground(QPainter *painter, const QRectF &rect) {
 void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if(event->button()==Qt::LeftButton) {
 
-        mouseDragPoint = event->scenePos();
+        mouseDragPoint = event->scenePos();            //different behavior due to myMode after release
         QGraphicsItem *clicked;
 
         if (event->button() == Qt::LeftButton) {
@@ -141,7 +141,7 @@ void CircuitScene::linkSelectedNodes() {
     }
 }
 
-void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
+void CircuitScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {    //mouserightbutton contextmenu
     mousePressPoint=event->scenePos();
     focus= itemAt(mousePressPoint,QTransform());
     if(focus!= nullptr) {
@@ -169,7 +169,7 @@ void CircuitScene::keyPressEvent(QKeyEvent *event) {
                     delete item;
 }
 
-std::string CircuitScene::getCircuitData() {
+std::string CircuitScene::getCircuitData() {    //collect data about components and positions
     std::string result;
     for(auto item:items()) {
         if (item->type() == Component::component)
@@ -190,7 +190,7 @@ void CircuitScene::loadCircuitData(std::vector<ComponentData> const circuitData)
 
     for(auto const data:circuitData){
 
-        Component::types type=data.type;
+        Component::types type=data.type;                   //analyses a vector of ComponentData,for each one create new components and add them to the circuit
 
         Component *c=initComponent(type);
 
@@ -216,7 +216,7 @@ void CircuitScene::loadCircuitData(std::vector<ComponentData> const circuitData)
     }
 
     int i=0;
-    for(auto &c:dependentSources) {
+    for(auto &c:dependentSources) {               //load dependencies
         for(auto &comp:circuit->getComponents()){
             if(comp->getLabel()==dependentLabels[i]) {
                 c->controller = comp;
@@ -253,7 +253,7 @@ void CircuitScene::deleteItem() {
         delete focus;
 }
 
-void CircuitScene::changeValue() {
+void CircuitScene::changeValue() {    //change value of component
     if (focus->type()==Component::activeComponent) {
         emit insertValue((ActiveComponent*)focus);
         circuit->update((ActiveComponent*)focus,cValue);
@@ -261,7 +261,7 @@ void CircuitScene::changeValue() {
     }
 }
 
-void CircuitScene::changeName() {
+void CircuitScene::changeName() {   //change name of component
     if (focus->type()==Component::activeComponent) {
         emit insertName((ActiveComponent*)focus);
         ((ActiveComponent*)focus)->setlabel(cName);
@@ -270,7 +270,7 @@ void CircuitScene::changeName() {
 }
 
 
-void CircuitScene::disconnectModel() {
+void CircuitScene::disconnectModel() {        //disconnect function: disconnect comp from others
     if (focus->type()>=Component::component) {
         Component* disconnecting=((Component*)focus);
         nodePair pair=disconnecting->getNodes();
@@ -342,7 +342,7 @@ void CircuitScene::resetExSel() {
     focus= nullptr;
 }
 
-Component* CircuitScene::initComponent(Component::types type, Component* source) {
+Component* CircuitScene::initComponent(Component::types type, Component* source) {    //initializes new component
     Component* c;
     switch(type) {
         case Component::resistor:

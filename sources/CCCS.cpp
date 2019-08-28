@@ -10,7 +10,7 @@ CCCS::CCCS(float value,Component *d):ActiveComponent(0,1/value,0,d) {
     myType=Component::cccs;
     pixmap=ResourceManager::getImage(Component::types::cccs);
     sourceType=ampere;
-    unit="number";
+    unit="x";
     label="CCCS";
 }
 

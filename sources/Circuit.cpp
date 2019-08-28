@@ -114,7 +114,7 @@ void Circuit::checkLink(Node *n) {
         }
     }
 
-    if (instances <= 1){
+    if (instances <= 1){   //check for multiple node in one and handle the matrix inserting
         if (existing != nullptr) {
             std::list<Component *> componentsToUpdate = n->getComponents();
             for (auto &component : componentsToUpdate) {
@@ -147,7 +147,7 @@ template <class T> int Circuit::getIndex(T *x,std::vector<T*> v){
         throw ModelException("getIndex found duplicated, unexpected behavior");
 }
 
-void Circuit::removeNotify(Component *c) {
+void Circuit::removeNotify(Component *c) {   //at component
     matrix.removeComponent(getIndex(c,components));
 
     for(auto &component : components)
@@ -162,7 +162,7 @@ void Circuit::removeNotify(Component *c) {
     components.erase(removeTail,components.end()); //destroys
 }
 
-void Circuit::removeNotify(Node *n) {
+void Circuit::removeNotify(Node *n) {   //at node
     if (!n->isGround())
         matrix.removeNode(getIndex(n, notGrounds));
     auto removeTail = std::remove(nodes.begin(), nodes.end(), n);
@@ -181,10 +181,10 @@ void Circuit::print(){
     matrix.print();
 }
 
-void Circuit::solve(){
+void Circuit::solve(){  //resolution of circuit
     bool atLeastOneGround=false;
     for (auto &n : nodes) {
-        if (n->isGround())
+        if (n->isGround())        //check if there is at least on ground
             atLeastOneGround = true;
     }
 
@@ -195,14 +195,14 @@ void Circuit::solve(){
         return;
     }
 
-    std::vector<float> solution=matrix.solve();
+    std::vector<float> solution=matrix.solve();   //of course,it is the matrix that is solving
     auto comp=components.begin();
     while(comp!=components.end()){
         (*comp)->setVoltage(solution[components.size()-1-(comp-components.begin())]);
         (*comp)->setCurrent(solution[2*components.size()-1-(comp-components.begin())]);
         comp++;
     }
-    auto node=notGrounds.begin();
+    auto node=notGrounds.begin();       //
     while(node!=notGrounds.end()){
         (*node)->setVoltage(solution[2*components.size()+(node-notGrounds.begin())]);
         node++;
