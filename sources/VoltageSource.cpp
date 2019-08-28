@@ -18,3 +18,9 @@ VoltageSource::VoltageSource(float value):ActiveComponent(1,0,value) {  //voltag
     this->value=value;
     myType=voltageSource;
 }
+
+void VoltageSource::setValue(float value){
+    behavior[2]=value;
+    voltage=value;
+    this->value=value;
+};

@@ -12,13 +12,8 @@ class CCCS : public ActiveComponent{
 public:
     CCCS(float value,Component *d= nullptr);
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
-    void setValue(float value) override{
-        behavior[1]=1/value;
-        this->value=value;
-    }
-    std::string getData() override{
-        return std::to_string(myType)+"/"+label.toStdString()+"/"+std::to_string(value)+"/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"/"+controller->getLabel().toStdString()+"/";
-    }
+    void setValue(float value) override;
+    std::string getData() override;
 };
 
 

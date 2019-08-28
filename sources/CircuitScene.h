@@ -33,15 +33,34 @@
 class CircuitScene: public QGraphicsScene, public CircuitObserver{
 Q_OBJECT
 public:
-    CircuitScene(Circuit* c);
+    explicit CircuitScene(Circuit* c);
     void addNotify(QGraphicsItem *c) override;
-    void createComponent(QPointF p, QPointF n);
-    static Component* initComponent(Component::types type, Component* source= nullptr);
-    void createItemMenus();
+
     std::string getCircuitData();
-    void loadCircuitData(std::vector<ComponentData> const circuitData);
+    void loadCircuitData(const std::vector<ComponentData> circuitData);
+    Circuit* getCircuit();
 
     enum modes{insertItem,moveItem,selectDependent};
+
+    void setType(Component::types type);
+    void setMode(CircuitScene::modes mode);
+    void resetExSel();
+    void setcValue(float v);
+    void setcName(QString s);
+
+    QPointF display;
+
+signals:
+    void insertValue(ActiveComponent* c);
+    void insertName(ActiveComponent* c);
+    void insertedComponent();
+
+private:
+
+    void createItemMenus();
+
+    void createComponent(QPointF p, QPointF n);
+    static Component* initComponent(Component::types type, Component* source= nullptr);
 
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     void drawForeground(QPainter* painter, const QRectF &rect) override;
@@ -51,12 +70,6 @@ public:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     void linkSelectedNodes();
 
-    void setType(Component::types type);
-    void setMode(CircuitScene::modes mode);
-    void resetExSel();
-    void setcValue(float v);
-    void setcName(QString s);
-
     //actions
     void disconnectModel();
     void changeValue();
@@ -64,15 +77,6 @@ public:
     void selectAll();
     void changeName();
 
-    Circuit* getCircuit();
-    QPointF display;
-
-signals:
-    void insertValue(ActiveComponent* c);
-    void insertName(ActiveComponent* c);
-    void insertedComponent();
-
-private:
     Component::types  myType;
     CircuitScene::modes myMode;
     Circuit* circuit;

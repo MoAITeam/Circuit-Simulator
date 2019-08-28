@@ -14,11 +14,7 @@ class VoltageSource : public ActiveComponent {
 public:
     VoltageSource(float value);
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override final;
-    void setValue(float value) override{
-        behavior[2]=value;
-        voltage=value;
-        this->value=value;
-    };
+    void setValue(float value) override;
 };
 
 #endif //FIRSTSIMULATORTEST_VOLTAGESOURCE_H

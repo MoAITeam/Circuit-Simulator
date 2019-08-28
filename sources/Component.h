@@ -27,58 +27,35 @@ public:
     void connect(Node* p, Node* n);
     void disconnect();
 
-    //QGraphicsItem
     int type() const override {return component;};
-    QRectF boundingRect() const override;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
-    QPainterPath shape() const override;
-    void drawComponent(QPainter *painter);
-    void drawLabels(QPainter *painter);
-    void drawSolution(QPainter *painter);
-    void setOrientation();
-    void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-    //void mouseClick(QGraphicsSceneMouseEvent*) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 
-    QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
-
-        //setters
+    //setters
     virtual void setCurrent(float value);
     void setVoltage(float value);
     void setNodesSelection(bool value);
     void setObserver(ComponentObserver *o);
-    void setlabel(QString label){
-        this->label=label;
-    };
+    void setlabel(QString label);
 
     void addDependent();
     void removeDependent();
 
     //getters
-    QString getUnit(){
-        return unit;
-    }
-
+    QString getUnit();
     const QPixmap &getPixmap() const;
-
-    QString getLabel(){
-        return label;
-    };
-
+    QString getLabel();
     float getCurrent();
     float getVoltage();
     virtual std::string getData();
     int getSourceType();
     nodePair getNodes();
+    float* getBehavior();
 
-    float behavior[3];
     Component *controller;
     types myType=wire;
 
 protected:
+    float behavior[3];
     int sourceType=0;
     float current=0;
     float voltage=0;
@@ -86,19 +63,29 @@ protected:
     QPixmap pixmap;
     QString unit="Us";
     QString label="";
+private:
+
+    QRectF boundingRect() const override;
+    QPainterPath shape() const override;
+    void drawComponent(QPainter *painter);
+    void drawSolution(QPainter *painter);
+    void setOrientation();
+    void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+
+    QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
+
     ComponentObserver* circuit;
     int dependentSources=0;
-private:
     bool hovering=false;
-    QPointF mousePress;
     float angle;
     QColor solutionColor=QColor(220, 220, 220);
     QPen controllingPen=QPen(Qt::darkGreen, 4, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QPen componentPen=QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QPen selectedPen=QPen(Qt::green, 1, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
     QPen solutionPen=QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-    QPointF press;
-    QPointF pressfirst;
-    QPointF pressecond;
 };
 #endif //FIRSTSIMULATORTEST_COMPONENT_H

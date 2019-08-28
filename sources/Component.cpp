@@ -269,3 +269,18 @@ std::string Component::getData(){
     return std::to_string(myType)+"/"+label.toStdString()+"/0.000/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"//";
 }
 
+QString Component::getLabel(){
+    return label;
+};
+
+QString Component::getUnit(){
+    return unit;
+}
+
+void Component::setlabel(QString label){
+    this->label=label;
+}
+
+float* Component::getBehavior(){
+    return behavior;
+}
