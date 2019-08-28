@@ -432,7 +432,7 @@ void MainWindow::fillSamplesToolbox(){
     samplesLayout->addWidget(createCellWidget("Current Divider",QPixmap(":/images/currentdivider.png"),samples::currentDivider,samplesButtonGroup),1,1);
     samplesLayout->addWidget(createCellWidget("Strange One",QPixmap(":/images/strangeone.png"),samples::strangeOne,samplesButtonGroup),1,0);
     samplesLayout->addWidget(createCellWidget("Controlled One",QPixmap(":/images/controlled.png"),samples::controlledOne,samplesButtonGroup),2,0);
-    samplesLayout->addWidget(createCellWidget("Trasformatore",QPixmap(":/images/trasformatore.png"),samples::trasformatore,samplesButtonGroup),2,1);
+    samplesLayout->addWidget(createCellWidget("Transformer",QPixmap(":/images/trasformatore.png"),samples::trasformatore,samplesButtonGroup),2,1);
     samplesLayout->addItem(verticalSpacer,3,0);
 }
 
