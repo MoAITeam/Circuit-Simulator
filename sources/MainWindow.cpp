@@ -350,6 +350,7 @@ void MainWindow::showMatrix() {  //it opens a dialog in which show the circuit's
     connect(play_Button,&QPushButton::pressed,this,&MainWindow::runCircuit);
     play_Button->addAction(runCircuitAction);
     mat.addButton(QMessageBox::Ok);
+    mat.setDefaultButton(QMessageBox::Ok);
     mat.exec();
 
     }

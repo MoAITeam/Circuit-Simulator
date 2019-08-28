@@ -47,24 +47,24 @@ void MainWindow::drawCircuits(QString text) {
         scene->getCircuit()->clear();
 
         auto res1=new Resistor(10);
-        auto n1=new Node(400,160,1);
-        auto n2=new Node(400,60);
+        auto n1=new Node(400,200,1);
+        auto n2=new Node(400,100);
         scene->getCircuit()->add(res1,n1,n2);
 
         auto res2= new Resistor(10);
-        auto n3=new Node(300,60);
+        auto n3=new Node(300,100);
         scene->getCircuit()->add(res2,n2,n3);
 
         auto res3= new Resistor(10);
-        auto n4=new Node(300,160);
+        auto n4=new Node(300,200);
         scene->getCircuit()->add(res3,n1,n4);
 
         auto res4=new Resistor(10);
-        auto n5=new Node(200,160);
+        auto n5=new Node(200,200);
         scene->getCircuit()->add(res4,n4,n5);
 
         auto res5= new Resistor(10);
-        auto n6=new Node(200,60);
+        auto n6=new Node(200,100);
         scene->getCircuit()->add(res5,n3,n6);
 
         auto vol= new VoltageSource(10);
