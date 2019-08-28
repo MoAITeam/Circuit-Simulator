@@ -4,7 +4,7 @@
 
 #include "MainWindow.h"
 
-//TODO these have no label
+//All samples circuit inside the respective toolbox
 
 void MainWindow::drawCircuits(QString text) {
 

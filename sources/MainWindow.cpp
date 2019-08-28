@@ -54,11 +54,11 @@ MainWindow::MainWindow(CircuitScene *scene) {
 
 }
 
-void MainWindow::handleScroll() {
+void MainWindow::handleScroll() {   //handle scrolling graphic
     scene->display=QPointF(view->horizontalScrollBar()->value(),view->verticalScrollBar()->value());
 }
 
-void MainWindow::showValueDialog(ActiveComponent *c){
+void MainWindow::showValueDialog(ActiveComponent *c){  //allows component's value changing
     std::string text = "Value in ";
     QString string = QString::fromStdString(text);
     QString unit= "Unit";
@@ -71,7 +71,7 @@ void MainWindow::showValueDialog(ActiveComponent *c){
     scene->setcValue(value);
 }
 
-void MainWindow::showNameDialog(ActiveComponent *c) {
+void MainWindow::showNameDialog(ActiveComponent *c) {   //allows component's name changing
 
     std::string text = "Name ";
     QString string = QString::fromStdString(text);
@@ -125,7 +125,7 @@ void MainWindow::createToolBox() {
 
 }
 
-void MainWindow::createActions() {
+void MainWindow::createActions() {  //buttons and menus action
 
     QIcon icon_delete= QIcon(":/images/delete.png");
     deleteAction=new QAction(icon_delete,tr("&Delete"),this);
@@ -171,6 +171,14 @@ void MainWindow::createActions() {
     showMatrixAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     connect(showMatrixAction,&QAction::triggered,this,&MainWindow::showMatrix);
 
+    saveAction=new QAction(tr("&Save"),this);
+    saveAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+    connect(saveAction,&QAction::triggered,this,&MainWindow::save);
+
+    loadAction=new QAction(tr("&Load"),this);
+    loadAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
+    connect(loadAction,&QAction::triggered,this,&MainWindow::load);
+
 
 
 }
@@ -202,7 +210,7 @@ void MainWindow::createToolbars() {
 }
 
 
-QWidget* MainWindow::createCellWidget(const QString &text, const QPixmap &image, int id, QButtonGroup* buttonGroup ) {
+QWidget* MainWindow::createCellWidget(const QString &text, const QPixmap &image, int id, QButtonGroup* buttonGroup ) {   //square button inside the toolbox
 
     auto *button= new QToolButton;
     button->setText(text);
@@ -224,10 +232,13 @@ QWidget* MainWindow::createCellWidget(const QString &text, const QPixmap &image,
     return widget;
 }
 
-void MainWindow::createMenus() {
+void MainWindow::createMenus() {   //vertical menu
+
     fileMenu=menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(exitAction);
+    fileMenu->addAction(loadAction);
+    fileMenu->addAction(saveAction);
     fileMenu->addAction(exportAction);
+    fileMenu->addAction(exitAction);
 
     itemMenu= menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(deleteAction);
@@ -243,7 +254,7 @@ void MainWindow::createMenus() {
 
 void MainWindow::componentsButtonGroupClicked(int type) {
 
-    scene->resetExSel();
+    scene->resetExSel();   //reset focus
     componentsToolboxLayout->update();
     samplesLayout->update();
 
@@ -276,8 +287,19 @@ void MainWindow::about()
                           "of ideal electronic circuit"));
 }
 
+void MainWindow::save() {
+    QString dir = QFileDialog::getSaveFileName(this, tr("Open File"),"/");   //open a dialog in order to select the dir
+    if(!dir.isNull())
+        scene->saveCircuit(dir.toStdString());  //then call scene function
+}
 
-void MainWindow::sceneScaleChanged(const QString &scale)
+void MainWindow::load() {
+    QString dir = QFileDialog::getOpenFileName(this, tr("Save File"),"/circuit.txt",tr("Circuit Files (*.txt)"));  //search for txt file only
+    if(!dir.isNull())
+        scene->loadCircuit(dir.toStdString());   //scene function
+}
+
+void MainWindow::sceneScaleChanged(const QString &scale)  //mofifies zoom on window
 {
     double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
     QMatrix oldMatrix = view->matrix();
@@ -293,7 +315,7 @@ void MainWindow::runCircuit() {
 
 }
 
-void MainWindow::showMatrix() {
+void MainWindow::showMatrix() {  //it opens a dialog in which show the circuit's matrix,then you can solve it from the dialog too
 
     if(scene->items().size()!=0){
     auto print=scene->getCircuit()->getMatrix();
@@ -332,7 +354,7 @@ void MainWindow::selectAll() {
             item->setSelected(true);
 }
 
-void MainWindow::exportImage() {
+void MainWindow::exportImage() {  //create a png file in cmake-build-debug directory
 
     scene->clearSelection();
     QRectF getRect=scene->sceneRect();
@@ -383,6 +405,10 @@ void MainWindow::fillSamplesToolbox(){
     samplesLayout->addWidget(createCellWidget("Trasformatore",QPixmap(":/images/trasformatore.png"),samples::trasformatore,samplesButtonGroup),2,1);
     samplesLayout->addItem(verticalSpacer,3,0);
 }
+
+
+//getter
+
 
 QAction* MainWindow::getDeleteAction(){
     return deleteAction;

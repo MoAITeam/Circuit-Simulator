@@ -20,7 +20,7 @@ void Voltmeter::paint(QPainter *painter, const QStyleOptionGraphicsItem *qg, QWi
     painter->drawText(-12,5," "+QString().number(round(voltage*100)/100)+"V");
 }
 
-Voltmeter::Voltmeter():Component(0,1,0) {
+Voltmeter::Voltmeter():Component(0,1,0) {   //voltage,current,value
     pixmap=ResourceManager::getImage(Component::types::voltmeter);
     current=0;
     label="VM";

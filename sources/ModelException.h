@@ -6,6 +6,8 @@
 #define FIRSTSIMULATORTEST_MODELEXCEPTION_H
 
 #include <exception>
+
+//handle errors associated to model's problem
 class ModelException: public std::exception {
 public:
     ModelException(std::string s):spec(s){};

@@ -1,6 +1,6 @@
 #include "ActiveComponent.h"
 
-void ActiveComponent::drawLabels(QPainter* painter, QString text){
+void ActiveComponent::drawLabels(QPainter* painter, QString text){   //draw name and value of component
     painter->save();
     painter->translate(QPointF((nodes.first->x()+nodes.second->x())/2, (nodes.first->y()+nodes.second->y())/2)-pos());
     QFont font=painter->font();

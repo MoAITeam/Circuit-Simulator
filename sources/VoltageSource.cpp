@@ -10,7 +10,7 @@ void VoltageSource::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg,
     ActiveComponent::paint(painter,qg,qw);
 }
 
-VoltageSource::VoltageSource(float value):ActiveComponent(1,0,value) {
+VoltageSource::VoltageSource(float value):ActiveComponent(1,0,value) {  //voltage,current,value
     unit="V";
     label="VS";
     pixmap=ResourceManager::getImage(Component::types::voltageSource);

@@ -9,6 +9,8 @@
 #include "Node.h"
 #include "QGraphicsScene"
 
+//Component like controlled sources
+
 class ActiveComponent: public Component {
 public:
     virtual void setValue(float value)=0;

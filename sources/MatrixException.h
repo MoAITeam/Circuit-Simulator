@@ -6,6 +6,8 @@
 #define FIRSTSIMULATORTEST_MATRIXEXCEPTION_H
 
 #include <exception>
+
+//handle matrix error
 class MatrixException: public std::exception{
 public:
     MatrixException(std::string s):spec(s){};
