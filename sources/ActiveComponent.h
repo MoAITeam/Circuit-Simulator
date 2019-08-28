@@ -9,19 +9,24 @@
 #include "Node.h"
 #include "QGraphicsScene"
 
+//Active component like controlled sources
+
 class ActiveComponent: public Component {
 public:
+
     virtual void setValue(float value)=0;
     ActiveComponent(float a,float b, float c,Component* d=nullptr):Component(a,b,c,d){};
     int type() const override{
         return itemType::activeComponent;
     };
+
     float getValue(){
         return value;
     };
+
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *s, QWidget *w) override{
         if(controller!= nullptr)
-            drawLabels(painter,label+" ∝ "+controller->getLabel());
+            drawLabels(painter,label+" ∝ "+controller->getLabel());    //draw name and value of the component
         else
             drawLabels(painter,label);
         Component::paint(painter,s,w);
