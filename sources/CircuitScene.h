@@ -28,6 +28,7 @@
 #include "VCCS.h"
 #include "CCVS.h"
 #include "CCCS.h"
+#include "ComponentData.h"
 
 class CircuitScene: public QGraphicsScene, public CircuitObserver{
 Q_OBJECT
@@ -37,8 +38,8 @@ public:
     void createComponent(QPointF p, QPointF n);
     Component* initComponent(Component::types type, Component* source= nullptr);
     void createItemMenus();
-    void saveCircuit(std::string path);
-    void loadCircuit(std::string path);
+    std::string getCircuitData();
+    void loadCircuitData(std::vector<ComponentData> circuitData);
 
     enum modes{insertItem,moveItem,selectDependent};
 

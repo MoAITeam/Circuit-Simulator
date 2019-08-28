@@ -2,7 +2,6 @@
 // Created by Sierra on 2019-06-23.
 //
 
-#include <fstream>
 #include "CircuitScene.h"
 
 #define sceneSize 1100
@@ -170,60 +169,47 @@ void CircuitScene::keyPressEvent(QKeyEvent *event) {
                     delete item;
 }
 
-void CircuitScene::saveCircuit(std::string path) {
-    std::ofstream out(path);
+std::string CircuitScene::getCircuitData() {
+    std::string result;
     for(auto item:items()) {
         if (item->type() == Component::component)
-            out << ((Component *) item)->getData() << std::endl;
+            result+=((Component *) item)->getData();
         if(item->type()==Component::activeComponent)
-            out<<((ActiveComponent*)item)->getData()<<std::endl;
+            result+=((ActiveComponent *) item)->getData();
     }
+    return result;
 }
 
-void CircuitScene::loadCircuit(std::string path) {
+void CircuitScene::loadCircuitData(std::vector<ComponentData> circuitData) {
+
     circuit->clear();
-    std::ifstream in(path);
-    std::string currentString;
-    std::vector<std::string> v;
+
     std::vector<Component*> toAdd;
     std::vector<nodePair> nodesToAdd;
     std::vector<QString> dependentLabels;
     std::vector<ActiveComponent*> dependentSources;
 
-    while (std::getline(in, currentString)) {
-        v.clear();
-        std::stringstream ss(currentString);
-        while (ss.good()) {
-            std::string substr;
-            getline(ss, substr, '/');
-            v.push_back(substr);
-        }
+    for(auto data:circuitData){
 
-        auto type=Component::types(std::stoi(v[0]));
-        QString label=QString::fromStdString(v[1]);
-        float value=stof(v[2]);
-        float pX=std::stof(v[3]);
-        float pY=std::stof(v[4]);
-        float nX=std::stof(v[5]);
-        float nY=std::stof(v[6]);
+        Component::types type=data.type;
 
         Component *c=initComponent(type);
-        c->setlabel(label);
+        c->setlabel(QString::fromStdString(data.label));
 
         if(c->type()==Component::activeComponent)
-            ((ActiveComponent*)c)->setValue(value);
+            ((ActiveComponent*)c)->setValue(data.value);
 
         if(c->myType>=Component::vcvs) {
             dependentSources.push_back((ActiveComponent *) c);
-            dependentLabels.push_back(QString::fromStdString(v[7]));
+            dependentLabels.push_back(QString::fromStdString(data.dependent));
         }
 
-        auto *p = new Node(Node::toGrid(QPointF(pX, pY)));
+        auto *p = new Node(Node::toGrid(QPointF(data.pX, data.pY)));
         Node* n;
         if(type==Component::ground)
-            n = new Node(Node::toGrid(QPointF(nX,nY)),true);
+            n = new Node(Node::toGrid(QPointF(data.nX,data.nY)),true);
         else
-            n = new Node(Node::toGrid(QPointF(nX, nY)));
+            n = new Node(Node::toGrid(QPointF(data.nX, data.nY)));
         toAdd.push_back(c);
         nodePair pair;
         pair.first=p;
@@ -241,12 +227,14 @@ void CircuitScene::loadCircuit(std::string path) {
         }
         i++;
     }
-    for(int i=0; i<toAdd.size();i++)
-        if(toAdd[i]->myType<Component::vcvs)
+    for(int i=0; i<toAdd.size();i++) {
+        if (toAdd[i]->myType < Component::vcvs)
             circuit->add(toAdd[i], nodesToAdd[i].first, nodesToAdd[i].second);
-    for(int i=0; i<toAdd.size();i++)
-        if(toAdd[i]->myType>=Component::vcvs)
+    }
+    for(int i=0; i<toAdd.size();i++) {
+        if (toAdd[i]->myType >= Component::vcvs)
             circuit->add(toAdd[i], nodesToAdd[i].first, nodesToAdd[i].second);
+    }
 
 }
 

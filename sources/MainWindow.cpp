@@ -11,6 +11,8 @@
 #include "ResourceManager.h"
 #include "Voltmeter.h"
 #include "SparseMatrix.h"
+#include "FileManager.h"
+#include "ComponentData.h"
 
 #include <QtWidgets>
 #include <iostream>
@@ -184,14 +186,20 @@ void MainWindow::createActions() {
 
 void MainWindow::save() {
     QString dir = QFileDialog::getSaveFileName(this, tr("Open File"),"/");
-    if(!dir.isNull())
-        scene->saveCircuit(dir.toStdString());
+    if(!dir.isNull()) {
+        FileManager file(dir.toStdString());
+        std::string data= scene->getCircuitData();
+        file.write(data);
+    }
 }
 
 void MainWindow::load() {
     QString dir = QFileDialog::getOpenFileName(this, tr("Save File"),"/circuit.txt",tr("Circuit Files (*.txt)"));
-    if(!dir.isNull())
-        scene->loadCircuit(dir.toStdString());
+    if(!dir.isNull()) {
+        FileManager file(dir.toStdString());
+        std::vector<ComponentData> data=file.read();
+        scene->loadCircuitData(data);
+    }
 }
 
 void MainWindow::createToolbars() {
