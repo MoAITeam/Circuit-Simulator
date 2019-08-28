@@ -24,5 +24,5 @@ Voltmeter::Voltmeter():Component(0,1,0) {   //voltage,current,value
     pixmap=ResourceManager::getImage(Component::types::voltmeter);
     current=0;
     label="VM";
-    myType=voltmeter;
+    componentType=voltmeter;
 }

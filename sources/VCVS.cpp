@@ -10,7 +10,7 @@ VCVS::VCVS(float value,Component *d):ActiveComponent(1/value,0,0,d) {
     sourceType=volts;
     this->value=value;
     unit="x";
-    myType=vcvs;
+    componentType=vcvs;
     label="VCVS";
 }
 
@@ -23,5 +23,5 @@ void VCVS::setValue(float value){
     this->value=value;
 }
 std::string VCVS::getData(){
-    return std::to_string(myType)+"/"+label.toStdString()+"/"+std::to_string(value)+"/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"/"+controller->getLabel().toStdString()+"/";
+    return std::to_string(componentType)+"/"+label.toStdString()+"/"+std::to_string(value)+"/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"/"+controller->getLabel().toStdString()+"/";
 }

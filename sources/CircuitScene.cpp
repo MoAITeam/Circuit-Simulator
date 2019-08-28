@@ -206,7 +206,7 @@ void CircuitScene::loadCircuitData(std::vector<ComponentData> const circuitData)
         if(c->type()==Component::activeComponent)
             ((ActiveComponent*)c)->setValue(data.value);
 
-        if(c->myType>=Component::vcvs) {
+        if(c->getType()>=Component::vcvs) {
             dependentSources.push_back((ActiveComponent *) c);
             dependentLabels.push_back(QString::fromStdString(data.dependent));
             dependentSourcesNodes.emplace_back(nodePair(p,n));
@@ -219,7 +219,7 @@ void CircuitScene::loadCircuitData(std::vector<ComponentData> const circuitData)
     for(auto &c:dependentSources) {               //load dependencies
         for(auto &comp:circuit->getComponents()){
             if(comp->getLabel()==dependentLabels[i]) {
-                c->controller = comp;
+                c->setController(comp);
                 comp->addDependent();
             }
         }
