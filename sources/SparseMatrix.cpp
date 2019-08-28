@@ -16,13 +16,13 @@ SparseMatrix::~SparseMatrix(){
     delete terms;
 }
 
-void SparseMatrix::add() {
+void SparseMatrix::add() {  //standard add
     addRow();
     addCol();
     terms->addRow();
 }
 
-void SparseMatrix::add(const float behavior[3],int a, int b) {
+void SparseMatrix::add(const float behavior[3],int a, int b) {  //passive component add
     insertRow(0);
     insertCol(0);
     terms->insertRow(0);
@@ -44,7 +44,7 @@ void SparseMatrix::add(const float behavior[3],int a, int b) {
     int i=a>b?1:-1;  //a,b are the indexes in the list of the nodes we want to insert in our sparse
 
     if(a!=notFound) {
-        matrix()(0, 2 * components + a) = i;                   //i is necessary to establish voltage and current directions
+        matrix()(0, 2 * components + a) = i;                   //it is necessary to establish voltage and current directions
         matrix()(2 * components + a, components) = -i;
     }
 
@@ -55,7 +55,7 @@ void SparseMatrix::add(const float behavior[3],int a, int b) {
 
 }
 
-void SparseMatrix::add(const float behavior[3],int d, int s,int a, int b) {
+void SparseMatrix::add(const float behavior[3],int d, int s,int a, int b) {  //active component add
 
     insertRow(0);
     insertCol(0);
