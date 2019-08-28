@@ -9,7 +9,7 @@ CCVS::CCVS(float value,Component *d):ActiveComponent(1/value,0,0,d) {
     pixmap=ResourceManager::getImage(Component::types::ccvs);
     sourceType=ampere;
     this->value=value;
-    myType=ccvs;
+    componentType=ccvs;
     unit="x";
     label="CCVS";
 }
@@ -19,7 +19,7 @@ void CCVS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget*
 }
 
 std::string CCVS::getData(){
-    return std::to_string(myType)+"/"+label.toStdString()+"/"+std::to_string(value)+"/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"/"+controller->getLabel().toStdString()+"/";
+    return std::to_string(componentType)+"/"+label.toStdString()+"/"+std::to_string(value)+"/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"/"+controller->getLabel().toStdString()+"/";
 }
 
 void CCVS::setValue(float value){

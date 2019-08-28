@@ -94,10 +94,10 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
     int b=getIndex(n, notGrounds);
 
     c->connect(p, n);
-    if(c->controller==nullptr)
+    if(c->getController()==nullptr)
         matrix.add(c->getBehavior(),a,b);
     else
-        matrix.add(c->getBehavior(),getIndex(c->controller,components),c->getSourceType(),a,b);
+        matrix.add(c->getBehavior(),getIndex(c->getController(),components),c->getSourceType(),a,b);
 
 }
 
@@ -151,8 +151,8 @@ void Circuit::removeNotify(Component *c) {   //at component
     matrix.removeComponent(getIndex(c,components));
 
     for(auto &component : components)
-        if(component->controller==c)
-            component->controller=nullptr;
+        if(component->getController()==c)
+            component->setController(nullptr);
 
     //Implementation of the erase-remove idiom
 

@@ -36,6 +36,7 @@ public:
     void setNodesSelection(bool value);
     void setObserver(ComponentObserver *o);
     void setlabel(QString label);
+    void setController(Component*);
 
     void addDependent();
     void removeDependent();
@@ -50,11 +51,12 @@ public:
     int getSourceType();
     nodePair getNodes();
     float* getBehavior();
-
-    Component *controller;
-    types myType=wire;
+    types getType();
+    Component* getController();
 
 protected:
+    Component *controller;
+    types componentType=wire;
     float behavior[3];
     int sourceType=0;
     float current=0;

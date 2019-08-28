@@ -16,7 +16,7 @@ VoltageSource::VoltageSource(float value):ActiveComponent(1,0,value) {  //voltag
     pixmap=ResourceManager::getImage(Component::types::voltageSource);
     voltage=value;
     this->value=value;
-    myType=voltageSource;
+    componentType=voltageSource;
 }
 
 void VoltageSource::setValue(float value){
