@@ -124,6 +124,7 @@ void CircuitScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
                 linkSelectedNodes();//should stay here or you get a bug, caller event destroyed sooner
             }
             selecting = false;
+            update(); //for selection area
         }
     } else{
         QGraphicsScene::mouseReleaseEvent(event);
