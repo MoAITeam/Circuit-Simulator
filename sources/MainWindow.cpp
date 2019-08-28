@@ -173,11 +173,13 @@ void MainWindow::createActions() {  //buttons and menus action
     showMatrixAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     connect(showMatrixAction, &QAction::triggered, this, &MainWindow::showMatrix);
 
-    saveAction = new QAction(tr("&Save"), this);
+    QIcon icon_save=QIcon(":/images/save.png");
+    saveAction = new QAction(icon_save,tr("&Save"), this);
     saveAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
     connect(saveAction, &QAction::triggered, this, &MainWindow::save);
 
-    loadAction = new QAction(tr("&Load"), this);
+    QIcon icon_load=QIcon(":/images/load.png");
+    loadAction = new QAction(icon_load,tr("&Load"), this);
     loadAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
     connect(loadAction, &QAction::triggered, this, &MainWindow::load);
 
@@ -186,7 +188,7 @@ void MainWindow::createActions() {  //buttons and menus action
 void MainWindow::save() {
     QString dir = QFileDialog::getSaveFileName(this, tr("Open File"),"/");
     if(!dir.isNull()) {
-        FileManager file(dir.toStdString());
+        FileManager file(dir.toStdString());       //handle dir thanks to filemanager
         std::string data= scene->getCircuitData();
         file.write(data);
     }
@@ -323,6 +325,8 @@ void MainWindow::runCircuit() {
 
 void MainWindow::showMatrix() {  //it opens a dialog in which show the circuit's matrix,then you can solve it from the dialog too
 
+    QMessageBox mat;
+
     if(scene->items().size()!=0){
     auto print=scene->getCircuit()->getMatrix();
     QString matrix="";
@@ -346,6 +350,12 @@ void MainWindow::showMatrix() {  //it opens a dialog in which show the circuit's
     mat.exec();
 
     }
+    else{
+        mat.setText("No <b>matrix</b> due to components absence");
+        mat.setWindowTitle("Show Matrix");
+        mat.exec();
+    }
+
 }
 
 void MainWindow::clearAll() {
@@ -361,16 +371,23 @@ void MainWindow::selectAll() {
 }
 
 void MainWindow::exportImage() {  //create a png file in cmake-build-debug directory
-
-    scene->clearSelection();
-    QRectF getRect=scene->sceneRect();
-    scene->setSceneRect(scene->itemsBoundingRect());
-    QImage image(scene->sceneRect().size().toSize(),QImage::Format_ARGB32);
-    image.fill(Qt::transparent);
-    QPainter painter(&image);
-    scene->render(&painter);
-    image.save("circuit.png");
-    scene->setSceneRect(getRect);
+    if(scene->items().size()!=0) {
+        scene->clearSelection();
+        QRectF getRect = scene->sceneRect();
+        scene->setSceneRect(scene->itemsBoundingRect());
+        QImage image(scene->sceneRect().size().toSize(), QImage::Format_ARGB32);
+        image.fill(Qt::transparent);
+        QPainter painter(&image);
+        scene->render(&painter);
+        image.save("circuit.png");
+        scene->setSceneRect(getRect);
+    }
+    else {
+        QMessageBox exp;
+        exp.setWindowTitle("Export not possible");
+        exp.setText("<b>Export</b> is not possible,try creating a circuit");
+        exp.exec();
+    }
 
 }
 
