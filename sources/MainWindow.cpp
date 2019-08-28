@@ -344,7 +344,9 @@ void MainWindow::showMatrix() {  //it opens a dialog in which show the circuit's
     mat.setWindowTitle("Show Matrix");
     mat.setText("Here is the <b>matrix</b>:");
     mat.setInformativeText(matrix);
+    QIcon icon(":/images/play.png");
     QPushButton *play_Button=mat.addButton("Run Circuit",QMessageBox::ActionRole);
+    play_Button->setIcon(icon);
     connect(play_Button,&QPushButton::pressed,this,&MainWindow::runCircuit);
     play_Button->addAction(runCircuitAction);
     mat.addButton(QMessageBox::Ok);
