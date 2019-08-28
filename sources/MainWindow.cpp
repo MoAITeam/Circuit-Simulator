@@ -160,7 +160,7 @@ void MainWindow::createActions() {  //buttons and menus action
 
     QIcon icon_selAll = QIcon(":/images/selectall");
     selectAllAction = new QAction(icon_selAll, tr("&Select All"), this);
-    selectAllAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+    selectAllAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
     connect(selectAllAction, &QAction::triggered, this, &MainWindow::selectAll);
 
     QIcon icon_export = QIcon(":/images/export.png");
@@ -372,6 +372,7 @@ void MainWindow::selectAll() {
 }
 
 void MainWindow::exportImage() {  //create a png file in cmake-build-debug directory
+    QMessageBox exp;
     if(scene->items().size()!=0) {
         scene->clearSelection();
         QRectF getRect = scene->sceneRect();
@@ -382,14 +383,16 @@ void MainWindow::exportImage() {  //create a png file in cmake-build-debug direc
         scene->render(&painter);
         image.save("circuit.png");
         scene->setSceneRect(getRect);
+        exp.setWindowTitle("Export Successful");
+        exp.setText("Your circuit has been exported");
     }
     else {
-        QMessageBox exp;
+
         exp.setWindowTitle("Export not possible");
         exp.setText("<b>Export</b> is not possible,try creating a circuit");
-        exp.exec();
-    }
 
+    }
+    exp.exec();
 }
 
 void MainWindow::deleteItems() {
