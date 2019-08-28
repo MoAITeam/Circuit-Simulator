@@ -56,11 +56,11 @@ MainWindow::MainWindow(CircuitScene *scene) {
 
 }
 
-void MainWindow::handleScroll() {
+void MainWindow::handleScroll() {   //handle scrolling graphic
     scene->display=QPointF(view->horizontalScrollBar()->value(),view->verticalScrollBar()->value());
 }
 
-void MainWindow::showValueDialog(ActiveComponent *c){
+void MainWindow::showValueDialog(ActiveComponent *c){  //allows component's value changing
     std::string text = "Value in ";
     QString string = QString::fromStdString(text);
     QString unit= "Unit";
@@ -73,7 +73,7 @@ void MainWindow::showValueDialog(ActiveComponent *c){
     scene->setcValue(value);
 }
 
-void MainWindow::showNameDialog(ActiveComponent *c) {
+void MainWindow::showNameDialog(ActiveComponent *c) {   //allows component's name changing
 
     std::string text = "Name ";
     QString string = QString::fromStdString(text);
@@ -127,19 +127,19 @@ void MainWindow::createToolBox() {
 
 }
 
-void MainWindow::createActions() {
+void MainWindow::createActions() {  //buttons and menus action
 
-    QIcon icon_delete= QIcon(":/images/delete.png");
-    deleteAction=new QAction(icon_delete,tr("&Delete"),this);
-    deleteAction->setShortcut(QKeySequence(Qt::CTRL+ Qt::Key_D));
+    QIcon icon_delete = QIcon(":/images/delete.png");
+    deleteAction = new QAction(icon_delete, tr("&Delete"), this);
+    deleteAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
     connect(deleteAction, &QAction::triggered, this, &MainWindow::deleteItems);
 
-    QIcon icon_select= QIcon(":/images/pointer.png");
-    selectAction=new QAction(icon_select,tr("&Select"),this);
+    QIcon icon_select = QIcon(":/images/pointer.png");
+    selectAction = new QAction(icon_select, tr("&Select"), this);
     connect(selectAction, &QAction::triggered, this, &MainWindow::selectItems);
 
-    QIcon icon_exit=QIcon(":/images/delete.png");
-    exitAction = new QAction(icon_exit,tr("&Exit"), this);
+    QIcon icon_exit = QIcon(":/images/delete.png");
+    exitAction = new QAction(icon_exit, tr("&Exit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);
     exitAction->setStatusTip(tr("Quit example"));
     connect(exitAction, &QAction::triggered, this, &QWidget::close);
@@ -148,39 +148,38 @@ void MainWindow::createActions() {
     aboutAction->setShortcut(tr("F1"));
     connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
 
-    QIcon icon_run=QIcon(":/images/play.png");
-    runCircuitAction= new QAction(icon_run,tr("&Run"),this);
-    runCircuitAction->setShortcut(QKeySequence(Qt::CTRL +Qt::Key_R));
-    connect(runCircuitAction,&QAction::triggered,this,&MainWindow::runCircuit);
+    QIcon icon_run = QIcon(":/images/play.png");
+    runCircuitAction = new QAction(icon_run, tr("&Run"), this);
+    runCircuitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
+    connect(runCircuitAction, &QAction::triggered, this, &MainWindow::runCircuit);
 
-    QIcon icon_clear=QIcon(":/images/clear.png");
-    clearAction= new QAction(icon_clear,tr("&Clear"),this);
-    clearAction->setShortcut(QKeySequence(Qt::CTRL+ Qt::Key_C));
-    connect(clearAction,&QAction::triggered,this,&MainWindow::clearAll);
+    QIcon icon_clear = QIcon(":/images/clear.png");
+    clearAction = new QAction(icon_clear, tr("&Clear"), this);
+    clearAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
+    connect(clearAction, &QAction::triggered, this, &MainWindow::clearAll);
 
-    QIcon icon_selAll=QIcon(":/images/selectall");
-    selectAllAction= new QAction(icon_selAll,tr("&Select All"),this);
-    selectAllAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
-    connect(selectAllAction,&QAction::triggered,this,&MainWindow::selectAll);
+    QIcon icon_selAll = QIcon(":/images/selectall");
+    selectAllAction = new QAction(icon_selAll, tr("&Select All"), this);
+    selectAllAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+    connect(selectAllAction, &QAction::triggered, this, &MainWindow::selectAll);
 
-    QIcon icon_export=QIcon(":/images/export.png");
-    exportAction=new QAction(icon_export,tr("&Export"),this);
+    QIcon icon_export = QIcon(":/images/export.png");
+    exportAction = new QAction(icon_export, tr("&Export"), this);
     exportAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
-    connect(exportAction,&QAction::triggered,this,&MainWindow::exportImage);
+    connect(exportAction, &QAction::triggered, this, &MainWindow::exportImage);
 
-    QIcon icon_showMatrix=QIcon(":/images/clear.png");
-    showMatrixAction=new QAction(icon_export,tr("&Show Matrix"),this);
+    QIcon icon_showMatrix = QIcon(":/images/matrix.png");
+    showMatrixAction = new QAction(icon_showMatrix, tr("&Show Matrix"), this);
     showMatrixAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
-    connect(showMatrixAction,&QAction::triggered,this,&MainWindow::showMatrix);
+    connect(showMatrixAction, &QAction::triggered, this, &MainWindow::showMatrix);
 
-    saveAction=new QAction(tr("&Save"),this);
+    saveAction = new QAction(tr("&Save"), this);
     saveAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
-    connect(saveAction,&QAction::triggered,this,&MainWindow::save);
+    connect(saveAction, &QAction::triggered, this, &MainWindow::save);
 
-    loadAction=new QAction(tr("&Load"),this);
+    loadAction = new QAction(tr("&Load"), this);
     loadAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
-    connect(loadAction,&QAction::triggered,this,&MainWindow::load);
-
+    connect(loadAction, &QAction::triggered, this, &MainWindow::load);
 
 }
 
@@ -201,6 +200,7 @@ void MainWindow::load() {
         scene->loadCircuitData(data);
     }
 }
+
 
 void MainWindow::createToolbars() {
 
@@ -228,7 +228,7 @@ void MainWindow::createToolbars() {
 }
 
 
-QWidget* MainWindow::createCellWidget(const QString &text, const QPixmap &image, int id, QButtonGroup* buttonGroup ) {
+QWidget* MainWindow::createCellWidget(const QString &text, const QPixmap &image, int id, QButtonGroup* buttonGroup ) {   //square button inside the toolbox
 
     auto *button= new QToolButton;
     button->setText(text);
@@ -250,18 +250,20 @@ QWidget* MainWindow::createCellWidget(const QString &text, const QPixmap &image,
     return widget;
 }
 
-void MainWindow::createMenus() {
+void MainWindow::createMenus() {   //vertical menu
+
     fileMenu=menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(loadAction);
     fileMenu->addAction(saveAction);
     fileMenu->addAction(exportAction);
     fileMenu->addAction(exitAction);
 
-
     itemMenu= menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(deleteAction);
     itemMenu->addAction(clearAction);
     itemMenu->addAction(selectAllAction);
+    itemMenu->addAction(runCircuitAction);
+    itemMenu->addAction(showMatrixAction);
 
     aboutMenu= menuBar()->addMenu(tr("&About"));
     aboutMenu->addAction(aboutAction);
@@ -270,7 +272,7 @@ void MainWindow::createMenus() {
 
 void MainWindow::componentsButtonGroupClicked(int type) {
 
-    scene->resetExSel();
+    scene->resetExSel();   //reset focus
     componentsToolboxLayout->update();
     samplesLayout->update();
 
@@ -303,8 +305,7 @@ void MainWindow::about()
                           "of ideal electronic circuit"));
 }
 
-
-void MainWindow::sceneScaleChanged(const QString &scale)
+void MainWindow::sceneScaleChanged(const QString &scale)  //mofifies zoom on window
 {
     double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
     QMatrix oldMatrix = view->matrix();
@@ -320,23 +321,31 @@ void MainWindow::runCircuit() {
 
 }
 
-void MainWindow::showMatrix() {
+void MainWindow::showMatrix() {  //it opens a dialog in which show the circuit's matrix,then you can solve it from the dialog too
 
+    if(scene->items().size()!=0){
     auto print=scene->getCircuit()->getMatrix();
-    QString matrix;
+    QString matrix="";
     for(int i=0;i<scene->getCircuit()->getMatrix()->rows();i++){
         for(int j=0;j<scene->getCircuit()->getMatrix()->cols();j++){
                 float val=(*print)(i, j);
-                matrix=matrix + QString::number(val);
+                matrix=matrix + "  " +  QString::number(val)+" ";
         }
         matrix=matrix+"\n";
 
     }
+
     QMessageBox mat;
     mat.setWindowTitle("Show Matrix");
-    mat.setText(matrix);
+    mat.setText("Here is the <b>matrix</b>:");
+    mat.setInformativeText(matrix);
+    QPushButton *play_Button=mat.addButton("Run Circuit",QMessageBox::ActionRole);
+    connect(play_Button,&QPushButton::pressed,this,&MainWindow::runCircuit);
+    play_Button->addAction(runCircuitAction);
+    mat.addButton(QMessageBox::Ok);
     mat.exec();
 
+    }
 }
 
 void MainWindow::clearAll() {
@@ -351,7 +360,7 @@ void MainWindow::selectAll() {
             item->setSelected(true);
 }
 
-void MainWindow::exportImage() {
+void MainWindow::exportImage() {  //create a png file in cmake-build-debug directory
 
     scene->clearSelection();
     QRectF getRect=scene->sceneRect();
@@ -402,6 +411,10 @@ void MainWindow::fillSamplesToolbox(){
     samplesLayout->addWidget(createCellWidget("Trasformatore",QPixmap(":/images/trasformatore.png"),samples::trasformatore,samplesButtonGroup),2,1);
     samplesLayout->addItem(verticalSpacer,3,0);
 }
+
+
+//getter
+
 
 QAction* MainWindow::getDeleteAction(){
     return deleteAction;

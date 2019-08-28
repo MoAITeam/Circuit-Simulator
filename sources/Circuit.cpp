@@ -30,7 +30,7 @@ void Circuit::setObserver(CircuitObserver *o) {
     }
 }
 
-bool Circuit::overlaps(Node* p, Node* n){
+bool Circuit::overlaps(Node* p, Node* n){ //check if 2 comps are overlapping
     bool result=false;
     for(auto component : components){
         if ((*(p) == *(component->getNodes().first) && *(n)==*(component->getNodes().second))
@@ -41,7 +41,7 @@ bool Circuit::overlaps(Node* p, Node* n){
     return result;
 }
 
-Node* Circuit::getNode(Node* n){
+Node* Circuit::getNode(Node* n){   //check the status of node of interest
     bool found=false;
     for (auto &node : nodes) {
         if (*n == *node && n != node) {
@@ -115,9 +115,6 @@ void Circuit::checkLink(Node *n) {
     }
 
     if (instances <= 1){
-        //throw ModelException("found more than one node to connect to, unexpected behavior");
-
-        //bool destroy=false;
         if (existing != nullptr) {
             std::list<Component *> componentsToUpdate = n->getComponents();
             for (auto &component : componentsToUpdate) {

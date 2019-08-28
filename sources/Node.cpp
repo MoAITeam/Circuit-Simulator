@@ -35,11 +35,11 @@ Node::~Node(){
     }
 }
 
-void Node::connect(Component *c) {
+void Node::connect(Component *c) {  //connection with component
     components.push_back(c);
 }
 
-void Node::disconnect(Component *c){
+void Node::disconnect(Component *c){  //disconnection from component
     components.remove(c);
 }
 
@@ -57,7 +57,8 @@ std::list<Component*> Node::getComponents() {
     return components;
 }
 
-QRectF Node::boundingRect() const {
+QRectF Node::boundingRect() const {   //boundingrect is the interaction area of the node
+
     QPointF topLeft=QPointF(-NodeSize/2.0, -NodeSize/2.0);
     QSize rectSize=QSize(NodeSize,NodeSize);
     QRectF boundingRect= QRectF( topLeft*4,rectSize*4);
@@ -168,7 +169,7 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange change, const QVaria
         return QGraphicsItem::itemChange(change,value);
 }
 
-QPointF Node::toGrid(QPointF n){
+QPointF Node::toGrid(QPointF n){   //node can only be placed according the grid
     n.setX(round(n.x()/20.0)*20);
     n.setY(round(n.y()/20.0)*20);
     return n;
