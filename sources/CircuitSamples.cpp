@@ -166,7 +166,7 @@ void MainWindow::drawCircuits(QString text) {
 
     }
 
-    else if(text=="Trasformatore"){
+    else if(text=="Transformer"){
 
         //rapporto di 2
         scene->getCircuit()->clear();
