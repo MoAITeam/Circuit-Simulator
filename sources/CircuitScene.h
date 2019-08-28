@@ -37,8 +37,8 @@ public:
     void createComponent(QPointF p, QPointF n);
     Component* initComponent(Component::types type, Component* source= nullptr);
     void createItemMenus();
-    void saveCircuit();
-    void loadCircuit();
+    void saveCircuit(std::string path);
+    void loadCircuit(std::string path);
 
     enum modes{insertItem,moveItem,selectDependent};
 
