@@ -36,10 +36,10 @@ public:
     CircuitScene(Circuit* c);
     void addNotify(QGraphicsItem *c) override;
     void createComponent(QPointF p, QPointF n);
-    Component* initComponent(Component::types type, Component* source= nullptr);
+    static Component* initComponent(Component::types type, Component* source= nullptr);
     void createItemMenus();
     std::string getCircuitData();
-    void loadCircuitData(std::vector<ComponentData> circuitData);
+    void loadCircuitData(std::vector<ComponentData> const circuitData);
 
     enum modes{insertItem,moveItem,selectDependent};
 
@@ -73,7 +73,6 @@ signals:
     void insertedComponent();
 
 private:
-    static QColor gridColor;
     Component::types  myType;
     CircuitScene::modes myMode;
     Circuit* circuit;

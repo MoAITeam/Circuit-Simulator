@@ -25,6 +25,7 @@ public:
     Node* getNode(Node* n);
     void checkLink(Node *n);
     void update(ActiveComponent* component,float value);
+    std::vector<Component*> getComponents(){return components;};
     template <typename T> int getIndex(T*x,std::vector<T*> v);
 
     void setObserver(CircuitObserver* graphics);

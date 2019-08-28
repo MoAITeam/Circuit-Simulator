@@ -180,20 +180,27 @@ std::string CircuitScene::getCircuitData() {
     return result;
 }
 
-void CircuitScene::loadCircuitData(std::vector<ComponentData> circuitData) {
+void CircuitScene::loadCircuitData(std::vector<ComponentData> const circuitData) {
 
     circuit->clear();
 
-    std::vector<Component*> toAdd;
-    std::vector<nodePair> nodesToAdd;
     std::vector<QString> dependentLabels;
     std::vector<ActiveComponent*> dependentSources;
+    std::vector<nodePair> dependentSourcesNodes;
 
-    for(auto data:circuitData){
+    for(auto const data:circuitData){
 
         Component::types type=data.type;
 
         Component *c=initComponent(type);
+
+        auto *p = new Node(Node::toGrid(QPointF(data.pX, data.pY)));
+        Node* n;
+        if(type==Component::ground)
+            n = new Node(Node::toGrid(QPointF(data.nX,data.nY)),true);
+        else
+            n = new Node(Node::toGrid(QPointF(data.nX, data.nY)));
+
         c->setlabel(QString::fromStdString(data.label));
 
         if(c->type()==Component::activeComponent)
@@ -202,38 +209,22 @@ void CircuitScene::loadCircuitData(std::vector<ComponentData> circuitData) {
         if(c->myType>=Component::vcvs) {
             dependentSources.push_back((ActiveComponent *) c);
             dependentLabels.push_back(QString::fromStdString(data.dependent));
+            dependentSourcesNodes.emplace_back(nodePair(p,n));
+        } else{
+            circuit->add(c,p,n);
         }
-
-        auto *p = new Node(Node::toGrid(QPointF(data.pX, data.pY)));
-        Node* n;
-        if(type==Component::ground)
-            n = new Node(Node::toGrid(QPointF(data.nX,data.nY)),true);
-        else
-            n = new Node(Node::toGrid(QPointF(data.nX, data.nY)));
-        toAdd.push_back(c);
-        nodePair pair;
-        pair.first=p;
-        pair.second=n;
-        nodesToAdd.push_back(pair);
     }
 
     int i=0;
     for(auto &c:dependentSources) {
-        for(auto &comp:toAdd){
-                if(comp->getLabel()==dependentLabels[i]) {
-                    c->controller = comp;
-                    comp->addDependent();
-                }
+        for(auto &comp:circuit->getComponents()){
+            if(comp->getLabel()==dependentLabels[i]) {
+                c->controller = comp;
+                comp->addDependent();
+            }
         }
+            circuit->add(c, dependentSourcesNodes[i].first, dependentSourcesNodes[i].second);
         i++;
-    }
-    for(int i=0; i<toAdd.size();i++) {
-        if (toAdd[i]->myType < Component::vcvs)
-            circuit->add(toAdd[i], nodesToAdd[i].first, nodesToAdd[i].second);
-    }
-    for(int i=0; i<toAdd.size();i++) {
-        if (toAdd[i]->myType >= Component::vcvs)
-            circuit->add(toAdd[i], nodesToAdd[i].first, nodesToAdd[i].second);
     }
 
 }
@@ -390,5 +381,6 @@ Component* CircuitScene::initComponent(Component::types type, Component* source)
         default:
             c = nullptr;
     }
+
     return c;
 }
