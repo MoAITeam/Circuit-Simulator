@@ -18,3 +18,9 @@ void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWid
     painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     ActiveComponent::paint(painter, qg, qw);
 }
+
+void Resistor::setValue(float value){
+    behavior[1]=-value;
+    resistance=value;
+    this->value=value;
+}

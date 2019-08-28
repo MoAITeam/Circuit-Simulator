@@ -95,9 +95,9 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
 
     c->connect(p, n);
     if(c->controller==nullptr)
-        matrix.add(c->behavior,a,b);
+        matrix.add(c->getBehavior(),a,b);
     else
-        matrix.add(c->behavior,getIndex(c->controller,components),c->getSourceType(),a,b);
+        matrix.add(c->getBehavior(),getIndex(c->controller,components),c->getSourceType(),a,b);
 
 }
 
@@ -211,9 +211,13 @@ void Circuit::solve(){  //resolution of circuit
 
 void Circuit::update(ActiveComponent *component,float value) {
     component->setValue(value);
-    matrix.update(getIndex((Component*)component,components),component->behavior);
+    matrix.update(getIndex((Component*)component,components),component->getBehavior());
 }
 
 SparseMatrix* Circuit::getMatrix() {
     return &matrix;
+}
+
+std::vector<Component*> Circuit::getComponents(){
+    return components;
 }

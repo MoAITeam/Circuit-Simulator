@@ -14,11 +14,7 @@ public:
     CurrentSource(float value);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override  final;
-    void setValue(float value) override{
-        behavior[2]=value;
-        current=value;
-        this->value=value;
-    }
+    void setValue(float value) override;
 };
 
 

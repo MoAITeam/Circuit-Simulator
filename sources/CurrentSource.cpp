@@ -17,3 +17,9 @@ CurrentSource::CurrentSource(float value):ActiveComponent(0,1,value) {   //volta
     label="CS";
     myType=currentSource;
 }
+
+void CurrentSource::setValue(float value){
+    behavior[2]=value;
+    current=value;
+    this->value=value;
+}
