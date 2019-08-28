@@ -39,7 +39,7 @@ Component::~Component() {
     }
 }
 
-void Component::disconnect() { //rimuove componente e nodi dal circuito
+void Component::disconnect() { //remove both component and nodes from circuit
     nodes.first->disconnect(this);
     nodes.second->disconnect(this);
 
@@ -57,7 +57,7 @@ void Component::disconnect() { //rimuove componente e nodi dal circuito
     }
 }
 
-void Component::connect(Node* p, Node* n){//rimuove nodi dal circuito e setta nuovi nodi
+void Component::connect(Node* p, Node* n){   //check dependencies then connect the nodes
     if(p!= nullptr && n!=nullptr) {
         Node* save_a= nullptr;
         Node* save_b= nullptr;
@@ -90,7 +90,7 @@ nodePair Component::getNodes() {
     return nodes;
 }
 
-QRectF Component::boundingRect() const {
+QRectF Component::boundingRect() const {    //geometric container for component
     QPointF n1(nodes.first->x() - x(), nodes.first->y() - y());
     QPointF n2(nodes.second->x() - x(), nodes.second->y() - y());
     QPointF m = (n1 + n2) / 2;
@@ -130,7 +130,7 @@ void Component::drawComponent(QPainter* painter){
     painter->translate(center);
 
     if(!pixmap.isNull()) {
-        painter->rotate(angle);
+        painter->rotate(angle);        //coordinate pixmap with line direction and position
         if (line.length() > 100) {
             painter->drawPixmap(-50, -50, 100, 100, pixmap);  //image as it is
         }
@@ -143,7 +143,7 @@ void Component::drawComponent(QPainter* painter){
 
 }
 
-void Component::drawSolution(QPainter* painter) {
+void Component::drawSolution(QPainter* painter) {      //solution pop-up
     painter->resetTransform();//scene coordinates
 
     QRectF solRect = QRectF(10,10,150,45);
@@ -176,7 +176,7 @@ float Component::getVoltage() {
     return voltage;
 }
 
-QPainterPath Component::shape() const
+QPainterPath Component::shape() const     //define effective interaction area for component -->PATH
 {
     QPainterPath path;
     QPolygon polygon;
@@ -192,7 +192,7 @@ QPainterPath Component::shape() const
     return path;
 }
 
-void Component::hoverEnterEvent(QGraphicsSceneHoverEvent*){
+void Component::hoverEnterEvent(QGraphicsSceneHoverEvent*){    //These methods define hovering interaction on component
     hovering=true;
     setZValue(solutionOnTop);
     nodes.first->setZValue(selectedNodesOnTop);
@@ -236,7 +236,7 @@ void Component::removeDependent() {
 }
 
 
-void Component::setOrientation() {
+void Component::setOrientation() {   //geometry coordination for component
 
     Node* p=nodes.first;
     Node* n=nodes.second;
