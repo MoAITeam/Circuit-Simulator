@@ -6,6 +6,8 @@
 #include <cassert>
 #include <iostream>
 
+//SINGLETON: over-used images are instanziated only 1 time
+
 ResourceManager *ResourceManager::sInstance = nullptr;
 
 ResourceManager::ResourceManager() {

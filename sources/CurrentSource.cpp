@@ -9,7 +9,7 @@ void CurrentSource::paint(QPainter *painter, const QStyleOptionGraphicsItem *qg,
     ActiveComponent::paint(painter,qg,qw);
 }
 
-CurrentSource::CurrentSource(float value):ActiveComponent(0,1,value) {   //voltage,current,value
+CurrentSource::CurrentSource(float value):ActiveComponent(0,1,value) {
     pixmap=ResourceManager::getImage(Component::types::currentSource);
     current=value;
     this->value=value;

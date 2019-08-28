@@ -328,11 +328,12 @@ void MainWindow::showMatrix() {  //it opens a dialog in which show the circuit's
     QMessageBox mat;
 
     if(scene->items().size()!=0){
-    auto print=scene->getCircuit()->getMatrix();
+        DynamicMatrix print(scene->getCircuit()->getMatrix()->rows(),scene->getCircuit()->getMatrix()->cols()+1);
+        print<<scene->getCircuit()->getMatrix()->matrix(),*(scene->getCircuit()->getMatrix()->getTerms());
     QString matrix="";
     for(int i=0;i<scene->getCircuit()->getMatrix()->rows();i++){
-        for(int j=0;j<scene->getCircuit()->getMatrix()->cols();j++){
-                float val=(*print)(i, j);
+        for(int j=0;j<scene->getCircuit()->getMatrix()->cols()+1;j++){
+                float val=(print)(i, j);
                 matrix=matrix + "  " +  QString::number(val)+" ";
         }
         matrix=matrix+"\n";
