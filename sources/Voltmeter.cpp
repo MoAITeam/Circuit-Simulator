@@ -17,7 +17,7 @@ void Voltmeter::paint(QPainter *painter, const QStyleOptionGraphicsItem *qg, QWi
     QFont font=painter->font();
     font.setPixelSize(12);
     painter->setFont(font);
-    painter->drawText(-12,5," "+QString().number(round(voltage*100)/100)+"V");
+    painter->drawText(-12,5," "+QString().number(abs(round(voltage*100)/100))+"V");
 }
 
 Voltmeter::Voltmeter():Component(0,1,0) {   //voltage,current,value

@@ -156,8 +156,8 @@ void Component::drawSolution(QPainter* painter) {      //solution pop-up
     painter->fillPath(path,solutionColor);
     painter->drawPath(path);
 
-    painter->drawText(topLeftDisplay, "Current:"+ QString::number(round(current*100)/100));
-    painter->drawText(topLeftDisplay+QPointF(0,20), "Voltage:"+QString::number(round(voltage*100)/100));
+    painter->drawText(topLeftDisplay, "Current:"+ QString::number(abs(round(current*100)/100)));
+    painter->drawText(topLeftDisplay+QPointF(0,20), "Voltage:"+QString::number(abs(round(voltage*100)/100)));
 }
 
 void Component::setCurrent(float value) {

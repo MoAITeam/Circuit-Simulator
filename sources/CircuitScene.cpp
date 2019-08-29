@@ -181,7 +181,7 @@ std::string CircuitScene::getCircuitData() {    //collect data about components 
     return result;
 }
 
-void CircuitScene::loadCircuitData(std::vector<ComponentData> const circuitData) {
+void CircuitScene::loadCircuitData(const std::vector<ComponentData> circuitData) {
 
     circuit->clear();
 
@@ -189,7 +189,7 @@ void CircuitScene::loadCircuitData(std::vector<ComponentData> const circuitData)
     std::vector<ActiveComponent*> dependentSources;
     std::vector<nodePair> dependentSourcesNodes;
 
-    for(auto const data:circuitData){
+    for(auto const &data:circuitData){
 
         Component::types type=data.type;                   //analyses a vector of ComponentData,for each one create new components and add them to the circuit
 
@@ -242,7 +242,7 @@ void CircuitScene::setcValue(float v) {
     cValue=v;
 }
 
-void CircuitScene::setcName(QString s) {
+void CircuitScene::setcName(QString *s) {
     cName=s;
 }
 
@@ -265,7 +265,7 @@ void CircuitScene::changeValue() {    //change value of component
 void CircuitScene::changeName() {   //change name of component
     if (focus->type()==Component::activeComponent) {
         emit insertName((ActiveComponent*)focus);
-        ((ActiveComponent*)focus)->setlabel(cName);
+        ((ActiveComponent*)focus)->setlabel(*cName);
         focus->update();
     }
 }
@@ -279,7 +279,7 @@ void CircuitScene::disconnectModel() {        //disconnect function: disconnect 
         Node* b_saved=new Node(pair.second->x()+20,pair.second->y()+20);
 
         disconnecting->disconnect();
-        circuit->add(disconnecting,a_saved,b_saved);
+        circuit->add(disconnecting,a_saved,b_saved, false);
         update();
         disconnecting->update();
         clearSelection();

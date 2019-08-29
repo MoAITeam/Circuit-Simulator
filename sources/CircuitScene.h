@@ -37,7 +37,7 @@ public:
     void addNotify(QGraphicsItem *c) override;
 
     std::string getCircuitData();
-    void loadCircuitData(const std::vector<ComponentData> circuitData);
+    void loadCircuitData(std::vector<ComponentData> circuitData);
     Circuit* getCircuit();
 
     enum modes{insertItem,moveItem,selectDependent};
@@ -46,7 +46,7 @@ public:
     void setMode(CircuitScene::modes mode);
     void resetExSel();
     void setcValue(float v);
-    void setcName(QString s);
+    void setcName(QString *s);
 
     QPointF display;
 
@@ -84,7 +84,7 @@ private:
     QPointF mouseDragPoint;
     bool selecting=false;
     float cValue;
-    QString cName;
+    QString* cName;
     QMenu* richItemMenu;
     QMenu* itemMenu;
     QMenu* sceneMenu;

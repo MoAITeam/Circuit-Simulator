@@ -18,7 +18,7 @@ void Amperometer::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, Q
     QFont font=painter->font();
     font.setPixelSize(12);
     painter->setFont(font);
-    painter->drawText(-12,5,QString().number(round(current*100)/100)+"A");
+    painter->drawText(-12,5,QString().number(abs(round(current*100)/100))+"A");
 }
 
 Amperometer::Amperometer():Component(1,0,0){

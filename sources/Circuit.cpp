@@ -53,22 +53,25 @@ Node* Circuit::getNode(Node* n){   //check the status of node of interest
             found=true;
     }
     if (!found){
-        if(!n->isGround()) {
-            matrix.add();
-            notGrounds.push_back(n);
-        }
-
-        nodes.push_back(n);
-        n->setObserver(this);
-
-        if(observer!=nullptr) {
-            observer->addNotify(n);
-        }
+        addNode(n);
     }
     return n;
 }
 
-void Circuit::add(Component *c, Node*& p, Node*& n) {
+void Circuit::addNode(Node* n){
+    if(!n->isGround()) {
+        matrix.add();
+        notGrounds.push_back(n);
+    }
+    nodes.push_back(n);
+    n->setObserver(this);
+
+    if(observer!=nullptr) {
+        observer->addNotify(n);
+    }
+}
+
+void Circuit::add(Component *c, Node*& p, Node*& n, bool link) {
 
     if(p==n)
         throw ModelException("Nodes point to the same memory location, component won't be connected...");
@@ -82,22 +85,33 @@ void Circuit::add(Component *c, Node*& p, Node*& n) {
         n->setX(n->x() + 30);
     }
 
-    p=getNode(p);
-    n=getNode(n);
+    if(!(*p==*n)) {
 
-    components.push_back(c);
-    c->setObserver(this);
-    if(observer!= nullptr)
-        observer->addNotify(c);
+        if(link) {
+            p = getNode(p);
+            n = getNode(n);
+        }else{
+            addNode(p);
+            addNode(n);
+        }
 
-    int a=getIndex(p, notGrounds);   //find the indexes of comp'sourceType nodes in the list
-    int b=getIndex(n, notGrounds);
+        components.push_back(c);
+        c->setObserver(this);
+        if (observer != nullptr)
+            observer->addNotify(c);
 
-    c->connect(p, n);
-    if(c->getController()==nullptr)
-        matrix.add(c->getBehavior(),a,b);
-    else
-        matrix.add(c->getBehavior(),getIndex(c->getController(),components),c->getSourceType(),a,b);
+        int a = getIndex(p, notGrounds);   //find the indexes of comp'sourceType nodes in the list
+        int b = getIndex(n, notGrounds);
+
+        c->connect(p, n);
+        if (c->getController() == nullptr)
+            matrix.add(c->getBehavior(), a, b);
+        else
+            matrix.add(c->getBehavior(), getIndex(c->getController(), components), c->getSourceType(), a, b);
+    }
+    else{
+        throw ModelException("trying to connect both ends of component to same node, won't add it...(save might be corrupted)");
+    }
 
 }
 

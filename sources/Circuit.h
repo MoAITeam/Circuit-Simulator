@@ -18,7 +18,7 @@ public:
     ~Circuit();
     void clear();
 
-    void add(Component *c, Node*& p, Node*& n);
+    void add(Component *c, Node*& p, Node*& n, bool link=true);
     void setObserver(CircuitObserver* graphics);
 
     void update(Node *drag) override;
@@ -36,6 +36,7 @@ public:
 private:
 
     Node* getNode(Node* n);
+    void addNode(Node* n);
     void checkLink(Node *n);
     bool overlaps(Node *p, Node *n);
     template <typename T> int getIndex(T*x,std::vector<T*> v);

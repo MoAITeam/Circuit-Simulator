@@ -81,7 +81,7 @@ void MainWindow::showNameDialog(ActiveComponent *c) {   //allows component's nam
     if(c!= nullptr)
         oldName = c->getLabel();
 
-    QString name = QInputDialog::getText(this->parentWidget(), "Dialog", string,QLineEdit::Normal,oldName);
+    QString* name = new QString(QInputDialog::getText(this->parentWidget(), "Dialog", string,QLineEdit::Normal,oldName));
     scene->setcName(name);
 }
 
