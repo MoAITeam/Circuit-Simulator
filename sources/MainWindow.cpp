@@ -186,7 +186,7 @@ void MainWindow::createActions() {  //buttons and menus action
 }
 
 void MainWindow::save() {
-    QString dir = QFileDialog::getSaveFileName(this, tr("Open File"),"/");
+    QString dir = QFileDialog::getSaveFileName(this, tr("Open File"),"/",tr("Circuit Files (*.txt)"));
     if(!dir.isNull()) {
         FileManager file(dir.toStdString());       //handle dir thanks to filemanager
         std::string data= scene->getCircuitData();
@@ -195,7 +195,7 @@ void MainWindow::save() {
 }
 
 void MainWindow::load() {
-    QString dir = QFileDialog::getOpenFileName(this, tr("Save File"),"/circuit.txt",tr("Circuit Files (*.txt)"));
+    QString dir = QFileDialog::getOpenFileName(this, tr("Save File"),"/",tr("Circuit Files (*.txt)"));
     if(!dir.isNull()) {
         FileManager file(dir.toStdString());
         std::vector<ComponentData> data=file.read();
