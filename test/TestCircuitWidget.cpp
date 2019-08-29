@@ -372,7 +372,7 @@ private slots:
 
        mw->getSelectAllAction()->triggered(true);
        mw->getDeleteAction()->triggered(true);
-       QVERIFY(widget->scene()->items().size()==0);
+       QVERIFY(widget->scene()->items().empty());
 
 
         auto res=new Resistor(10);
@@ -437,7 +437,7 @@ private slots:
       mainWindow->getSelectAllAction()->triggered();
       mainWindow->getDeleteAction()->triggered();
 
-      QVERIFY(widget->scene()->items().size()==0);
+      QVERIFY(widget->scene()->items().empty());
 
 
   }

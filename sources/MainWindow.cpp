@@ -186,7 +186,7 @@ void MainWindow::createActions() {  //buttons and menus action
 }
 
 void MainWindow::save() {
-    QString dir = QFileDialog::getSaveFileName(this, tr("Open File"),"/",tr("Circuit Files (*.txt)"));
+    QString dir = QFileDialog::getSaveFileName(this, tr("Save File"),"/",tr("Circuit Files (*.txt)"));
     if(!dir.isNull()) {
         FileManager file(dir.toStdString());       //handle dir thanks to filemanager
         std::string data= scene->getCircuitData();
@@ -195,7 +195,7 @@ void MainWindow::save() {
 }
 
 void MainWindow::load() {
-    QString dir = QFileDialog::getOpenFileName(this, tr("Save File"),"/",tr("Circuit Files (*.txt)"));
+    QString dir = QFileDialog::getOpenFileName(this, tr("Open File"),"/",tr("Circuit Files (*.txt)"));
     if(!dir.isNull()) {
         FileManager file(dir.toStdString());
         std::vector<ComponentData> data=file.read();
@@ -290,13 +290,9 @@ void MainWindow::componentsButtonGroupClicked(int type) {
 void MainWindow::samplesButtonGroupClicked(QAbstractButton *button) {
 
     const QList<QAbstractButton *> buttons = samplesButtonGroup->buttons();      //metodo per cliccare sui bottoni del backgrnd
-    for (QAbstractButton *myButton : buttons) {
-        if (myButton != button)
-            button->setChecked(false);
-    }
-
     QString text=button->text();
     drawCircuits(text);
+    samplesButtonGroup->checkedButton()->setChecked(false);
 
 }
 
@@ -327,7 +323,7 @@ void MainWindow::showMatrix() {  //it opens a dialog in which show the circuit's
 
     QMessageBox mat;
 
-    if(scene->items().size()!=0){
+    if(!scene->items().empty()){
         DynamicMatrix print(scene->getCircuit()->getMatrix()->rows(),scene->getCircuit()->getMatrix()->cols()+1);
         print<<scene->getCircuit()->getMatrix()->matrix(),*(scene->getCircuit()->getMatrix()->getTerms());
     QString matrix="";
@@ -340,7 +336,6 @@ void MainWindow::showMatrix() {  //it opens a dialog in which show the circuit's
 
     }
 
-    QMessageBox mat;
     mat.setWindowTitle("Show Matrix");
     mat.setText("Here is the <b>matrix</b>:");
     mat.setInformativeText(matrix);
@@ -376,7 +371,7 @@ void MainWindow::selectAll() {
 
 void MainWindow::exportImage() {  //create a png file in cmake-build-debug directory
     QMessageBox exp;
-    if(scene->items().size()!=0) {
+    if(!scene->items().empty()){
         scene->clearSelection();
         QRectF getRect = scene->sceneRect();
         scene->setSceneRect(scene->itemsBoundingRect());
@@ -406,7 +401,16 @@ void MainWindow::deleteItems() {
 }
 
 void MainWindow::selectItems() {
+
+    componentsButtonGroup->setExclusive(false);
+
+    if(componentsButtonGroup->checkedButton()!= nullptr)
+        componentsButtonGroup->checkedButton()->setChecked(false);
+
     scene->setMode(CircuitScene::moveItem);
+
+    componentsButtonGroup->setExclusive(true);
+
 }
 
 void MainWindow::fillComponentsToolbox(){

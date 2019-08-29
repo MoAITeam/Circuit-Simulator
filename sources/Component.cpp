@@ -266,7 +266,12 @@ const QPixmap &Component::getPixmap() const {
 }
 
 std::string Component::getData(){
-    return std::to_string(componentType)+"/"+label.toStdString()+"/0.000/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"//";
+    return std::to_string(componentType)+"/"
+    +label.toStdString()+"/0.000/"
+    +std::to_string(nodes.first->x())+"/"
+    +std::to_string(nodes.first->y())+"/"
+    +std::to_string(nodes.second->x())+"/"
+    +std::to_string(nodes.second->y())+"//";
 }
 
 QString Component::getLabel(){

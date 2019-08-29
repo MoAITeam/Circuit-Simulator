@@ -18,7 +18,6 @@ ResourceManager::ResourceManager() {
     auto im_vol= new QPixmap(":/images/voltagesource.png");
     auto im_cur=new QPixmap(":/images/currentsource.png");
     auto im_wir=new QPixmap(":/images/wire.png");
-    auto im_amp=new QPixmap(":/images/amperometer.png");
     auto im_volm=new QPixmap(":/images/voltm.png");
     auto im_gnd=new QPixmap(":/images/ground.png");
     auto im_vcvs=new QPixmap(":/images/vcvs.png");
@@ -30,7 +29,6 @@ ResourceManager::ResourceManager() {
     images.insert(std::make_pair(Component::types::currentSource ,im_cur));
     images.insert(std::make_pair(Component::types::voltageSource ,im_vol));
     images.insert(std::make_pair(Component::types::wire,im_wir));
-    images.insert(std::make_pair(Component::types::amperometer ,im_amp));
     images.insert(std::make_pair(Component::types::voltmeter ,im_volm));
     images.insert(std::make_pair(Component::types::ground ,im_gnd));
     images.insert(std::make_pair(Component::types::vcvs ,im_vcvs));

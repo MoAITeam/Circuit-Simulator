@@ -19,7 +19,14 @@ void CCCS::paint(QPainter* painter, const QStyleOptionGraphicsItem* qg, QWidget*
 }
 
 std::string CCCS::getData() {
-    return std::to_string(componentType)+"/"+label.toStdString()+"/"+std::to_string(value)+"/"+std::to_string(nodes.first->x())+"/"+std::to_string(nodes.first->y())+"/"+std::to_string(nodes.second->x())+"/"+std::to_string(nodes.second->y())+"/"+controller->getLabel().toStdString()+"/";
+    return std::to_string(componentType)+"/"
+    +label.toStdString()+"/"
+    +std::to_string(value)+"/"
+    +std::to_string(nodes.first->x())+"/"
+    +std::to_string(nodes.first->y())+"/"
+    +std::to_string(nodes.second->x())+"/"
+    +std::to_string(nodes.second->y())+"/"
+    +controller->getLabel().toStdString()+"/";
 }
 
 void CCCS::setValue(float value) {
