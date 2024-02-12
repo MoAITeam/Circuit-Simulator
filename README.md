@@ -19,7 +19,7 @@ its own electrical circuit and find the voltages and currents involved. This pro
 </div>
 <br />
 
-### Predefined circuits view
+#### Predefined circuits view
 <div align="center">
     <img src="assets/ex_2.jpeg" width=50% alt="Ui_2"/>
 </div>
