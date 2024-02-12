@@ -32,11 +32,11 @@ Firstly, you need to move into project folder and then in <i>sources</i> via con
 ```
 qmake -project
 ```
-This will create the .pro file, which we need to modify, as shown below, in order to include all the libraries. 
+This will create the .pro file, which we need to modify, as shown below, in order to include all the libraries. Make sure to write down the correct path for Eigen library.
 ```
 RESOURCES += components.qrc                                           
 QT += widgets                                                        
-INCLUDEPATH += C:\Users\ciuff\Desktop\eigen-3.3.9                       
+INCLUDEPATH += \path\to\eigen-3.3.9                       
 CONFIG += c++11  
 ```
 Then, you need to launch the commands below in order to compile the makefile.
@@ -44,4 +44,4 @@ Then, you need to launch the commands below in order to compile the makefile.
 qmake
 mingw32-make
 ```
-Last thing to do is to copy dll files from `qt/bin` and `qt/plugins/platform` into project's `release` folder, where `qt` refers to the local installation path for Qt.
+Last thing to do is to copy dll files from `qt/bin` and `qt/plugins/platforms` respectively into project's `release` and `release/platforms` folder, where `qt` refers to the local installation path for Qt.
