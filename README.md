@@ -13,14 +13,15 @@ its own electrical circuit and find the voltages and currents involved. This pro
 
 
 ### UI
+#### Electrical components view
 <div align="center">
     <img src="assets/ex_1.jpeg" width=50% alt="Ui_1"/>
-    <figcaption>Fig.1 - Design your circuit using the available electrical components</figcaption>
 </div>
 <br />
+
+### Predefined circuits view
 <div align="center">
     <img src="assets/ex_2.jpeg" width=50% alt="Ui_2"/>
-    <figcaption>Fig.2 - Try out the available sample circuits and modify them</figcaption>
 </div>
 
 ### Testing environment
